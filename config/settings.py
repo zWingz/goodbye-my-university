@@ -37,6 +37,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+
+    'apps.user',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -50,8 +53,12 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
-ROOT_URLCONF = 'basketballWeb.urls'
+ROOT_URLCONF = 'config.urls'
 
+TEMPLATE_DIRS = (
+    # os.path.join(os.path.dirname(os.path.dirname(__file__)),'templates').replace('\\','/'),
+    os.path.join(BASE_DIR, 'templates').replace('\\', '/'),
+)
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -68,7 +75,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'basketballWeb.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
 
 
 # Database
@@ -85,9 +92,10 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-CN'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -98,5 +106,13 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
+STATIC_ROOT = os.path.join(BASE_DIR, 'static').replace('\\', '/')
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    ("downloads", os.path.join(BASE_DIR, 'static/downloads').replace('\\', '/')),
+    ("uploads", os.path.join(BASE_DIR, 'static/uploads').replace('\\', '/')),
+)
+
+import config.localsettings
