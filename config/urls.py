@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^auth/',include("apps.authen.urls")),
     url(r'^users/',include("apps.users.urls")),
     url(r'^usual/',include("apps.usual.urls")),
+    url(r'^team/',include("apps.team.urls")),
 ]

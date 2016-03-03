@@ -6,6 +6,7 @@ import os
 BASEDIR = os.getcwd()
 VENDORS_ROOT = os.path.join(BASEDIR, "vendors")
 UPLOADED_DIR = os.path.join(BASEDIR, "static/upload")
+TEAM_PROFILE_DIR = os.path.join(BASEDIR, "static/files/teamProfiles")
 
 ADMINS = (
     ('zwing', 'zwing@z.com'),
@@ -146,6 +147,7 @@ INSTALLED_APPS = (
     'apps.authen',
     'apps.welcome',
     'apps.users',
+    'apps.team',
     'apps.usual',
 )
 

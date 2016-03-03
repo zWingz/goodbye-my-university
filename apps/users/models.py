@@ -20,8 +20,8 @@ class ProfileBase(type):
 class ProfileUser(object,metaclass=ProfileBase):  
     pass
 class Users(ProfileUser):  
-    phone= models.CharField(max_length = 20)
-    qq = models.CharField(max_length=20)
-    campus = models.CharField(max_length=10)
-    img_path = models.CharField(max_length=15)
-    status = models.CharField(max_length=5) 
+    phone= models.CharField(max_length = 20,null=True)
+    qq = models.CharField(max_length=20,null=True)
+    school = models.CharField(max_length=10,null=True)
+    img_path = models.CharField(max_length=15,null=True)
+    status = models.CharField(max_length=5,null=True) 
