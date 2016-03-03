@@ -1,0 +1,19 @@
+{
+  "name": "webbasketball",
+  "description": "毕设",
+  "main": "index.js",
+  "authors": [
+    "zwing"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/zWingz/webbasketball",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

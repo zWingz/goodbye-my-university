@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>webbasketball</title>
+</head>
+<body>
+{% if user.is_authenticated %}
+    登陆成功
+    <div>
+        username:<span>{{request.user.username}}</span>
+    </div>
+    <div>
+        email:<span class="userInfo" id="email">{{request.user.email}}</span>
+    </div>
+    <div>
+        phone:<span class="userInfo" id="phone">{{request.user.phone}}</span>
+    </div>
+    <div>
+        qq:<span class="userInfo" id="qq">{{request.user.qq}}</span>
+    </div>
+    <div>
+        campus:<span class="userInfo" id="campus">{{request.user.campus}}</span>
+    </div>
+    <div>
+        <img id="user-img" style="max-height: 50px;max-width: 50px;" src="/static/upload/{{request.user.img_path}}" alt="头像未加载">
+        <input id="updateImage" type="file" name="" value="" placeholder="上传头像">修改头像
+    </div>
+    <button id="editInfo" type="button">编辑信息</button>
+    <button id="changePwd" type="button">修改密码</button>
+    <form action="/users/logout" method="post" accept-charset="utf-8">
+        <input type="submit" name="" value="退出">
+    </form>
+{% else %}
+ 请先登录:
+    <form id="login-form" action="/users/login" method="POST">
+        用户名：<input  type="text" name="username" value="" placeholder="username">
+        密码：<input  type="password" name="password" value="" placeholder="password">
+        {# <input id="first_name" type="text" name="first_name" value="" placeholder="first_name"> #}
+        {# <input id="phone" type="text" name="phone" value="" placeholder="phone"> #}
+        {# <input id="address" type="text" name="address" value="" placeholder="address"> #}
+        <input type="submit" name="" value="提交">
+    </form>
+    或者注册:
+    <form action="/users/register" method="post" accept-charset="utf-8">
+        用户名：<input id="username" type="text" name="username" value="" placeholder="username">
+        密码：<input id="password" type="password" name="password" value="" placeholder="password">
+        first_name:<input id="first_name" type="text" name="first_name" value="" placeholder="first_name">
+        last_name:<input id="last_name" type="text" name="last_name" value="" placeholder="last_name">
+        email:<input id="email" type="mail" name="email" value="" placeholder="email">
+        phone:<input id="phone" type="text" name="phone" value="" placeholder="phone">
+        qq:<input id="qq" type="text" name="qq" value="" placeholder="qq">
+        campus:<input id="campus" type="text" name="campus" value="" placeholder="campus">
+        address:<input id="address" type="text" name="address" value="" placeholder="address">
+        <input type="submit" name="" value="提交">
+    </form>
+    {% endif %}
+
+</body>
+<script type="text/javascript" src="/static/vendors/jquery/dist/jquery.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $("#updateImage").on("change",function(){
+            var data = new FormData();
+            data.append('file',this.files[0]);
+            console.log(this.files[0]);
+            $.ajax({
+                url: '/users/updateImage',
+                type: 'post',
+                dataType: 'json',
+                data: data,
+                processData:false,
+                contentType:false,
+            })
+            .done(function(data) {
+                console.log(data);
+                var fileInfo = data.fileInfo;
+                $("#user-img").attr("src",fileInfo.url).attr("filename",fileInfo.uname);
+            });
+        }) ;      
+        $("#editInfo").on("click",function(){
+            var $df = $(document.createDocumentFragment());
+            $(".userInfo").each(function(index,ele){
+                var $ele = $(ele);
+                var text = $ele.text();
+                var id = $ele.attr("id");
+                var $input = $("<input type='text' class='editInfo'>").attr('name', id).val(text);
+                $df.append($input);
+            });
+            var saveBtn = $("<button type='button'>保存</button>");
+            saveBtn.on("click",function(){
+                var postData = {}
+                $(".editInfo").each(function(index,input){
+                    postData[$(this).attr("name")] = $(this).val();
+                });
+                $.ajax({
+                        url: '/users/editUserInfo',
+                        type: 'post',
+                        dataType: 'json',
+                        data: postData
+                    })
+                    .done(function(data) {
+                        console.log(data);
+                        location.reload();
+                    });
+            });
+            console.log(saveBtn);
+            $(this).before($df);
+            $(this).after(saveBtn);
+            $(this).hide();
+
+        }) ;
+        $("#changePwd").on("click",function(){
+            var $old = $("<input type='text' name='oldPwd' placeholder='oldPwd'/>");
+            var $new = $("<input type='text' name='newPwd' placeholder='newPwd'/>");
+            var saveBtn = $("<button type='button'>保存</button>");
+            saveBtn.on("click",function(){
+                var postData = {};
+                postData['oldPwd'] = $old.val();
+                postData['newPwd'] = $new.val();
+                $.ajax({
+                        url: '/users/changePwd',
+                        type: 'post',
+                        dataType: 'json',
+                        data: postData
+                    })
+                    .done(function(data) {
+                        alert(data.message);
+                        location.reload();
+                    });
+            });
+            $(this).before($old);
+            $(this).before($new);
+            $(this).before(saveBtn);
+            $(this).hide();
+        });
+    });
+
+    function submit(){
+        console.log("ajax");
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        var first_name = document.getElementById("first_name").value;
+        var phone = document.getElementById("phone").value;
+        var address = document.getElementById("address").value;
+        var data = {
+                username: username,
+                password:password,
+                first_name:first_name,
+                phone:phone
+                ,address:address
+            };
+            console.log(data);
+        $.ajax({
+            url: '/users/register',
+            type: 'post',
+            dataType: 'json',
+            data: data
+        })
+        .done(function(data) {
+            console.log(data);
+        });
+    }
+</script>
+</html>
