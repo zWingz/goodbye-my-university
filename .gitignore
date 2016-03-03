@@ -1,4 +1,9 @@
 nginx-1.9.9
 .python-version
 requirements.txt
+config/*.pyc
+config/__pycache__/*
 
+static/bower_components/*
+static/node_modules/*
+static/*.json
