@@ -7,6 +7,10 @@ BASEDIR = os.getcwd()
 VENDORS_ROOT = os.path.join(BASEDIR, "vendors")
 UPLOADED_DIR = os.path.join(BASEDIR, "static/upload")
 TEAM_PROFILE_DIR = os.path.join(BASEDIR, "static/files/teamProfiles")
+PLAYER_PROFILE_DIR = os.path.join(BASEDIR, "static/files/playerProfiles")
+
+# ini 文件Dir
+ID_CODE_INI = os.path.join(BASEDIR, "config/id_code.ini")
 
 ADMINS = (
     ('zwing', 'zwing@z.com'),
@@ -144,7 +148,7 @@ INSTALLED_APPS = (
     #'debug_toolbar',
     # 'django_user_agents',
 
-    'apps.authen',
+    # 'apps.authen',
     'apps.welcome',
     'apps.users',
     'apps.team',

@@ -7,8 +7,6 @@ from django.conf import settings
 from django.db import transaction
 from django.db import models  
 from django.contrib.auth.models import User  
-from apps.users.models import Users
-from django.contrib.auth import login as auth_login
 @transaction.atomic
 def register(postData):
     username = postData["username"]

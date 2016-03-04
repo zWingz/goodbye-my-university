@@ -19,7 +19,7 @@ from django.conf.urls import include, url
 urlpatterns = [
     # url(r'^admin/', include(admin.site.urls)),
     url(r'^$',include("apps.welcome.urls")),
-    url(r'^auth/',include("apps.authen.urls")),
+    # url(r'^auth/',include("apps.authen.urls")),
     url(r'^users/',include("apps.users.urls")),
     url(r'^usual/',include("apps.usual.urls")),
     url(r'^team/',include("apps.team.urls")),

@@ -11,18 +11,21 @@ from django.contrib.auth.models import User
 class Team(models.Model):
     class Meta:
         db_table = 'team'
+    id_code = models.CharField(max_length=10)
     name = models.CharField(max_length=10)
     manager = models.ForeignKey(User,to_field="username",related_name="team")
     logo = models.CharField(max_length=20,null=True)
     profile = models.CharField(max_length=20,null=True)
     desc = models.TextField()
     school = models.CharField(max_length=10,null=True)
+    status = models.IntegerField()  # 判断是否生效字段
     create_time = models.DateTimeField()
     edit_tiime = models.DateTimeField()
 
     def save(self, *args, **kwargs):
         if not self.create_time:
             self.create_time = datetime.datetime.now()
+            self.status = 1
         self.edit_time = datetime.datetime.now()
         super(Team, self).save(*args, **kwargs)
 
@@ -33,17 +36,21 @@ class Team(models.Model):
 class Player(models.Model):
     class Meta:
         db_table = 'player'
-    user = models.OneToOneField(User,to_field="username",related_name="profile")  
-    number = models.IntegerField()
-    team = models.ForeignKey(Team,related_name="players",on_delete=models.CASCADE)
+    id_code = models.CharField(max_length=10)
+    user = models.OneToOneField(User,to_field="username",related_name="player")  
+    number = models.IntegerField(null=True)
+    team = models.ForeignKey(Team,related_name="players",on_delete=models.CASCADE,null=True)
     profile = models.CharField(max_length=20)
-    desc = models.TextField()
+    desc = models.TextField(null=True)
+    position = models.CharField(manx_length=5,null=True)
+    status = models.IntegerField()  # 判断是否生效字段
     create_time = models.DateTimeField()
     edit_tiime = models.DateTimeField()
     
     def save(self, *args, **kwargs):
         if not self.create_time:
             self.create_time = datetime.datetime.now()
+            status = 1
         self.edit_time = datetime.datetime.now()
         super(Player, self).save(*args, **kwargs)
 
