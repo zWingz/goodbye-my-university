@@ -24,26 +24,9 @@ def setIniValue(path, option, key, value):
     configParser.set(option, key, value)
     configParser.write(open(path, 'w'))
   
-def getUserIdCode():
-    return getIniValue(settings.ID_CODE_INI,'USER','id_code')
+def getIdCode(id_type):
+    return getIniValue(settings.ID_CODE_INI,id_type,'id_code')
 
-def setUserIdCode(value):
-    return setIniValue(settings.ID_CODE_INI,'USER','id_code',str(value))
 
-def getTeamIdCode():
-    return getIniValue(settings.ID_CODE_INI,'TEAM','id_code')
-
-def setTeamIdCode(value):
-    return setIniValue(settings.ID_CODE_INI,'TEAM','id_code',str(value))
-
-def getPlayerIdCode():
-    return getIniValue(settings.ID_CODE_INI,'PLAYER','id_code')
-
-def setPlayerIdCode(value):
-    return setIniValue(settings.ID_CODE_INI,'PLAYER','id_code',str(value))
-
-def getMsgIdCode():
-    return getIniValue(settings.ID_CODE_INI,'MESSAGE','id_code')
-
-def setMsgIdCode(value):
-    return setIniValue(settings.ID_CODE_INI,'MESSAGE','id_code',str(value))
+def getIdCode(id_type,value):
+    return setIniValue(settings.ID_CODE_INI,id_type,'id_code',str(value))

@@ -21,10 +21,10 @@ class Message(models.Model):
 
     def save(self,*args,**kwargs):
         if not self.id_code:
-            self.id_code = fileLogics.getMsgIdCode()
+            self.id_code = fileLogics.getIdCode("MESSAGE")
             self.create_time = datetime.datetime.now()
         super(Team, self).save(*args, **kwargs)
-        fileLogics.setMsgIdCode(self.id_code+1)
+        fileLogics.setIdCode("MESSAGE",int(self.id_code)+1)
 
     def __str__(self):
         return self.id_code

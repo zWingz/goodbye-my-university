@@ -18,7 +18,7 @@ def saveTeam(user,postData):
         team = teams[0]
     else:
         team = Team()
-        team.id_code = fileLogics.getTeamIdCode()
+        team.id_code = fileLogics.getIdCode("TEAM")
         team.manager = user
         user.status = 'manager'
         team.name = postData['name']
@@ -31,7 +31,7 @@ def saveTeam(user,postData):
         fp.write("")
     team.save()
     user.save()
-    fileLogics.setTeamIdCode(team.id_code+1)
+    fileLogics.setIdCode("TEAM",int(team.id_code)+1)
     return True;
 
 @transaction.atomic
@@ -63,7 +63,7 @@ def disbandTeam(team):
 def savePlayer(user,postData):
     if user.player is None
         player = Player()
-        player.id_code = fileLogics.getPlayerIdCode()
+        player.id_code = fileLogics.getIdCode("PLAYER")
         player.user = user
         user.status = 'player'
         with open(settings.PLAYER_PROFILE_DIR+"/"+id_code,"wb+") as fp:
@@ -75,7 +75,7 @@ def savePlayer(user,postData):
     player.desc = postData['desc']
     player.save()
     user.save()
-    fileLogics.setPlayerIdCode(player.id_code+1)
+    fileLogics.setIdCode("PLAYER",int(player.id_code)+1)
     return True
 
 @transaction.atomic

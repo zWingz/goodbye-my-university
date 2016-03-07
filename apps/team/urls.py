@@ -20,6 +20,7 @@ urlpatterns = patterns(
     url('^disbandTeam$', 'disbandTeam'),
     url('^getTeam$', 'getTeam'),
     url('^listTeam$', 'listTeam'),
+    url('^getMyTeam$', 'getMyTeam'),
     # Player
     url('^savePlayer$', 'savePlayer'),
     url('^editPlayer$', 'editPlayer'),

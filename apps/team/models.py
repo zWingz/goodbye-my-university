@@ -1,8 +1,6 @@
 import os
 from django.db import models
 import datetime
-import json
-from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User  
 # Create your models here

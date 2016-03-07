@@ -177,13 +177,34 @@ def leaveTeam(request):
     return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 # get somthing
+@login_required
+def getMyTeam(request):
+    user = request.user
+    team = Team.objects.get(manager=user,status=1)
+    identity = 'normal'
+    if team is None:
+        player = Player.objects.get(user=user,status=1)
+        if team is not None
+            team = player.team
+            identity = 'player'
+    else:
+        identity = 'manager'
+    return render(request,"team/info",{team:team,identity:identity})
+
 def getTeam(request):
     team = Team.objects.get(name=request.GET['name'])
     return render(request,"team/info",{team:team})
 
+
+@login_required
+def getMyPlayer(request):
+    user = request.user
+    player = Player.objects.get(user=user,status=1)
+    return render(request,"team/info",{player:player,isPlayer:True})
+
 def getPlayer(request):
     player = Player.objects.get(user_username=request.GET['name'])
-    return render(request,"team/player",{getPlayer:getPlayer})
+    return render(request,"team/player",{player:player})
 
 
 # list something

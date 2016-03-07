@@ -11,7 +11,7 @@ import utils.files.logics as fileLogics
 
 @transaction.atomic
 def register(postData):
-    id_code = fileLogics.getUserIdCode()
+    id_code = fileLogics.getIdCode("USER")
     username = postData["username"]
     first_name = postData["first_name"]
     last_name = postData["last_name"]
@@ -29,7 +29,7 @@ def register(postData):
     user.school = school
     user.status="normal"
     user.save()
-    fileLogics.setUserIdCode(int(id_code)+1)
+    fileLogics.setIdCode("USER",int(id_code)+1)
     return user
 
 @transaction.atomic
