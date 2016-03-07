@@ -21,7 +21,7 @@
         qq:<span class="userInfo" id="qq">{{request.user.qq}}</span>
     </div>
     <div>
-        campus:<span class="userInfo" id="campus">{{request.user.campus}}</span>
+        school:<span class="userInfo" id="school">{{request.user.school}}</span>
     </div>
     <div>
         <img id="user-img" style="max-height: 50px;max-width: 50px;" src="/static/upload/{{request.user.img_path}}" alt="头像未加载">
@@ -51,8 +51,7 @@
         email:<input id="email" type="mail" name="email" value="" placeholder="email">
         phone:<input id="phone" type="text" name="phone" value="" placeholder="phone">
         qq:<input id="qq" type="text" name="qq" value="" placeholder="qq">
-        campus:<input id="campus" type="text" name="campus" value="" placeholder="campus">
-        address:<input id="address" type="text" name="address" value="" placeholder="address">
+        school:<input id="school" type="text" name="school" value="" placeholder="school">
         <input type="submit" name="" value="提交">
     </form>
     {% endif %}
@@ -143,13 +142,13 @@
         var password = document.getElementById("password").value;
         var first_name = document.getElementById("first_name").value;
         var phone = document.getElementById("phone").value;
-        var address = document.getElementById("address").value;
+        var address = document.getElementById("school").value;
         var data = {
                 username: username,
                 password:password,
                 first_name:first_name,
                 phone:phone
-                ,address:address
+                ,school:school
             };
             console.log(data);
         $.ajax({

@@ -99,7 +99,7 @@ def savePlayer(request):
         response_data = {}
         response_data.success = 0
         response_data.message = '保存失败'
-        result = Logics.saveTeam(request.user,request.POST)
+        result = Logics.savePlayer(request.user,request.POST)
         if result :
             response_data.success = 1
             response_data.message = '保存成功'
@@ -113,7 +113,7 @@ def editPlayer(request):
         response_data = {}
         response_data.success = 0
         response_data.message = '保存失败'
-        result = Logics.saveTeam(request.user,request.POST)
+        result = Logics.savePlayer(request.user,request.POST)
         if result :
             response_data.success = 1
             response_data.message = '保存成功'

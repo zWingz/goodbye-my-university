@@ -11,14 +11,14 @@ from django.contrib.auth.models import User
 class Team(models.Model):
     class Meta:
         db_table = 'team'
-    id_code = models.CharField(max_length=10)
+    id_code = models.CharField(max_length=10,null=True)
     name = models.CharField(max_length=10)
     manager = models.ForeignKey(User,to_field="username",related_name="team")
     logo = models.CharField(max_length=20,null=True)
     profile = models.CharField(max_length=20,null=True)
     desc = models.TextField()
     school = models.CharField(max_length=10,null=True)
-    status = models.IntegerField()  # 判断是否生效字段
+    status = models.IntegerField(default=1)  # 判断是否生效字段
     create_time = models.DateTimeField()
     edit_tiime = models.DateTimeField()
 
@@ -36,14 +36,14 @@ class Team(models.Model):
 class Player(models.Model):
     class Meta:
         db_table = 'player'
-    id_code = models.CharField(max_length=10)
+    id_code = models.CharField(max_length=10,null=True)
     user = models.OneToOneField(User,to_field="username",related_name="player")  
     number = models.IntegerField(null=True)
     team = models.ForeignKey(Team,related_name="players",on_delete=models.CASCADE,null=True)
     profile = models.CharField(max_length=20)
     desc = models.TextField(null=True)
-    position = models.CharField(manx_length=5,null=True)
-    status = models.IntegerField()  # 判断是否生效字段
+    position = models.CharField(max_length=5,null=True)
+    status = models.IntegerField(default=1)  # 判断是否生效字段
     create_time = models.DateTimeField()
     edit_tiime = models.DateTimeField()
     

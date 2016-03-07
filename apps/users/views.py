@@ -11,14 +11,13 @@ from django.contrib.auth.views import logout as auth_logout
 from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login,authenticate
 # Create your views here.
 def register(request):
-    print("register")
     if request.method == 'POST':
         user = Logics.register(request.POST)
     if user:
         user = authenticate(username=request.POST['username'], password=request.POST['password'])
         auth_login(request,user)
-        return render(request, "auth/login.html")
-    return HttpResponseRedirect('/auth/login.html')
+        # return render(request, "auth/login.html")
+    return HttpResponseRedirect('/users/login')
 
 
 def login(request):
@@ -28,16 +27,16 @@ def login(request):
         user = authenticate(username=username, password=pws)
         if user :
             auth_login(request,user)
-            return render(request, "auth/login.html")
-        else:
-            return HttpResponseRedirect('/auth/login')
+    return render(request, "auth/login.html")
+    # else:
+        # return HttpResponseRedirect('/auth/login')
 
 @login_required
 def editUserInfo(request):
     response_data = {}
     if request.method == "POST":
-        username = request.user.username
-        result = Logics.editUserInfo(username,request.POST)
+        user = request.user
+        result = Logics.editUserInfo(user,request.POST)
     if result:
         response_data['success'] = 1
         response_data['message'] = '修改成功'
@@ -66,7 +65,7 @@ def changePwd(request):
 @login_required
 def  logout(request):
     auth_logout(request)
-    return HttpResponseRedirect('/auth/login')
+    return HttpResponseRedirect('/users/login')
 
 # 用户头像更改view
 @login_required

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import datetime
-import confiparse
+import configparser
 from django.conf import settings
 import time
 def saveFile(file,path):
@@ -14,24 +14,36 @@ def saveFile(file,path):
 
 
 def getIniValue(path, option, key):
-    configParser = confiparse.ConfigParser()
+    configParser = configparser.ConfigParser()
     configParser.read(path);
     return configParser.get(option, key)
 
 def setIniValue(path, option, key, value):
-    configParser = confiparse.ConfigParser()
+    configParser = configparser.ConfigParser()
     configParser.read(path);
     configParser.set(option, key, value)
     configParser.write(open(path, 'w'))
-    
+  
+def getUserIdCode():
+    return getIniValue(settings.ID_CODE_INI,'USER','id_code')
+
+def setUserIdCode(value):
+    return setIniValue(settings.ID_CODE_INI,'USER','id_code',str(value))
+
 def getTeamIdCode():
     return getIniValue(settings.ID_CODE_INI,'TEAM','id_code')
 
 def setTeamIdCode(value):
-    return setIniValue(ettings.ID_CODE_INI,'TEAM','id_code',value)
+    return setIniValue(settings.ID_CODE_INI,'TEAM','id_code',str(value))
 
 def getPlayerIdCode():
     return getIniValue(settings.ID_CODE_INI,'PLAYER','id_code')
 
 def setPlayerIdCode(value):
-    return setIniValue(ettings.ID_CODE_INI,'PLAYER','id_code',value)
+    return setIniValue(settings.ID_CODE_INI,'PLAYER','id_code',str(value))
+
+def getMsgIdCode():
+    return getIniValue(settings.ID_CODE_INI,'MESSAGE','id_code')
+
+def setMsgIdCode(value):
+    return setIniValue(settings.ID_CODE_INI,'MESSAGE','id_code',str(value))

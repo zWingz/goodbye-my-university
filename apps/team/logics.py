@@ -8,7 +8,7 @@ from django.db import transaction
 from django.db import models  
 from apps.team.models import Team,Player
 from django.contrib.auth.models import User  
-from utils.files.logics as fileLogics
+import utils.files.logics as fileLogics
 
 # Team do something
 @transaction.atomic
@@ -59,6 +59,7 @@ def disbandTeam(team):
     return True
 
 # Player do something
+@transaction.atomic
 def savePlayer(user,postData):
     if user.player is None
         player = Player()
@@ -77,52 +78,23 @@ def savePlayer(user,postData):
     fileLogics.setPlayerIdCode(player.id_code+1)
     return True
 
+@transaction.atomic
 def changeNum(player,number):
     player.number = number
     player.save()
     return True
 
+@transaction.atomic
 def joinTeam(player,team,number):
     player.team = team
     player.number = number
     player.save()
     return True
 
+@transaction.atomic
 def leaveTeam(player):
     player.team = null
     player.number = null
     player.save();
     return True
 
-
-# # get somthing
-
-
-# def getPlayer(username,status=1):
-#     player = Player.objects.get(user_username=username,status=status)
-#     return player
-
-# def get_user(username):
-#     return User.objects.get(username=username)
-
-# def get_team(username,status=1):
-#     team = Team.objects.get(user_username=username,status=status)
-#     if team is None
-#         team = Player.objects.get(user_username=username,status=status).team
-#     if team is None
-#         team = {}
-#     return team
-
-# #  list something
-# def listTeamPlayers(teamname,status=1):
-#     players = Team.objects.get(name=teamname,status=status).players_set.all()
-#     return players
-
-# def listTeam(status=1):
-#     teams = Team.objects.filter(status=status)
-#     return teams
-
-# def listTeamNum(teamname,status=1):
-#     players = listTeamPlayers(teamname,status)
-#     nums = [x.number for x in players]
-#     return nums    

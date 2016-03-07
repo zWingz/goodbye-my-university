@@ -7,25 +7,29 @@ from django.conf import settings
 from django.db import transaction
 from django.db import models  
 from django.contrib.auth.models import User  
+import utils.files.logics as fileLogics
+
 @transaction.atomic
 def register(postData):
+    id_code = fileLogics.getUserIdCode()
     username = postData["username"]
     first_name = postData["first_name"]
     last_name = postData["last_name"]
     pwd = postData["password"]
     phone = postData["phone"]
-    address = postData["address"]
     qq = postData["qq"]
     email = postData["email"]
-    campus = postData["campus"]
+    school = postData["school"]
     user = User.objects.create_user(username,email,pwd)
+    user.id_code = id_code
     user.first_name = first_name
     user.last_name = last_name
     user.phone = phone
-    user.address = address
     user.qq = qq
-    user.campus = campus
+    user.school = school
+    user.status="normal"
     user.save()
+    fileLogics.setUserIdCode(int(id_code)+1)
     return user
 
 @transaction.atomic
@@ -36,8 +40,7 @@ def updateImage(username,imgpath):
     return True
 
 @transaction.atomic
-def editUserInfo(username,postData):
-    user = User.objects.get(username=username)
+def editUserInfo(user,postData):
     setPostToModel(user,postData)
     user.save()
     return True
@@ -53,6 +56,3 @@ def cheangePwd(user,pwd):
 def setPostToModel(model, post):
     for key, value in post.items():
         setattr(model, key, value)
-
-def aaa():
-    pass;

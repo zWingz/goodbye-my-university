@@ -153,6 +153,7 @@ INSTALLED_APPS = (
     'apps.users',
     'apps.team',
     'apps.usual',
+    'apps.message'
 )
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
