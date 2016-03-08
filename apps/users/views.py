@@ -1,9 +1,9 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
 # from django.shortcuts import render_to_response
 import json, os, time
 from django.conf import settings
 from django.http import HttpResponse
-from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 import apps.users.logics as Logics
 from datetime import datetime
@@ -14,10 +14,10 @@ def register(request):
     if request.method == 'POST':
         user = Logics.register(request.POST)
     if user:
-        user = authenticate(username=request.POST['username'], password=request.POST['password'])
+        user = authenticate(username=request.POST['r-username'], password=request.POST['password'])
         auth_login(request,user)
         # return render(request, "auth/login.html")
-    return HttpResponseRedirect('/users/login')
+    return redirect('/')
 
 
 def login(request):
@@ -27,9 +27,15 @@ def login(request):
         user = authenticate(username=username, password=pws)
         if user :
             auth_login(request,user)
-    return render(request, "auth/login.html")
+    # return render(request, "users/login.html")
+    return redirect('/')
     # else:
         # return HttpResponseRedirect('/auth/login')
+
+@login_required
+def usercenter(request):
+    return render(request,"users/usercenter.html")
+
 
 @login_required
 def editUserInfo(request):
@@ -65,7 +71,7 @@ def changePwd(request):
 @login_required
 def  logout(request):
     auth_logout(request)
-    return HttpResponseRedirect('/users/login')
+    return redirect('/')
 
 # 用户头像更改view
 @login_required

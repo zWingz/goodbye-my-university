@@ -2,7 +2,7 @@ from django.shortcuts import render
 import json, os, time
 from django.conf import settings
 from django.http import HttpResponse
-from apps.message.logo as Logics
+from apps.message.logics as Logics
 from utils.Decorator.decorator import post_required
 # Create your views here.
 

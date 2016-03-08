@@ -28,5 +28,5 @@ def getIdCode(id_type):
     return getIniValue(settings.ID_CODE_INI,id_type,'id_code')
 
 
-def getIdCode(id_type,value):
+def setIdCode(id_type,value):
     return setIniValue(settings.ID_CODE_INI,id_type,'id_code',str(value))

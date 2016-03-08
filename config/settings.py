@@ -8,6 +8,7 @@ VENDORS_ROOT = os.path.join(BASEDIR, "vendors")
 UPLOADED_DIR = os.path.join(BASEDIR, "static/upload")
 TEAM_PROFILE_DIR = os.path.join(BASEDIR, "static/files/teamProfiles")
 PLAYER_PROFILE_DIR = os.path.join(BASEDIR, "static/files/playerProfiles")
+GAME_PROFILE_DIR = os.path.join(BASEDIR, "static/files/gameProfiles")
 
 # ini 文件Dir
 ID_CODE_INI = os.path.join(BASEDIR, "config/id_code.ini")

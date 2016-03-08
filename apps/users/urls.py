@@ -15,6 +15,7 @@ urlpatterns = patterns(
     url('^register$', 'register'),
     url('^login$', 'login'),
     url('^logout$', 'logout'),
+    url('^usercenter$', 'usercenter'),
     url('^updateImage$', 'updateImage'),
     url('^editUserInfo$', 'editUserInfo'),
     url('^changePwd$', 'changePwd'),

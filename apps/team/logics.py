@@ -26,7 +26,7 @@ def saveTeam(user,postData):
         logo = postData['logo']
     school = postData['school']
     desc = postData['desc']
-    os.mkdir(os.path.join(setting.TEAM_PROFILE_DIR,team.name))
+    os.mkdir(os.path.join(settings.TEAM_PROFILE_DIR,team.name))
     with open(settings.TEAM_PROFILE_DIR+"/"+team.name+"/profile","wb+") as fp:
         fp.write("")
     team.save()
@@ -61,7 +61,7 @@ def disbandTeam(team):
 # Player do something
 @transaction.atomic
 def savePlayer(user,postData):
-    if user.player is None
+    if user.player is None:
         player = Player()
         player.id_code = fileLogics.getIdCode("PLAYER")
         player.user = user

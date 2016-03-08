@@ -35,7 +35,7 @@ def editTeam(request):
         response_data.success = 0
         response_data.message = '保存失败'
         result = Logics.editTeam(request.user,request.POST)
-        if result :
+        if result:
             response_data.success = 1
             response_data.message = '保存成功'
         return HttpResponse(json.dumps(response_data),content_type="application/json")
@@ -100,7 +100,7 @@ def savePlayer(request):
         response_data.success = 0
         response_data.message = '保存失败'
         result = Logics.savePlayer(request.user,request.POST)
-        if result :
+        if result:
             response_data.success = 1
             response_data.message = '保存成功'
         return HttpResponse(json.dumps(response_data),content_type="application/json")
@@ -114,7 +114,7 @@ def editPlayer(request):
         response_data.success = 0
         response_data.message = '保存失败'
         result = Logics.savePlayer(request.user,request.POST)
-        if result :
+        if result:
             response_data.success = 1
             response_data.message = '保存成功'
         return HttpResponse(json.dumps(response_data),content_type="application/json")
@@ -131,7 +131,7 @@ def changeNum(request):
         team = player.team
         team_players = team.players_set.all()
         nums = [x.number for x in players]
-        if !request.POST['number'] in nums
+        if not request.POST['number'] in nums:
             response_data.success = 0
             response_data.message = '号码已存在'
         else:
@@ -150,12 +150,12 @@ def joinTeam(request):
     team = Team.objects.get(id_code=request.POST['id_code'])
     team_players = team.players_set.all()
     nums = [x.number for x in players]
-    if request.POST['number'] in nums
+    if request.POST['number'] in nums:
         response_data.success = 0
         response_data.message = '号码已存在'
         return HttpResponse(json.dumps(response_data),content_type="application/json")
     result = Logics.joinTeam(player,team,request.POST['number'])
-    if result :
+    if result:
         response_data.success = 1
         response_data.message = '保存成功'
     return HttpResponse(json.dumps(response_data),content_type="application/json")
@@ -171,7 +171,7 @@ def leaveTeam(request):
         response_data['message'] = '退出失败'
     else:
         result = Logics.leaveTeam(player)
-            if result :
+        if result:
             response_data.success = 1
             response_data.message = '保存成功'
     return HttpResponse(json.dumps(response_data),content_type="application/json")
@@ -184,7 +184,7 @@ def getMyTeam(request):
     identity = 'normal'
     if team is None:
         player = Player.objects.get(user=user,status=1)
-        if team is not None
+        if team is not None:
             team = player.team
             identity = 'player'
     else:

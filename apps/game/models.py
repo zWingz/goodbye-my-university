@@ -11,6 +11,7 @@ class Game(models.Model):
     id_code = models.CharField(max_length=10,null=True,unique=True)
     team_one = models.ForeignKey(Team,to_field='id_code')
     team_two = models.ForeignKey(Team,to_field='id_code')
+    game_time = models.DateTimeField()
     create_time = models.DateTimeField()
     data_profile = models.CharField(max_length=10)
 

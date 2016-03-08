@@ -12,21 +12,11 @@ import utils.files.logics as fileLogics
 @transaction.atomic
 def register(postData):
     id_code = fileLogics.getIdCode("USER")
-    username = postData["username"]
-    first_name = postData["first_name"]
-    last_name = postData["last_name"]
-    pwd = postData["password"]
-    phone = postData["phone"]
-    qq = postData["qq"]
-    email = postData["email"]
-    school = postData["school"]
+    username = postData["r-username"]
+    pwd = postData["r-password"]
+    email = postData["r-email"]
     user = User.objects.create_user(username,email,pwd)
     user.id_code = id_code
-    user.first_name = first_name
-    user.last_name = last_name
-    user.phone = phone
-    user.qq = qq
-    user.school = school
     user.status="normal"
     user.save()
     fileLogics.setIdCode("USER",int(id_code)+1)

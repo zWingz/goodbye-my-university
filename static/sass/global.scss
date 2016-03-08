@@ -1,0 +1,131 @@
+@import "base";
+// @import "common";
+$header-bgc:#0732A2;
+$header-title-height:110px;
+$hader-nav-height:40px;
+html,body{
+    margin:0px;
+    padding:0px;
+    min-height: 100%;
+    background:#F4F4F4 !important;
+}
+#header {
+    position:fixed;
+    top:0px;
+    width:100%;
+    text-align: center;
+    z-index: 111;
+    .header-title {
+        margin:0px;
+        font-size: 60px;
+        font-weight: bold;
+        color:#fcfcfc;
+        background: $header-bgc;
+        height:$header-title-height;
+        line-height: $header-title-height;
+    }
+    .header-nav {
+        padding:10px 20px;
+        background:#f4f4f4;
+    }
+    .nav {
+        display:inline-block;
+        li{
+            display:inline-block;
+            // padding:0px 20px;
+            font-size: 20px;
+            font-weight: bold;
+            a{
+                display:inline-block;
+                color:$header-bgc;
+                width:80px;
+                text-decoration: none;
+                height:$hader-nav-height;
+                line-height: $hader-nav-height;
+            }
+            &.tabactive{
+                a{
+                    color:#E87BA0;
+                    border-bottom: 1px dashed #E87BA0;
+                }
+            }
+        }
+    }
+    .avatar {
+        float: right;
+        position:relative;
+        height:$hader-nav-height;
+        width:40px;
+        line-height: $hader-nav-height;
+        box-shadow: 0 0px 4px rgb(232,123,160);
+        border-radius: 50%;
+        cursor:pointer;
+        &:hover {
+            .user-center-menu{
+                display:block;
+            }
+        }
+    }
+    .user-center-menu {
+        position:absolute;
+        display:none;
+        right:0px;
+        border:1px solid #ddd;
+        background:#fff;
+        .menu-item {
+            display:block;
+            width:100px;
+            font-size: 13px;
+        }
+        //  三角形
+        &:before{
+            content:"";
+            position: absolute;
+            height: 10px;
+            width: 10px;
+            top: -6px;
+            right: 15px;
+            transform: rotateZ(45deg);
+            background: white;
+            border:{
+                    top:1px solid #ddd;
+                    left:1px solid #ddd;
+                }
+        }
+    }
+}
+
+#login-modal {
+    .am-modal-hd {
+        padding-top: 0px;
+    }
+    .my-tabs-nav {
+        display:flex;
+        flex-wrap: nowrap;
+        justify-content: space-around;
+        li{
+            width:50%;
+            height: 50px;
+            line-height: 50px;
+            display:inline-block;
+            &.my-tabs-active{
+                border-bottom: 2px solid $header-bgc;
+            }
+        }
+    }
+    .my-tabs-bd {
+        margin-top: 10px;
+    }
+}
+
+
+.container {
+    margin:{
+        top:180px;
+        left:20px;
+        right:20px;
+    }
+    min-height: 500px;
+    background:#F4F4F4;
+    // box-shadow: 0 0px 4px rgb(232,123,160)
+}

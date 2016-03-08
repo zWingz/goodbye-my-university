@@ -1,0 +1,41 @@
+{% extends "layout/base.html" %}
+{%block head%}<link rel="stylesheet" type="text/css" href="/static/css/usercenter.css">{%endblock%}
+{% block title %}个人中心{% endblock %}
+{%block content%}
+    <div class="usercenter-container">
+        <div class="usercenter-left">
+            <header class="user-info">
+                <img class="user-logo" src="/static/upload/{{user.img_path}}" alt="">
+                <aside class="user-name">
+                    {{user.last_name}}
+                    {{user.username}}
+                </aside>
+            </header>
+            <nav class="usercenter-nav">
+                <ul class="unstyle">
+                    <li><a class="usercenter-nav-item active" href="#user-info" title="" my-role="nav-item" nav-index="0">个人信息</a></li>
+                    <li><a class="usercenter-nav-item" href="#user-player" title="" my-role="nav-item" nav-index="1">我的生涯</a></li>
+                    <li><a class="usercenter-nav-item" href="#user-team" title="" my-role="nav-item" nav-index="2">我的球队</a></li>
+                    <li><a class="usercenter-nav-item" href="#user-msg" title="" my-role="nav-item" nav-index="3">我的消息</a></li>
+                </ul>
+            </nav>
+        </div>
+        <section class="usercenter-content">
+            <section class="usercenter-content-item active" my-role="content-item" content-index="0">
+                个人信息content
+            </section>
+            <section class="usercenter-content-item" my-role="content-item" content-index="1">
+                我的生涯content
+            </section>
+            <section class="usercenter-content-item" my-role="content-item" content-index="2">
+                我的球队content
+            </section>
+            <section class="usercenter-content-item" my-role="content-item" content-index="3">
+                我的消息content
+            </section>
+        </section>
+    </div>
+{%endblock%}
+{%block js%}
+    <script type="text/javascript" src="/static/js/usercenter.js"></script>
+{%endblock%}

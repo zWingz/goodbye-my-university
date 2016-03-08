@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/global.css">
+    <link rel="stylesheet" type="text/css" href="/static/vendors/amazeui//dist/css/amazeui.css">
+    <title>{% block title %}{% endblock %}</title>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <header id="header" class="">
+        <h1 class="header-title">UBA</h1>
+        <nav class='header-nav'>
+            <ul class='nav unstyle'>
+                <li class="tabactive"><a href="" title="">首页</a></li>
+                <li><a href="" title="">nav1</a></li>
+                <li><a href="" title="">nav1</a></li>
+                <li><a href="" title="">nav1</a></li>
+            </ul>
+                {% if user.is_authenticated %}
+                <aside class='avatar' href="#" title="" data-type='login'>
+                    <img src="/static/upload/{{user.img_path}}" alt="">
+                    <div class='user-center-menu'>
+                        <!-- <i class='triangle'></i> -->
+                        <span class="menu-item">您好! {{user.first_name}}</span>
+                        <a class="menu-item" href="/users/usercenter#user-info" title="">个人信息</a>
+                        <a class="menu-item" href="/users/usercenter#user-player" title="">我的生涯</a>
+                        <a class="menu-item" href="/users/usercenter#user-team" title="">我的球队</a>
+                        <a class="menu-item" href="/users/usercenter#user-msg" title="">我的消息</a>
+                        <a class="menu-item" href="/users/logout" title="">退出登录</a>
+                    </div>
+                </aside>
+                {% else %}
+                    <a href="javascript: void(0)" class='avatar' data-type='unlogin' data-am-modal="{target: '#login-modal'}">登录</a>
+                {% endif %}
+        </nav>
+    </header><!-- /header -->
+    <section class="container">
+        {% block content %}{% endblock %}
+    </section>
+    <footer>
+        {%block footer%}{%endblock%}
+    </footer>
+
+    <div class="am-modal am-modal-no-btn" tabindex="-1" id="login-modal">
+      <div class="am-modal-dialog">
+        <div class="am-modal-hd">
+          <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+        </div>
+        <div class="am-modal-bd">
+          <div class="my-tabs" id="login-tabs">
+            <ul class="my-tabs-nav unstyle">
+              <li class="my-tabs-active"><a href="">登录</a></li>
+              <li><a href="">注册</a></li>
+            </ul>
+            <div class="my-tabs-bd">
+              <div class="my-tabs-panel my-tabs-active">
+                  <form id="login-form" action="/users/login" method="POST" class="my-form">
+                    <h4 class="my-form-title">账号登录:</h4>
+                    <div class="my-form-group">
+                        <label class="my-form-label" or="">用户名:</label>
+                        <input type="text" class='my-form-input' name="username" value="" placeholder="用户名">
+                    </div>
+                    <div class="my-form-group">
+                        <label class="my-form-label" for="">密码:</label>
+                        <input type="password" class='my-form-input' name="password" value="" placeholder="password">
+                    </div>
+                     <input class="am-btn am-btn-success am-btn-sm" type="submit" name="" value="登录">
+                  </form>
+              </div>
+              <div class="my-tabs-panel">
+                  <form action="/users/register" method="post" accept-charset="utf-8" class='my-form'>
+                      <h4 class="my-form-title">快速注册:</h4>
+                      <div class="my-form-group">
+                          <label class="my-form-label" or="">用户名:</label>
+                          <input id="username" class='my-form-input' type="text" name="r-username" value="" placeholder="username">
+                      </div>
+                      <div class="my-form-group">
+                          <label class="my-form-label" or="">密码:</label>
+                          <input id="password" class='my-form-input' type="password" name="r-password" value="" placeholder="password">
+                      </div>
+                      <div class="my-form-group">
+                          <label class="my-form-label" or="">邮箱:</label>
+                          <input id="email" class='my-form-input' type="mail" name="r-email" value="" placeholder="email">
+                      </div>
+                      <input class="am-btn am-btn-success am-btn-sm" type="submit" name="" value="提交">
+                  </form>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+
+
+    <script type="text/javascript" src="/static/vendors/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/vendors/amazeui/dist/js/amazeui.min.js"></script>
+    <script type="text/javascript" src="/static/js/global.js"></script>
+    <script type="text/javascript"></script>
+    {%block js%}{%endblock%}
+</body>
+</html>
