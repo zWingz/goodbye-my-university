@@ -1,14 +1,14 @@
 {% extends "layout/base.html" %}
-{%block head%}<link rel="stylesheet" type="text/css" href="/static/css/usercenter.css">{%endblock%}
+{%block head%}<link rel="stylesheet" type="text/css" href="/static/css/usercenter.css">
+<link rel="stylesheet" type="text/css" href="/static/vendors/hovercss/css/hover-min.css">{%endblock%}
 {% block title %}个人中心{% endblock %}
 {%block content%}
     <div class="usercenter-container">
         <div class="usercenter-left">
             <header class="user-info">
-                <img class="user-logo" src="/static/upload/{{user.img_path}}" alt="">
+                <img class="user-logo user-avatar" src="/static/upload/{{user.img_path}}" alt="">
                 <aside class="user-name">
-                    {{user.last_name}}
-                    {{user.username}}
+                    {{user.first_name}}
                 </aside>
             </header>
             <nav class="usercenter-nav">
@@ -21,17 +21,334 @@
             </nav>
         </div>
         <section class="usercenter-content">
-            <section class="usercenter-content-item active" my-role="content-item" content-index="0">
-                个人信息content
+            <section id="user-info" class="usercenter-content-item active opacity" my-role="content-item" >
+                <header class="content-head">
+                    <span>个人信息</span>
+                </header>
+                <article class="content-bd">
+                    <div class="base-info my-form">
+                        <div class="info-avatar">
+                            <img class="user-avatar" src="/static/upload/{{user.img_path}}" alt="">
+                            <div class="am-form-group am-form-file">
+                              <button  type="button" class="am-btn am-btn-default am-btn-sm">
+                                <i class="am-icon-cloud-upload"></i> 上传头像</button>
+                              <input id="uploadImg" type="file" >
+                            </div>
+                        </div>
+                        <div class="info-group">
+                            <div class="m10">
+                                用户名:{{user.username}}
+                            </div>
+                            <div class="m10">
+                                真实名称:{{user.first_name}}
+                            </div>
+                            <div class="m10">
+                                昵称: <span editable='last_name'>{{user.last_name}}</span>
+                            </div>
+                        </div>
+                        <div class="info-group">
+                            <div class="m10">
+                                邮箱:<span editable='email'>{{user.email}}</span>
+                            </div>
+                            <div class="m10">
+                                电话:<span editable='phone'>{{user.phone}}</span>
+                            </div>
+                            <div class="m10">
+                                q q :<span editable='qq'>{{user.qq}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="editUserInfoBtn">
+                        <span class="edit"><i class="iconfont">&#xe600;</i>编辑</span>
+                        <span class="save dis-none"><i class="iconfont">&#xe602;</i>保存</span>
+                        <span class="cancel dis-none"><i class="iconfont">&#xe601;</i>取消</span>
+                    </div>
+                </article>
             </section>
-            <section class="usercenter-content-item" my-role="content-item" content-index="1">
-                我的生涯content
+            <section class="usercenter-content-item" my-role="content-item" >
+                <header class="content-head">
+                    <span>我的生涯</span>
+                </header>
+                <article class="content-bd">
+                    {%if player == "" %}
+                        你还不是一名球员,请先申请成为球员
+                        <form action="/team/savePlayer" method="post" accept-charset="utf-8" class="my-form">
+                             <div class="">
+                                <label class="my-form-label">身高:</label>
+                                <input type="text" name="height" class="my-form-input" value="" placeholder="单位:cm">
+                            </div>
+                             <div class="">
+                                <label class="my-form-label">体重:</label>
+                                <input type="text" name="weight" class="my-form-input" value="" placeholder="单位:kg">
+                            </div>
+                            <div class="">
+                              <label class="my-form-label" or="">选择位置:</label>
+                              <select name="position">
+                                  <option value="PG">控卫</option>
+                                  <option value="SG">分卫</option>
+                                  <option value="C">中锋</option>
+                                  <option value="PF">前锋</option>
+                                  <option value="SF">小前锋</option>
+                              </select>
+                            </div>
+                            <div class="">
+                              <label class="my-form-label">个人简述:</label>
+                              <textarea name="desc"></textarea>
+                            </div>
+                            <input type="submit" name="" value="提交">
+                        </form>
+                    {%else%}
+                    <div class="player-info my-form">
+                            <div class="info-avatar">
+                                <img class="team-avatar" src="/static/files/clothes.png" alt="">
+                                <i>{%if user.player.number%}{{user.player.number}}{%else%}null{%endif%}</i>
+                            </div>
+                            <div class="info-group">
+                                <div class="m10">
+                                    所在球队:{%if user.player.team%}{{user.player.team}}{%else%}你不属于任何球队{%endif%}
+                                </div>
+                                <div class="m10">
+                                    球衣号码:{%if user.player.number%}{{user.player.number}}{%else%}你还未有号码{%endif%}
+                                </div>
+                                <div class="m10">
+                                    擅长位置:{{user.player.position}}
+                                </div>
+                            </div>
+                            <div class="info-group">
+                                <div class="m10">
+                                    身高:<span editable='height'>{{user.player.height}}</span>
+                                </div>
+                                <div class="m10">
+                                    体重:<span editable='weight'>{{user.player.weight}}</span>
+                                </div>
+                                <div class="m10">
+                                    学校:<span editable='school'>{{user.player.school}}</span>
+                                </div>
+                                <div class="m10">
+                                    desc :<span editable='desc'>{{user.player.desc}}</span>
+                                </div>
+                            </div>
+                        <div id="editPlayerInfoBtn">
+                            <span class="edit"><i class="iconfont">&#xe600;</i>编辑</span>
+                            <span class="save dis-none"><i class="iconfont">&#xe602;</i>保存</span>
+                            <span class="cancel dis-none"><i class="iconfont">&#xe601;</i>取消</span>
+                        </div>
+                    </div>
+                    <div>
+                        <table class="am-table">
+                            <caption>平均数据</caption>
+                            <thead>
+                                <tr>
+                                    <th>得分</th>
+                                    <th>助攻</th>
+                                    <th>篮板</th>
+                                    <th>抢断</th>
+                                    <th>盖帽</th>
+                                    <th>失误</th>
+                                    <th>犯规</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>data</td>
+                                    <td>data</td>
+                                    <td>data</td>
+                                    <td>data</td>
+                                    <td>data</td>
+                                    <td>data</td>
+                                    <td>data</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="am-table">
+                            <caption>总数据</caption>
+                            <thead>
+                                <tr>
+                                    <th>得分</th>
+                                    <th>助攻</th>
+                                    <th>篮板</th>
+                                    <th>抢断</th>
+                                    <th>盖帽</th>
+                                    <th>失误</th>
+                                    <th>犯规</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>data</td>
+                                    <td>data</td>
+                                    <td>data</td>
+                                    <td>data</td>
+                                    <td>data</td>
+                                    <td>data</td>
+                                    <td>data</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    {%endif%}
+                </article>
             </section>
-            <section class="usercenter-content-item" my-role="content-item" content-index="2">
-                我的球队content
+            <section class="usercenter-content-item" my-role="content-item" >
+                <header class="content-head">
+                    <span>我的球队</span>
+                </header>
+                <article class="content-bd">
+                    {% if team == "noJoinTeam" %}
+                        你还没有加入球队,你可以选择创建一支或者加入一支
+                        <form action="/team/saveTeam" method="post">
+                            <input type="text" name="name" value="" placeholder="name">
+                            <input type="text" name="school" value="" placeholder="归属学校">
+                            <textarea name="desc"></textarea>
+                            <input type="submit" name="" value="提交">
+                        </form>
+                    {% elif team == "noTeam" %}
+                        你还不是球员,你可以选择创建一支或成为球员后加入球队
+                    {% else %}
+                        <div class="team-info my-form">
+                            <div class="info-avatar">
+                                <img class="team-avatar" src="/static/upload/{{team.logo}}" alt="">
+                                {%if  isManager %}
+                                <div class="am-form-group am-form-file">
+                                  <button  type="button" class="am-btn am-btn-default am-btn-sm">
+                                    <i class="am-icon-cloud-upload"></i> 上传Logo</button>
+                                  <input id="uploadLogo" type="file" >
+                                </div>
+                                {%endif%}
+                            </div>
+                            <div class="info-group">
+                                <div class="m10">
+                                    球队名字:<span editable='name'>{{team.name}}</span>
+                                </div>
+                                <div class="m10">
+                                    管理员:{{team.manager.first_name}}
+                                </div>
+                                <div class="m10">
+                                    学校: <span editable='school'>{{team.school}}</span>
+                                </div>
+                            </div>
+                            <div class="info-group">
+                                <div class="m10">
+                                    简介:<span editable='desc'>{{team.desc}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {%if isManager%}
+                        <div id="editTeamInfoBtn">
+                            <span class="edit"><i class="iconfont">&#xe600;</i>编辑</span>
+                            <span class="save dis-none"><i class="iconfont">&#xe602;</i>保存</span>
+                            <span class="cancel dis-none"><i class="iconfont">&#xe601;</i>取消</span>
+                        </div>
+                        {%endif%}
+                        <header class="content-head">
+                            <span>球员信息:</span>
+                        </header>
+                        <aside class="players">
+                            {% for player in team.players.all %}
+                                <div class="players-item" data-idCode="{{player.id_code}}">
+                                    <img src="/static/upload/{{player.user.img_path}}" alt="">
+                                    <div class="players-item-info">
+                                        <div>姓名:<span class="detail-name">{{player.user.first_name}}</span></div>
+                                        <div>球衣:<span class="detail-number">{{player.number}}</span></div>
+                                        <div>位置:<span class="detail-position">{{player.position}}</span></div>
+                                        <div>身高:<span class="detail-height">{{player.height}}</span> 体重:<span class="detail-weight">{{player.weight}}</span></div>
+                                        <div>加入时间:<span class="detail-join-time">{{player.create_time|date:'Y-m-d'}}</span></div>
+                                    </div>
+                                </div>
+                                <div class="players-item" data-idCode="{{player.id_code}}">
+                                    <img src="/static/upload/{{player.user.img_path}}" alt="">
+                                    <div class="players-item-info">
+                                        <div>姓名:<span class="detail-name">{{player.user.first_name}}</span></div>
+                                        <div>球衣:<span class="detail-number">{{player.number}}</span></div>
+                                        <div>位置:<span class="detail-position">{{player.position}}</span></div>
+                                        <div>身高:<span class="detail-height">{{player.height}}</span> 体重:<span class="detail-weight">{{player.weight}}</span></div>
+                                        <div>加入时间:<span class="detail-join-time">{{player.create_time|date:'Y-m-d'}}</span></div>
+                                    </div>
+                                </div>
+                                <div class="players-item" data-idCode="{{player.id_code}}">
+                                    <img src="/static/upload/{{player.user.img_path}}" alt="">
+                                    <div class="players-item-info">
+                                        <div>姓名:<span class="detail-name">{{player.user.first_name}}</span></div>
+                                        <div>球衣:<span class="detail-number">{{player.number}}</span></div>
+                                        <div>位置:<span class="detail-position">{{player.position}}</span></div>
+                                        <div>身高:<span class="detail-height">{{player.height}}</span> 体重:<span class="detail-weight">{{player.weight}}</span></div>
+                                        <div>加入时间:<span class="detail-join-time">{{player.create_time|date:'Y-m-d'}}</span></div>
+                                    </div>
+                                </div>
+                                <div class="players-item" data-idCode="{{player.id_code}}">
+                                    <img src="/static/upload/{{player.user.img_path}}" alt="">
+                                    <div class="players-item-info">
+                                        <div>姓名:<span class="detail-name">{{player.user.first_name}}</span></div>
+                                        <div>球衣:<span class="detail-number">{{player.number}}</span></div>
+                                        <div>位置:<span class="detail-position">{{player.position}}</span></div>
+                                        <div>身高:<span class="detail-height">{{player.height}}</span> 体重:<span class="detail-weight">{{player.weight}}</span></div>
+                                        <div>加入时间:<span class="detail-join-time">{{player.create_time|date:'Y-m-d'}}</span></div>
+                                    </div>
+                                </div>
+                                <div class="players-item" data-idCode="{{player.id_code}}">
+                                    <img src="/static/upload/{{player.user.img_path}}" alt="">
+                                    <div class="players-item-info">
+                                        <div>姓名:<span class="detail-name">{{player.user.first_name}}</span></div>
+                                        <div>球衣:<span class="detail-number">{{player.number}}</span></div>
+                                        <div>位置:<span class="detail-position">{{player.position}}</span></div>
+                                        <div>身高:<span class="detail-height">{{player.height}}</span> 体重:<span class="detail-weight">{{player.weight}}</span></div>
+                                        <div>加入时间:<span class="detail-join-time">{{player.create_time|date:'Y-m-d'}}</span></div>
+                                    </div>
+                                </div>
+                                <div class="players-item" data-idCode="{{player.id_code}}">
+                                    <img src="/static/upload/{{player.user.img_path}}" alt="">
+                                    <div class="players-item-info">
+                                        <div>姓名:<span class="detail-name">{{player.user.first_name}}</span></div>
+                                        <div>球衣:<span class="detail-number">{{player.number}}</span></div>
+                                        <div>位置:<span class="detail-position">{{player.position}}</span></div>
+                                        <div>身高:<span class="detail-height">{{player.height}}</span> 体重:<span class="detail-weight">{{player.weight}}</span></div>
+                                        <div>加入时间:<span class="detail-join-time">{{player.create_time|date:'Y-m-d'}}</span></div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                        </aside>
+                    {%endif%}
+                </article>
             </section>
-            <section class="usercenter-content-item" my-role="content-item" content-index="3">
-                我的消息content
+            <section class="usercenter-content-item" my-role="content-item" >
+                <header class="content-head">
+                    <span>我的消息</span>
+                </header>
+                <article class="content-bd">
+                    
+                </article>
+            </section>
+        </section>
+    </div>
+    <div class="playerDetailContainer" >
+        <header class="header">
+            球员信息
+            {%if isManager%}
+            <div id="edit-player-btn">
+                <span class="edit"><i class="iconfont">&#xe600;</i>编辑</span>
+                <span class="save dis-none"><i class="iconfont">&#xe602;</i>保存</span>
+                <span class="cancel dis-none"><i class="iconfont">&#xe601;</i>取消</span>
+            </div>
+            {%endif%}
+        </header><!-- /header -->
+        <section class="playerDetail">
+            <header class="detail-info">
+                <img class="player-logo"src="/static/upload/{{team.logo}}" alt="">
+                <div class="my-form">
+                    <div>姓名:<span class="detail-name">d</span></div>
+                    <div>球衣:<span class="detail-number">dddd</span></div>
+                    <div>位置:<span class="detail-position">dddd</span></div>
+                    <div>身高:<span class="detail-height">dddd</span> 体重:<span class="detail-weight">dddd</span></div>
+                    <div>加入时间:<span class="detail-join-time"></span></div>
+                </div>
+                <div>
+                    <label>简介:</label>
+                    <span class="detail-desc">dddd</span>
+                </div>
+            </header><!-- /header -->
+            <section class="detail-data">
+                
             </section>
         </section>
     </div>

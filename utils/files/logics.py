@@ -7,10 +7,10 @@ import time
 def saveFile(file,path):
     extention =  file.name[file.name.rfind('.'):]
     fileName = str(int(time.time() * 10)) + extention
-    with open(path, 'wb+') as dest:
+    with open(path+"/"+fileName, 'wb+') as dest:
         for chunk in file.chunks():
             dest.write(chunk)
-    return {fileName:file.name,fileUName:fileName}
+    return {"fileName":file.name,"fileUName":fileName}
 
 
 def getIniValue(path, option, key):

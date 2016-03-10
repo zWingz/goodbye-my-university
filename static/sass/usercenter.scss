@@ -1,7 +1,60 @@
 $base-blue:#0732A2;
+//  球员信息container,in  the usercenter-content,第三个flex-item
+.playerDetailContainer {
+    position:fixed;
+    width:400px;
+    top:65px;
+    right:0px;
+    background:#fff;
+    border:1px solid #ddd;
+    z-index: 111;
+    padding: 10px 20px;
+    min-height: 500px;
+    transition:transform 1s;
+    transform-origin:top right;
+    transform:scale(0);
+    .header {
+        border-left: 4px solid $base-blue;
+        padding-left: 10px;
+        font-size: 16px;
+        font-weight: 700;
+        font-family: 'Microsoft YaHei',Arial;
+    }
+    .playerDetail {
+        margin-left: 10px;
+        .player-logo {
+            width: 100px;
+            height: 100px;
+            vertical-align: 0px;
+            margin-right: 5px;
+            +div{
+                display:inline-block;
+                font-weight: bold;
+                font-family: 'sans-serif';
+                span{
+                    font-weight: normal;
+                    // margin-left: 5px;
+                }
+            }
+        }
+        .detail-info {
+            margin-top: 5px;
+            // text-align: center;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #ddd;
+            >div {
+                font-size: 13px;
+            }
+        }
+    }
+}
+
+// 主面板
 .usercenter-container{
     display: flex;
     flex-wrap:nowrap;
+    align-items: flex-start;
+    // 左侧兰,第一个flex-item
     .usercenter-left {
         flex-shrink:0;
         width:200px;
@@ -31,23 +84,166 @@ $base-blue:#0732A2;
             }
         }
     }
+    // 主面板.第二个flex-item
     .usercenter-content {
         position:relative;
         flex-grow:1;
         box-shadow: 0 0 4px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
         .usercenter-content-item {
-            position:absolute;
+            // position:absolute;
+            display:none;
+            padding:10px 30px;
             width:100%;
             height:100%;
             background:#fff;
             opacity:0;
-            transition:opacity 1s ;
-            &.active {
+            transition:opacity .5s ;
+            &.opacity{
                 opacity:1;
+            }
+            &.active {
+                display:inline-block;
+                // z-index: 10;
+            }
+        }
+        .content-head {
+            position:relative;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            &:after{
+                content: "";
+                position: absolute;
+                right: 0px;
+                display: inline-block;
+                height: 2px;
+                left: 82px;
+                background: #eee;
+                float: left;
+                margin-top: 14px;
             }
         }
     }
+
+
+    // 信息container,in the usercenter-content-item
+    .base-info,.player-info,.team-info {
+        display:flex;
+        flex-wrap:nowrap;
+        justify-content:space-around;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 15px;
+        .info-group {
+            flex-grow:1;
+            >div {
+                margin:10px;
+            }
+        }
+        .info-avatar {
+            position:relative;
+            flex-shrink:0;
+            margin-right: 50px;
+            overflow:hidden;
+            &:hover {
+                .am-form-file {
+                    bottom:0px;
+                }
+            }
+            img {
+                width:150px;
+                height:150px;
+            }
+            .am-form-file {
+                position:absolute;
+                bottom:-32px;
+                width:150px;
+                margin:0px;
+                transition:bottom 1px;
+                opacity:0.8;
+                button{
+                    width:100%;
+                }
+            }
+        }
+    }
+    .player-info {
+        .info-avatar{
+            img{
+                width:80px;
+                height:135px;
+            }
+            i {
+                position: absolute;
+                top: 22%;
+                left: 14%;
+                font-size: 46px;
+            }
+        }
+    }
+    .team-info {
+        border-bottom: none;
+    }
+    .players{
+        display:flex;
+        flex-wrap:wrap;
+        margin-top: 10px;
+        // justify-content:flex-start;
+    }
+    .players-item {
+        font-size: 13px;
+        margin:10px;
+        cursor: pointer;
+        position:relative;
+        &:hover{
+            &:after {
+                box-shadow: 0 0 40px 4px #ccc;
+            }
+        }
+        &:after{
+            content:'';
+            position:absolute;
+            top:0px;
+            left:0px;
+            display:inline-block;
+            width:100%;
+            height:100%;
+            // box-shadow: 0 0 4px #ddd;
+            transition:box-shadow 0.2s;
+            // background:red;
+        }
+        img{
+            width:120px;
+            height:120px;
+            vertical-align: -2px;
+            margin-right: 5px;
+        }
+        .players-item-info{
+            display:inline-block;
+            font-weight: bold;
+            font-family: 'sans-serif';
+            span{
+                font-weight: normal;
+                // margin-left: 5px;
+            }
+        }
+    }
+    @at-root #editUserInfoBtn,#editPlayerInfoBtn,#editTeamInfoBtn,#edit-player-btn {
+        position:absolute;
+        top:25px;
+        right:30px;
+        font-size: 13px;
+        cursor:pointer;
+        >span:hover {
+            color:$base-blue;
+        }
+    }
+    @at-root #edit-player-btn{
+        top:10px;
+    }
 }
+
+
 .user-info {
     height:150px;
     padding-top:30px;

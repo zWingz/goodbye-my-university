@@ -18,7 +18,7 @@ class Team(models.Model):
     school = models.CharField(max_length=10,null=True)
     status = models.IntegerField(default=1)  # 判断是否生效字段
     create_time = models.DateTimeField()
-    edit_tiime = models.DateTimeField()
+    edit_time = models.DateTimeField()
 
     def save(self, *args, **kwargs):
         if not self.create_time:
@@ -38,12 +38,15 @@ class Player(models.Model):
     user = models.OneToOneField(User,to_field="username",related_name="player")  
     number = models.IntegerField(null=True)
     team = models.ForeignKey(Team,related_name="players",on_delete=models.CASCADE,null=True)
+    height = models.CharField(max_length=10,null=True)
+    weight = models.CharField(max_length=10,null=True)
     profile = models.CharField(max_length=20)
+    school = models.CharField(max_length=10,null=True)
     desc = models.TextField(null=True)
     position = models.CharField(max_length=5,null=True)
     status = models.IntegerField(default=1)  # 判断是否生效字段
     create_time = models.DateTimeField()
-    edit_tiime = models.DateTimeField()
+    edit_time = models.DateTimeField()
     
     def save(self, *args, **kwargs):
         if not self.create_time:

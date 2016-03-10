@@ -23,6 +23,5 @@ class Users(ProfileUser):
     id_code = models.CharField(max_length = 20,null=True,unique=True)
     phone= models.CharField(max_length = 20,null=True)
     qq = models.CharField(max_length=20,null=True)
-    school = models.CharField(max_length=10,null=True)
     img_path = models.CharField(max_length=15,null=True)
     status = models.CharField(max_length=10,null=True) 

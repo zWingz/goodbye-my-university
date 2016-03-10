@@ -12,16 +12,16 @@
 <body>
     <header id="header" class="">
         <h1 class="header-title">UBA</h1>
-        <nav class='header-nav'>
+        <nav class='header-nav' data-am-sticky>
             <ul class='nav unstyle'>
-                <li class="tabactive"><a href="" title="">首页</a></li>
-                <li><a href="" title="">nav1</a></li>
+                <li class="tabactive"><a href="/" title="">首页</a></li>
+                <li><a href="/team/listTeam" title="">球队</a></li>
                 <li><a href="" title="">nav1</a></li>
                 <li><a href="" title="">nav1</a></li>
             </ul>
                 {% if user.is_authenticated %}
                 <aside class='avatar' href="#" title="" data-type='login'>
-                    <img src="/static/upload/{{user.img_path}}" alt="">
+                    <img class="user-avatar"src="/static/upload/{{user.img_path}}" alt="">
                     <div class='user-center-menu'>
                         <!-- <i class='triangle'></i> -->
                         <span class="menu-item">您好! {{user.first_name}}</span>

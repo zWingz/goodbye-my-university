@@ -1,0 +1,116 @@
+{% extends "layout/base.html" %}
+{%block head%}
+<link rel="stylesheet" type="text/css" href="/static/css/listTeam.css">
+{%endblock%}
+{% block title %}球队列表{% endblock %}
+{%block content%}
+    <div class="teamList-container active">
+        <div class="teamList-left">
+            <header class="teamList-header">
+                球队列表
+            </header><!-- /header -->
+            <section class="teamList-content" >
+                {% for team in teamList %}
+                    <div class="team-item" data-code="{{team.id_code}}">
+                        <img class="team-logo"src="/static/upload/{{team.logo}}" alt="">
+                        <div class="team-info">
+                            <span><label>球队名:</label>{{team.name}}</span>
+                            <span><label>学校:</label>{{team.school}}</span>
+                            <span><label>创建者:</label>{{team.manager.first_name}}</span>
+                            <span><label>创建时间:</label>{{team.create_time|date:'Y-m-d'}}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </section>
+        </div>
+        <div class="teamList-right opacity" >
+            <header class="teamList-header">
+                球队信息
+                <span class="into-detail">详情<i class='iconfont'>&#xe603;</i></span>
+            </header><!-- /header -->
+            <section class="teamDetail">
+                <header class="detail-info">
+                    <img class="team-logo"src="/static/upload/{{team.logo}}" alt="">
+                    <div><span class="detail-name">{{team.name}}</span></div>
+                    <div><label>简介:</label><span class="detail-desc">{{team.desc}}</span></div>
+                </header><!-- /header -->
+                <section class="detail-players">
+                </section>
+                <section class="detail-data">
+                    <table class="am-table">
+                        <caption>场均数据</caption>
+                        <thead>
+                            <tr>
+                                <th>得分</th>
+                                <th>助攻</th>
+                                <th>篮板</th>
+                                <th>抢断</th>
+                                <th>盖帽</th>
+                                <th>失误</th>
+                                <th>胜率</th>
+                                <!-- <th>场次</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-type='point'>data</td>
+                                <td data-type='assist'>data</td>
+                                <td data-type='rebound'>data</td>
+                                <td data-type='steal'>data</td>
+                                <td data-type='block'>data</td>
+                                <td data-type='turnover'>data</td>
+                                <td data-type='win'>data</td>
+                                <!-- <td data-type='game'>data</td> -->
+                                </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </section>
+        </div>
+    </div>
+
+    <!-- 球队详情  -->
+    <div class="teamList-container">
+        <div class="teamList-left">
+            <header class="teamList-header">
+                球队详情
+                <span class="out-detail"><i class='iconfont'>&#xe604;</i>返回</span>
+            </header><!-- /header -->
+            <section class="teamList-content" >
+                球队的详情页面
+            </section>
+        </div>
+        <div class="teamList-right opacity" >
+            <header class="teamList-header">
+                球员信息
+            </header><!-- /header -->
+            <section class="playerDetail">
+                <header class="detail-info">
+                    <img class="player-logo"src="/static/upload/{{team.logo}}" alt="">
+                    <div>
+                        <div>姓名:<span class="detail-name"></span></div>
+                        <div>球衣:<span class="detail-number"></span></div>
+                        <div>位置:<span class="detail-position"></span></div>
+                        <div>身高:<span class="detail-height"></span> 体重:<span class="detail-weight"></span></div>
+                        <div>加入时间:<span class="detail-join-time"></span></div>
+                    </div>
+                    <div>
+                        <label>简介:</label>
+                        <span class="detail-desc"></span>
+                    </div>
+                </header><!-- /header -->
+                <section class="detail-data">
+                    
+                </section>
+            </section>
+        </div>
+    </div>
+{%endblock%}
+{%block js%}
+<script type="text/javascript" src="/static/js/listTeam.js"></script>
+<script type="text/javascript">
+    $(function () {
+
+  });
+</script>
+{%endblock%}

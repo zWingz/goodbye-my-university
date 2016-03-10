@@ -114,7 +114,8 @@ DATABASES = {
         'NAME': 'webbasketball',
         'USER': 'ubuntu',
         'PASSWORD': '75906116',
-        'HOST': '192.168.201.67',
+        # 'HOST': '192.168.201.67',
+        'HOST': '10.173.160.107',
         'PORT': '3306',
     },
 }

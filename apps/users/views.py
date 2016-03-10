@@ -14,7 +14,7 @@ def register(request):
     if request.method == 'POST':
         user = Logics.register(request.POST)
     if user:
-        user = authenticate(username=request.POST['r-username'], password=request.POST['password'])
+        user = authenticate(username=request.POST['r-username'], password=request.POST['r-password'])
         auth_login(request,user)
         # return render(request, "auth/login.html")
     return redirect('/')
@@ -34,7 +34,22 @@ def login(request):
 
 @login_required
 def usercenter(request):
-    return render(request,"users/usercenter.html")
+    isManager = False;
+    try:
+        player = request.user.player
+        team = player.team
+        if team is None:
+            team = "noJoinTeam"
+        elif team.manager == request.user:
+            isManager = True
+    except:
+        player = ""
+        try:
+            team = request.user.team
+            isManager = True
+        except:
+            team = "noTeam"
+    return render(request,"users/usercenter.html",{"player":player,"team":team,"isManager":isManager})
 
 
 @login_required

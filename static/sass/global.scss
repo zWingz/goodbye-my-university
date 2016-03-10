@@ -10,8 +10,8 @@ html,body{
     background:#F4F4F4 !important;
 }
 #header {
-    position:fixed;
-    top:0px;
+    // position:fixed;
+    // top:0px;
     width:100%;
     text-align: center;
     z-index: 111;
@@ -25,6 +25,7 @@ html,body{
         line-height: $header-title-height;
     }
     .header-nav {
+        position:relative;
         padding:10px 20px;
         background:#f4f4f4;
     }
@@ -52,18 +53,27 @@ html,body{
         }
     }
     .avatar {
-        float: right;
-        position:relative;
+        position:absolute;
+        // position:relative;
+        right:80px;
+        top:10px;
         height:$hader-nav-height;
         width:40px;
         line-height: $hader-nav-height;
-        box-shadow: 0 0px 4px rgb(232,123,160);
-        border-radius: 50%;
+        // box-shadow: 0 0px 4px rgb(232,123,160);
         cursor:pointer;
+        z-index: 20;
+        // overflow:hidden;
         &:hover {
             .user-center-menu{
                 display:block;
             }
+        }
+        .user-avatar {
+            width:40px;
+            height:100%;
+            vertical-align: top;
+            border-radius: 50%;
         }
     }
     .user-center-menu {
@@ -120,12 +130,10 @@ html,body{
 
 
 .container {
-    margin:{
-        top:180px;
-        left:20px;
-        right:20px;
-    }
-    min-height: 500px;
+    width:88%;
+    margin:0 auto;
+    // min-height: 1500px;
     background:#F4F4F4;
     // box-shadow: 0 0px 4px rgb(232,123,160)
+    // overflow: hidden;
 }

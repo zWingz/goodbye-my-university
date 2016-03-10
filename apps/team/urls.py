@@ -12,6 +12,8 @@ from django.conf.urls import patterns, url
 
 urlpatterns = patterns(
     'apps.team.views',
+    url('^listTeam$', 'listTeam'),
+    url('^getTeamDetail$', 'getTeamDetail'),
     # Team
     url('^saveTeam$', 'saveTeam'),
     url('^editTeam$', 'editTeam'),
@@ -19,12 +21,13 @@ urlpatterns = patterns(
     url('^changeTeamName$', 'changeTeamName'),
     url('^disbandTeam$', 'disbandTeam'),
     url('^getTeam$', 'getTeam'),
-    url('^listTeam$', 'listTeam'),
     url('^getMyTeam$', 'getMyTeam'),
     # Player
+    # getPlayerDetail
+    url('^getPlayerDetail$', 'getPlayerDetail'),
     url('^savePlayer$', 'savePlayer'),
     url('^editPlayer$', 'editPlayer'),
-    url('^changeNum$', 'changeNum'),
+    url('^changeNumAndPos$', 'changeNumAndPos'),
     url('^joinTeam$', 'joinTeam'),
     url('^leaveTeam$', 'leaveTeam'),
     url('^getPlayer$', 'getPlayer'),
