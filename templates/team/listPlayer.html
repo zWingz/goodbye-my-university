@@ -1,0 +1,121 @@
+{% extends "layout/base.html" %}
+{%block head%}
+<link rel="stylesheet" type="text/css" href="/static/css/listTeam.css">
+{%endblock%}
+{% block title %}球员列表{% endblock %}
+{%block content%}
+    <div class="teamList-container active">
+        <div class="teamList-left">
+            <header class="teamList-header">
+                球员列表
+            </header><!-- /header -->
+            <section class="teamList-content" >
+                {% for player in playerList %}
+                    <div class="team-item" data-code-type='player' data-code="{{player.id_code}}">
+                        <img class ="team-logo"src="/static/upload/{{player.user.img_path}}" alt="">
+                        <div class="team-info">
+                            <span><label>姓名:</label>{{player.user.first_name}}</span>
+                             <span><label>球队:</label>{{player.team.name}}</span>
+                            <span><label>学校:</label>{{player.school}}</span>
+                             <span><label>位置:</label>{{player.position}}</span>
+                        </div>
+                        {% if user.status == 'manager' or user.status == 'double' and not player.team%}
+                        <button type="button" class="invite-join-team am-btn am-btn-default">邀请加入</button>
+                        {%endif%}
+                    </div>
+                {% endfor %}
+            </section>
+        </div>
+        <div class="teamList-right opacity" >
+            <header class="teamList-header">
+                球员信息
+                <span class="into-detail">详情<i class='iconfont'>&#xe603;</i></span>
+            </header><!-- /header -->
+            <section class="playerDetail">
+                <header class="detail-info">
+                    <img class="player-logo"src="/static/upload/{{team.logo}}" alt="">
+                    <div>
+                        <div>姓名:<span class="detail-name"></span></div>
+                        <div>球衣:<span class="detail-number"></span></div>
+                        <div>位置:<span class="detail-position"></span></div>
+                        <div>身高:<span class="detail-height"></span> 体重:<span class="detail-weight"></span></div>
+                        <div>加入时间:<span class="detail-join-time"></span></div>
+                    </div>
+                    <div>
+                        <label>简介:</label>
+                        <span class="detail-desc"></span>
+                    </div>
+                </header><!-- /header -->
+                <section class="detail-data">
+                    <table class="am-table">
+                        <caption>场均数据</caption>
+                        <thead>
+                            <tr>
+                                <th>得分</th>
+                                <th>助攻</th>
+                                <th>篮板</th>
+                                <th>抢断</th>
+                                <th>盖帽</th>
+                                <th>失误</th>
+                                <th>胜率</th>
+                                <!-- <th>场次</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-type='point'>0</td>
+                                <td data-type='assist'>0</td>
+                                <td data-type='rebound'>0</td>
+                                <td data-type='steal'>0</td>
+                                <td data-type='block'>0</td>
+                                <td data-type='turnover'>0</td>
+                                <td data-type='win'>0</td>
+                                <!-- <td data-type='game'>data</td> -->
+                                </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </section>
+        </div>
+    </div>
+
+{%endblock%}
+{%block footer%}
+<!-- 申请加入球队modal -->
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="applyModal">
+  <div class="am-modal-dialog">
+    <div class="am-modal-hd">申请加入:
+      <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+    </div>
+    <div class="am-modal-bd my-form">
+        <div class="my-form-group">
+            <label class="my-form-label">你希望的号码:</label>
+            <input class="my-form-input" type="text" name="r-number" value="" placeholder="你希望的号码">
+        </div>
+        <div class="my-form-group">
+            <label class="my-form-label"l>你希望的位置:</label>
+            <select name="r-position">
+                <option value="PG">控卫</option>
+                <option value="SG">分位</option>
+                <option value="C">中锋</option>
+                <option value="SF">小前</option>
+                <option value="PF">大前</option>
+            </select>
+        </div>
+        <div class="my-form-group">
+            <label class="my-form-label">你想说什么:</label>
+            <textarea name="r-saysomething"></textarea>
+        </div>
+        <button id="saveApplyJoin" type="button" class='am-btn am-btn-default'>提交</button>
+    </div>
+  </div>
+</div>
+{%endblock%}
+{%block js%}
+<script type="text/javascript" src="/static/js/listTeam.js"></script>
+<script type="text/javascript">
+    $(function () {
+
+  });
+</script>
+{%endblock%}

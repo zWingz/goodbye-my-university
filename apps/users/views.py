@@ -6,6 +6,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 import apps.users.logics as Logics
+from apps.message.models import Message
 from datetime import datetime
 from django.contrib.auth.views import logout as auth_logout
 from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login,authenticate
@@ -35,21 +36,35 @@ def login(request):
 @login_required
 def usercenter(request):
     isManager = False;
-    try:
+    status = request.user.status
+    player = False
+    team = False
+    player_data = {}
+    team_data = {}
+    if status == 'double':
+        team = request.user.team.all()[0]
         player = request.user.player
+        player_data = json.load(open(settings.PLAYER_PROFILE_DIR+"/"+player.profile,'r'));
+        team_data = json.load(open(settings.TEAM_PROFILE_DIR+"/"+team.profile+"/profile","r"))
+        isManager = True
+    elif status == 'player':
+        player = request.user.player
+        player_data = json.load(open(settings.PLAYER_PROFILE_DIR+"/"+player.profile,'r'));
         team = player.team
-        if team is None:
-            team = "noJoinTeam"
-        elif team.manager == request.user:
-            isManager = True
-    except:
-        player = ""
-        try:
-            team = request.user.team
-            isManager = True
-        except:
-            team = "noTeam"
-    return render(request,"users/usercenter.html",{"player":player,"team":team,"isManager":isManager})
+
+    elif status == 'manager':
+        team = request.user.team.all()[0]
+        team_data = json.load(open(settings.TEAM_PROFILE_DIR+"/"+team.profile+"/profile","r"))
+        isManager = True
+    msg = Message.objects.filter(receiver=request.user).order_by("-create_time");
+    return render(request,"users/usercenter.html",{
+                                                                                                    "player":player,
+                                                                                                    "player_data":player_data,
+                                                                                                    "team":team,
+                                                                                                    "team_data":team_data,
+                                                                                                    "isManager":isManager,
+                                                                                                    "msg":msg
+                                                                                                    })
 
 
 @login_required

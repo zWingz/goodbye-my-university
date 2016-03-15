@@ -14,7 +14,8 @@ urlpatterns = patterns(
     'apps.message.views',
     url('^sendMsg$', 'sendMsg'),
     url('^readMsg$', 'readMsg'),
-    url('^sendJoinTeamMsg$', 'sendJoinTeamMsg'),
+    url('^applyJoinTeam$', 'applyJoinTeam'),
+    url('^inviteJoinTeam$', 'inviteJoinTeam'),
     url('^listUnReadMsg$', 'listUnReadMsg'),
     url('^listAllMsg$', 'listAllMsg'),
 

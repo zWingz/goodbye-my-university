@@ -5,7 +5,9 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 import apps.team.logics as Logics
+import apps.message.logics as MsgLogics
 from apps.team.models import Team,Player
+from apps.message.models import Message
 from datetime import datetime
 from utils.files.logics import saveFile
 from utils.Decorator.decorator import post_required
@@ -14,6 +16,11 @@ from utils.Decorator.decorator import post_required
 def listTeam(request):
     teamList = Team.objects.all();
     return render(request,"team/listTeam.html",{"teamList":teamList})
+
+
+def listPlayer(request):
+    playerList = Player.objects.all();
+    return render(request,"team/listPlayer.html",{"playerList":playerList})
 
 @post_required
 def getTeamDetail(request):
@@ -31,10 +38,8 @@ def getTeamDetail(request):
 def getPlayerDetail(request):
     id_code = request.POST['id_code']
     player = Player.objects.get(id_code=id_code);
-    # data = json.load(open(settings.PLAYER_PROFILE_DIR+'/'+player.profile,'r'))
     response_data ={}
     response_data['players'] = toPlayersView([player])
-    # response_data['player_data'] = data
     return HttpResponse(json.dumps(response_data,cls=CJsonEncoder),content_type='application/json')
 
 
@@ -180,18 +185,20 @@ def changeNumAndPos(request):
 @post_required
 def joinTeam(request):
     response_data = {}
-    player = Player.objects.get(user=request.user)
-    team = Team.objects.get(id_code=request.POST['id_code'])
-    team_players = team.players_set.all()
-    nums = [x.number for x in players]
-    if request.POST['number'] in nums:
-        response_data.success = 0
-        response_data.message = '号码已存在'
+    player = Player.objects.get(id_code=request.POST['player_id_code'])
+    msg = Message.objects.get(id_code=request.POST['msg_id_code'])
+    team = request.user.team.all()[0]
+    team_players = team.players.all()
+    nums = [x.number for x in team_players]
+    if request.POST['r-number'] in nums:
+        response_data['success'] = 0
+        response_data['message'] = '号码已存在'
         return HttpResponse(json.dumps(response_data),content_type="application/json")
-    result = Logics.joinTeam(player,team,request.POST['number'])
+    result = Logics.joinTeam(player,team,request.POST['r-number'],request.POST['r-position'])
     if result:
-        response_data.success = 1
-        response_data.message = '保存成功'
+        response_data['success'] = 1
+        response_data['message'] = '保存成功'
+        MsgLogics.readMsg(msg)
     return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 
@@ -249,11 +256,6 @@ def getPlayer(request):
 #     teams = Team.objects.filter(id_code=id_code,name=name,status=status)
 #     return render(request,"team/listteam",{teams:teams})
 
-def listPlayer(request):
-    team_id = request.GET['id_code']
-    team = Team.objects.get(id_code=id_code,status=1)
-    players = team.players_set.all()
-    return render(request,"team/listplayers",{players:players})
 
 def toPlayersView(players):
     result = []
@@ -272,6 +274,8 @@ def toPlayersView(players):
         obj['number'] = player.number
         obj['create_time'] = player.create_time
         obj['desc'] = player.desc
+        data = json.load(open(settings.PLAYER_PROFILE_DIR+'/'+player.profile,'r'))
+        obj['player_data'] = data
         result.append(obj)
     return result
 

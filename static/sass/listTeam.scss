@@ -124,7 +124,7 @@ $base-blue:#0732A2;
         display:flex;
         flex-wrap:wrap;
         margin-top: 10px;
-        justify-content:space-between;
+        justify-content:flex-start;
         .player {
             cursor: pointer;
             margin:5px;
@@ -138,7 +138,7 @@ $base-blue:#0732A2;
             }
         }
     }
-    .detail-data{
+    @at-root .detail-data{
         td,th{
             text-align: center;
         }

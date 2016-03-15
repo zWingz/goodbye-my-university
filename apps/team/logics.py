@@ -24,7 +24,21 @@ TEAM_DATA = {
     'game':"0",
     "win":"0"
 }
-
+PLAYER_DATA = {
+    # 'name':'',
+    'point':'0',  #  得分
+    'assist':'0', # 助攻
+    'shot':'0/0',  # 投篮
+    'three':'0/0', #三分
+    'rebound':'0', # 篮板
+    'steal':'0', # 抢断
+    "free":'0/0', #  罚球
+    'turnover':'0', # 失误
+    'block':'0', # 盖帽
+    "doubledouble":'0',
+    "threedouble":'0',
+    'game':"0",
+}
 # Team do something
 @transaction.atomic
 def saveTeam(user,postData):
@@ -60,7 +74,6 @@ def editTeam(user,postData):
     else:
         team = teams[0]
         team.name = postData['name']
-        team.profile = postData['name']
         team.school = postData['school']
         team.desc = postData['desc']
         team.save()
@@ -100,7 +113,7 @@ def savePlayer(user,postData):
     player.user = user
     user.status = 'player'
     with open(settings.PLAYER_PROFILE_DIR+"/"+player.id_code,"w+") as fp:
-        fp.write("")
+        fp.write(json.dumps(PLAYER_DATA))
     player.profile = player.id_code
     height = postData['height']
     if height[-2:] != 'cm':
@@ -130,8 +143,8 @@ def editPlayer(user,postData):
         weight = weight + 'kg'
     player.height = height
     player.weight = weight
-    if player.team is None:
-        player.position = postData['position']
+    # if player.team is None:
+        # player.position = postData['position']
     player.desc = postData['desc']
     player.school = postData['school']
     player.save()
@@ -146,11 +159,14 @@ def changeNumAndPos(player,number,position):
     return True
 
 @transaction.atomic
-def joinTeam(player,team,number):
+def joinTeam(player,team,number,position):
     player.team = team
     player.number = number
+    player.position = position
     player.save()
     return True
+
+
 
 @transaction.atomic
 def leaveTeam(player):

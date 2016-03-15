@@ -1,3 +1,10 @@
+(function(){
+    var href = location.pathname;
+    var arr = href.split("/");
+    var arg = arr[arr.length-1];
+    $("li[data-nav-type='"+arg+"']").addClass("tabactive");
+})();
+
 $(function(){
     $(".my-tabs").each(function(index,ele){
         $ele = $(this);
@@ -10,4 +17,6 @@ $(function(){
             $ele.children(".my-tabs-bd").find('.my-tabs-panel').eq(i).addClass('my-tabs-active')
         });
     });
+
+
 });

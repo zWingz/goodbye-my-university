@@ -11,10 +11,11 @@ import utils.files.logics as fileLogics
 
 
 @transaction.atomic
-def saveMsg(sender,receiver,content,msg_type):
+def saveMsg(sender,receiver,title,content,msg_type):
     msg = Message()
     msg.sender = sender
     msg.receiver = receiver
+    msg.title = title
     msg.content = content
     msg.msg_type = msg_type
     msg.status = 0

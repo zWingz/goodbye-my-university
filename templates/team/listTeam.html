@@ -11,7 +11,7 @@
             </header><!-- /header -->
             <section class="teamList-content" >
                 {% for team in teamList %}
-                    <div class="team-item" data-code="{{team.id_code}}">
+                    <div class="team-item" data-code-type='team' data-code="{{team.id_code}}">
                         <img class="team-logo"src="/static/upload/{{team.logo}}" alt="">
                         <div class="team-info">
                             <span><label>球队名:</label>{{team.name}}</span>
@@ -19,6 +19,11 @@
                             <span><label>创建者:</label>{{team.manager.first_name}}</span>
                             <span><label>创建时间:</label>{{team.create_time|date:'Y-m-d'}}</span>
                         </div>
+                        {% if user.player and not user.player.team %}
+                        <button type="button" class="apply-join-team am-btn am-btn-default">申请加入</button>
+                        {%elif user.team.all %}
+                            <button type="button" class="am-btn am-btn-default">邀请比赛</button>
+                        {%endif%}
                     </div>
                 {% endfor %}
             </section>
@@ -105,6 +110,39 @@
             </section>
         </div>
     </div>
+
+
+{%endblock%}
+{%block footer%}
+<!-- 申请加入球队modal -->
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="applyModal">
+  <div class="am-modal-dialog">
+    <div class="am-modal-hd">申请加入:
+      <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+    </div>
+    <div class="am-modal-bd my-form">
+        <div class="my-form-group">
+            <label class="my-form-label">你希望的号码:</label>
+            <input class="my-form-input" type="text" name="r-number" value="" placeholder="你希望的号码">
+        </div>
+        <div class="my-form-group">
+            <label class="my-form-label"l>你希望的位置:</label>
+            <select name="r-position">
+                <option value="PG">控卫</option>
+                <option value="SG">分位</option>
+                <option value="C">中锋</option>
+                <option value="SF">小前</option>
+                <option value="PF">大前</option>
+            </select>
+        </div>
+        <div class="my-form-group">
+            <label class="my-form-label">你想说什么:</label>
+            <textarea name="r-saysomething"></textarea>
+        </div>
+        <button id="saveApplyJoin" type="button" class='am-btn am-btn-default'>提交</button>
+    </div>
+  </div>
+</div>
 {%endblock%}
 {%block js%}
 <script type="text/javascript" src="/static/js/listTeam.js"></script>

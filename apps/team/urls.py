@@ -14,6 +14,8 @@ urlpatterns = patterns(
     'apps.team.views',
     url('^listTeam$', 'listTeam'),
     url('^getTeamDetail$', 'getTeamDetail'),
+
+    url('^listPlayer$', 'listPlayer'),
     # Team
     url('^saveTeam$', 'saveTeam'),
     url('^editTeam$', 'editTeam'),
@@ -31,5 +33,4 @@ urlpatterns = patterns(
     url('^joinTeam$', 'joinTeam'),
     url('^leaveTeam$', 'leaveTeam'),
     url('^getPlayer$', 'getPlayer'),
-    url('^listPlayer$', 'listPlayer'),
 )

@@ -14,10 +14,10 @@
         <h1 class="header-title">UBA</h1>
         <nav class='header-nav' data-am-sticky>
             <ul class='nav unstyle'>
-                <li class="tabactive"><a href="/" title="">首页</a></li>
-                <li><a href="/team/listTeam" title="">球队</a></li>
-                <li><a href="" title="">nav1</a></li>
-                <li><a href="" title="">nav1</a></li>
+                <li data-nav-type=""><a href="/" title="">首页</a></li>
+                <li data-nav-type="listTeam"><a href="/team/listTeam" title="">球队</a></li>
+                <li data-nav-type="listPlayer"><a href="/team/listPlayer" title="">球员</a></li>
+                <li data-nav-type="game"><a href="" title="">比赛</a></li>
             </ul>
                 {% if user.is_authenticated %}
                 <aside class='avatar' href="#" title="" data-type='login'>

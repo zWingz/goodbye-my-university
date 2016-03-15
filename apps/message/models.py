@@ -14,6 +14,7 @@ class Message(models.Model):
     id_code = models.CharField(max_length=10)
     sender = models.ForeignKey(User,to_field="username",related_name="send")
     receiver =models.ForeignKey(User,to_field="username",related_name="receive")
+    title = models.CharField(max_length=20,default="")
     content = models.CharField(max_length=200)
     msg_type = models.IntegerField()
     create_time = models.DateTimeField()
@@ -23,7 +24,7 @@ class Message(models.Model):
         if not self.id_code:
             self.id_code = fileLogics.getIdCode("MESSAGE")
             self.create_time = datetime.datetime.now()
-        super(Team, self).save(*args, **kwargs)
+        super(Message, self).save(*args, **kwargs)
         fileLogics.setIdCode("MESSAGE",int(self.id_code)+1)
 
     def __str__(self):
