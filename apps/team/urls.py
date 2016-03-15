@@ -30,7 +30,11 @@ urlpatterns = patterns(
     url('^savePlayer$', 'savePlayer'),
     url('^editPlayer$', 'editPlayer'),
     url('^changeNumAndPos$', 'changeNumAndPos'),
-    url('^joinTeam$', 'joinTeam'),
+    url('^agreeApplyJoinTeam$', 'agreeApplyJoinTeam'),
+    
+    url('^agreeInviteJoinTeam$', 'agreeInviteJoinTeam'),
     url('^leaveTeam$', 'leaveTeam'),
     url('^getPlayer$', 'getPlayer'),
+
+    url('^checkNum$', 'checkNum'),
 )

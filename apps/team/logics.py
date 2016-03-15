@@ -174,3 +174,13 @@ def leaveTeam(player):
     player.number = null
     player.save();
     return True
+
+
+
+def checkNum(team,num):
+    team_players = team.players.all()
+    nums = [x.number for x in team_players]
+    if num in nums:
+        return True;
+    else:
+        return False;

@@ -11,6 +11,7 @@ from apps.message.models import Message
 from datetime import datetime
 from utils.files.logics import saveFile
 from utils.Decorator.decorator import post_required
+from django.contrib.auth.models import User  
 # Create your views here.
 
 def listTeam(request):
@@ -167,10 +168,7 @@ def changeNumAndPos(request):
         response_data['success'] = 0
         response_data['message'] = '修改失败'
     else:
-        team_players = team.players.all()
-        nums = [x.number for x in team_players]
-        print(nums)
-        if request.POST['number'] in nums:
+        if Logics.checkNum(team,request.POST['number']):
             response_data['success'] = 0
             response_data['message'] = '号码已存在'
         else:
@@ -180,17 +178,37 @@ def changeNumAndPos(request):
                 response_data['message'] = '修改成功'
     return HttpResponse(json.dumps(response_data),content_type="application/json")
 
-
+# 同意加入申请
 @login_required
 @post_required
-def joinTeam(request):
+def agreeApplyJoinTeam(request):
     response_data = {}
-    player = Player.objects.get(id_code=request.POST['player_id_code'])
+    user = User.objects.get(id_code=request.POST['id_code'])
+    player = Player.objects.get(user=user)
     msg = Message.objects.get(id_code=request.POST['msg_id_code'])
     team = request.user.team.all()[0]
-    team_players = team.players.all()
-    nums = [x.number for x in team_players]
-    if request.POST['r-number'] in nums:
+    if Logics.checkNum(team,request.POST['r-number']):
+        response_data['success'] = 0
+        response_data['message'] = '号码已存在'
+        return HttpResponse(json.dumps(response_data),content_type="application/json")
+    result = Logics.joinTeam(player,team,request.POST['r-number'],request.POST['r-position'])
+    if result:
+        response_data['success'] = 1
+        response_data['message'] = '保存成功'
+        MsgLogics.readMsg(msg)
+    return HttpResponse(json.dumps(response_data),content_type="application/json")
+
+
+# 同意邀请
+@login_required
+@post_required
+def agreeInviteJoinTeam(request):
+    response_data = {}
+    user = User.objects.get(id_code=request.POST['id_code'])
+    team = Team.objects.get(manager=user,status=1)
+    msg = Message.objects.get(id_code=request.POST['msg_id_code'])
+    player = request.user.player
+    if Logics.checkNum(team,request.POST['r-number']):
         response_data['success'] = 0
         response_data['message'] = '号码已存在'
         return HttpResponse(json.dumps(response_data),content_type="application/json")
@@ -248,13 +266,15 @@ def getPlayer(request):
     return render(request,"team/player",{player:player})
 
 
-# list something
-# def listTeam(request):
-#     id_code = request.POST['id_code']
-#     name = request.POST['name']
-#     status = request.POST['status']
-#     teams = Team.objects.filter(id_code=id_code,name=name,status=status)
-#     return render(request,"team/listteam",{teams:teams})
+def checkNum(request):
+    team = Team.objects.get(id_code=request.POST['id_code'])
+    if checkNum(team,request.POST['number']):
+        response_data['success'] = 0
+        response_data['message'] = '号码已存在'
+    else:
+        response_data['success'] = 1
+    return HttpResponse(json.dums(response_data),content_type='application/json')
+
 
 
 def toPlayersView(players):

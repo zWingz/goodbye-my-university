@@ -85,30 +85,44 @@ $(function(){
             }
         });
 
-    //  msg 弹出框
+    //  msg 事件
     $(".message-action").on("click",function(e){
         var $target = $(e.target);
-        var index = $target.index();
+        var type = $target.data("msg-type");
         var container = $target.parents(".message-item");
-        if(index === 0) {
-            var player_id_code = container.find(".sender-name").data("id-code");
-            var msg_id_code = container.data('id-code')
-            $("#applyModal").data("player-id-code",player_id_code).data("msg-id-code",msg_id_code);
-            $("#applyModal").modal("open");
-        }else {
-
+        console.log(type)
+        switch(type){
+            case 'agree-apply':
+                var id_code = container.find(".sender-name").data("id-code");
+                var msg_id_code = container.data('id-code')
+                $("#applyModal").data("id-code",id_code).data("msg-id-code",msg_id_code);
+                $("#applyModal").modal("open");
+                break;
+            case 'agree-invite':
+                var id_code = container.find(".sender-name").data("id-code");
+                var msg_id_code = container.data('id-code');
+                var postData = {};
+                postData.id_code = id_code;
+                postData.msg_id_code = msg_id_code;
+                postData['r-position']= container.find(".msg-content-position").text();
+                postData['r-number'] = container.find(".msg-content-number").text();
+                console.log(postData)
+                $.post("/team/agreeInviteJoinTeam",postData,function(data){
+                    console.log(data);
+                });
+                break;
         }
     });
     //  提交同意申请
     $("#agreeApplyJoin").on("click",function(){
         var postData = {};
         var container = $("#applyModal");
-        postData.player_id_code = container.data("player-id-code");
+        postData.id_code = container.data("id-code");
         postData.msg_id_code = container.data("msg-id-code");
         postData['r-position']= container.find("[name='r-position']").val();
         postData['r-number'] = container.find("[name='r-number']").val();
         console.log(postData)
-        $.post("/team/joinTeam",postData,function(data){
+        $.post("/team/agreeApplyJoinTeam",postData,function(data){
             console.log(data);
         });
     });

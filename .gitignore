@@ -11,3 +11,6 @@ static/package.json
 static/gulpfile.js
 apps/*/migrations
 static/upload
+static/files/*
+static/bower.json
+static/css/*.css.map
