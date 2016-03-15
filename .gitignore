@@ -1,6 +1,5 @@
 nginx-1.9.9
 .python-version
-requirements.txt
 *.pyc
 config/*.pyc
 config/__pycache__/*
