@@ -13,7 +13,7 @@ from django.conf.urls import patterns, url
 urlpatterns = patterns(
     'apps.team.views',
     url('^listTeam$', 'listTeam'),
-    url('^getTeamDetail$', 'getTeamDetail'),
+    url('^teamDetail$', 'teamDetail'),
 
     url('^listPlayer$', 'listPlayer'),
     # Team
@@ -26,7 +26,7 @@ urlpatterns = patterns(
     url('^getMyTeam$', 'getMyTeam'),
     # Player
     # getPlayerDetail
-    url('^getPlayerDetail$', 'getPlayerDetail'),
+    url('^playerDetail$', 'playerDetail'),
     url('^savePlayer$', 'savePlayer'),
     url('^editPlayer$', 'editPlayer'),
     url('^changeNumAndPos$', 'changeNumAndPos'),

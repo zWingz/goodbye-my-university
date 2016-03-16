@@ -1,0 +1,223 @@
+$base-blue:#0732A2;
+.detail-container {
+    min-height:500px;
+    display: flex;
+    flex-wrap:nowrap;
+    align-items: flex-start;
+    width:100%;
+    .detail-left,.detail-right {
+        box-shadow: 0 0 4px rgba(0,0,0,0.1);
+        height:100%;
+        background: #fff;
+        padding:10px 20px;
+    }
+    .detail-left {
+        flex-grow:1;
+        margin-right: 20px;
+        padding-top: 30px;
+        padding-left: 24px;
+    }
+    .detail-right {
+        width:400px;
+        transition:opacity 0.5s ;
+        opacity:0;
+    }
+    .opacity{
+        opacity:1;
+    }
+    .detail-header{
+        border-left: 4px solid $base-blue;
+        padding:{
+            left:10px;
+            right:20px;
+        }
+        font-size: 16px;
+        font-weight: 700;
+        font-family: 'Microsoft YaHei',Arial;
+    }
+}
+
+
+
+.team-info {
+    display:flex;
+    font-size: 13px;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    .team-logo {
+        width:160px;
+        height:160px;
+        margin-right: 20px;
+        +div {
+            border-right:1px solid #ddd;
+            padding-right: 25px;
+        }
+    }
+    .team-name {
+        font-size: 22px;
+        font-weight: normal;
+    }
+    li {
+        span {
+            color:#a0a0a0;
+        }
+    }
+}
+
+.player-info {
+    display:flex;
+    font-size: 13px;
+    padding:0 20px;
+    justify-content:space-around;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    .player-logo {
+        width:130px;
+        height:130px;
+        margin-right: 20px;
+    }
+    .detail-name {
+        color:#515151;
+        width:130px;
+        // padding-right: 10px;
+        border-right: 1px solid #ddd;
+        .player-name {
+            font-size: 22px;
+        }
+        .player-number {
+            font-size: 32px;
+        }
+        .player-position{
+            color:#999;
+        }
+        &+ul {
+            padding-right: 20px;
+            border-right: 1px solid #ddd;
+            span {
+                margin-right: 15px;
+                color:#999;
+            }
+        }
+    }
+    .player-team {
+        text-align: center;
+        color:#515151;
+        .team-logo {
+            display:block;
+            width:98px;
+            height:98px;
+        }
+        &:hover {
+            color:$base-blue;
+        }
+    }
+}
+
+
+#detail-tab {
+    .my-tabs-nav {
+        display:flex;
+        flex-wrap: nowrap;
+        justify-content: space-around;
+        border: {
+            top:1px solid #ddd;
+            bottom:1px solid #ddd;
+        };
+        li{
+            flex-grow:1;
+            line-height: 27px;
+            display:inline-block;
+            text-align: center;
+            cursor: pointer;
+            border-right: 1px solid #fff;
+            &:hover,&.my-tabs-active{
+                background-color:$base-blue;
+                color:#fff;
+            }
+        }
+    }
+    .my-tabs-bd {
+        margin-top: 10px;
+        .my-tabs-active{
+            display:block;
+        }
+    }
+    .table-head {
+        font-size: 15px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        text-align: center;
+    }
+    .data-table {
+        width:100%;
+        th{
+            font-size: 13px;
+            text-align: center;
+            color:#a0a0a0;
+            background:#f7f7f7;
+            font-weight: normal;
+        }
+        td {
+            padding:16px 0;
+            vertical-align: middle;
+            font-size: 14px;
+            text-align: center;
+        }
+        .player-img {
+            height:43px;
+            width:46px;
+            margin:0 16px;
+            vertical-align: middle;
+        }
+    }
+}
+
+
+
+.playerDetail {
+    margin-left: 10px;
+    .player-logo {
+        width: 100px;
+        height: 100px;
+        vertical-align: 0px;
+        margin-right: 5px;
+        +div{
+            display:inline-block;
+            font-weight: bold;
+            font-family: 'sans-serif';
+            span{
+                font-weight: normal;
+                // margin-left: 5px;
+            }
+        }
+    }
+    .detail-info {
+        margin-top: 5px;
+        // text-align: center;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #ddd;
+        >div {
+            font-size: 13px;
+        }
+    }
+}
+
+
+.detail-players{
+        display:flex;
+        flex-wrap:wrap;
+        margin-top: 10px;
+        justify-content:flex-start;
+        .player {
+            cursor: pointer;
+            margin:5px;
+            img {
+                width:70px;
+                height:70px;
+            }
+            div {
+                text-align: center;
+                font-size: 13px;
+            }
+        }
+    }

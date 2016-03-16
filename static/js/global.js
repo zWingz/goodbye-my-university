@@ -7,8 +7,9 @@
 
 $(function(){
     $(".my-tabs").each(function(index,ele){
-        $ele = $(this);
-        $ele.children(".my-tabs-nav").find("li").on('mouseenter', function(event) {
+        var $ele = $(this);
+        var type = $ele.attr('changeType');
+        $ele.children(".my-tabs-nav").find("li").on(type, function(event) {
             event.preventDefault();
             var i = $(this).index();
             $(this).siblings().removeClass("my-tabs-active");

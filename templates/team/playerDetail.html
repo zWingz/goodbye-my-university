@@ -1,0 +1,143 @@
+{% extends "layout/base.html" %}
+{%block head%}
+<link rel="stylesheet" type="text/css" href="/static/css/detail.css">
+{%endblock%}
+{% block title %}球员信息{% endblock %}
+{%block content%}
+    <!-- 球队详情  -->
+    <div class="detail-container">
+        <div class="detail-left">
+            <section class="detail-content" >
+                <div class="player-info">
+                    <img class="player-logo"src="/static/upload/{{player.user.img_path}}" alt="">
+                    <div class="detail-name">
+                        <div class="player-name">{{player.user.first_name}}</div>
+                        <div>
+                            <span class="player-number">{{player.number}}</span>
+                            <span class="player-position">号/{{player.position}}</span>
+                        </div>
+                    </div>
+                    <ul class="unstyle">
+                        <li><span>昵称:</span>{{player.user.last_name}}</li>
+                        <li><span>身高:</span>{{player.height}}</li>
+                        <li><span>体重:</span>{{player.weight}}</li>
+                        <li><span>学校:</span>{{player.school}}</li>
+                        <li><span>加入日期:</span>{{player.create_time|date:'Y-m-d'}}</li>
+                    </ul>
+                    <a class="player-team" href="/team/teamDetail?id_code={{player.team.id_code}}" target="_blank" title="">
+                        <img class="team-logo" src="/static/upload/{{player.team.logo}}" alt="">
+                        {{player.team.name}}
+                    </a>
+                </div>
+                <div class="my-tabs" id="detail-tab" changeType="click">
+                    <ul class="my-tabs-nav unstyle">
+                      <li class="my-tabs-active">数据</li>
+                      <li >介绍</li>
+                    </ul>
+                    <div class="my-tabs-bd">
+                        <div class="my-tabs-panel my-tabs-active">
+                            <header class="table-head">平均数据</header>
+                            <table class="am-table am-table-hover data-table">
+                                <thead>
+                                    <tr>
+                                        <th >得分</th>
+                                        <th >投篮</th>
+                                        <th >三分</th>
+                                        <th>罚球</th>
+                                        <th >助攻</th>
+                                        <th >抢断</th>
+                                        <th >篮板</th>
+                                        <th >盖帽</th>
+                                        <th >失误</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{% widthratio player_data.point player_data.game 1%}</td>
+                                        <td>{% widthratio player_data.shot.all player_data.game 1%}</td>
+                                        <td>{% widthratio player_data.three.all player_data.game 1%}</td>
+                                        <td>{% widthratio player_data.free.all player_data.game 1%}</td>
+                                        <td>{% widthratio player_data.assist player_data.game 1%}</td>
+                                        <td>{% widthratio player_data.steal player_data.game 1%}</td>
+                                        <td>{% widthratio player_data.rebound player_data.game 1%}</td>
+                                        <td>{% widthratio player_data.block player_data.game 1%}</td>
+                                        <td>{% widthratio player_data.turnover player_data.game 1%}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <header class="table-head">总数据</header>
+                            <table class="am-table am-table-hover data-table">
+                                <thead>
+                                    <tr>
+                                        <th >得分</th>
+                                        <th >投篮</th>
+                                        <th >命中%</th>
+                                        <th >三分</th>
+                                        <th >三分%</th>
+                                        <th>罚球</th>
+                                        <th>罚球%</th>
+                                        <th >助攻</th>
+                                        <th >抢断</th>
+                                        <th >篮板</th>
+                                        <th >盖帽</th>
+                                        <th >失误</th>
+                                        <th >场次</th>
+                                        <th >两双</th>
+                                        <th >三双</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{player_data.point}}</td>
+                                        <td>{{player_data.shot.all}}</td>
+                                        <td>{{player_data.shot.rate}}</td>
+                                        <td>{{player_data.three.all}}</td>
+                                        <td>{{player_data.three.rate}}</td>
+                                        <td>{{player_data.free.all}}</td>
+                                        <td>{{player_data.free.rate}}</td>
+                                        <td>{{player_data.assist}}</td>
+                                        <td>{{player_data.steal}}</td>
+                                        <td>{{player_data.rebound}}</td>
+                                        <td>{{player_data.block}}</td>
+                                        <td>{{player_data.turnover}}</td>
+                                        <td>{{player_data.game}}</td>
+                                        <td>{{player_data.doubledouble}}</td>
+                                        <td>{{player_data.threedouble}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="my-tabs-panel ">
+                            个人信息
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="detail-right opacity" >
+            <header class="detail-header">
+                他的队友
+            </header><!-- /header -->
+            <section class="detail-players">
+                {% for each in teammates %}
+                    <div class="player">
+                        <img src="/static/upload/{{each.user.img_path}}" alt="">
+                        <div>
+                            {{each.user.first_name}}
+                        </div>
+                    </div>
+                {% endfor %}
+            </section>
+        </div>
+    </div>
+
+
+{%endblock%}
+{%block js%}
+<script type="text/javascript" src="/static/js/detail.js"></script>
+<script type="text/javascript">
+    $(function () {
+
+  });
+</script>
+{%endblock%}

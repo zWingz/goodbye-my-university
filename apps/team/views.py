@@ -23,25 +23,32 @@ def listPlayer(request):
     playerList = Player.objects.all();
     return render(request,"team/listPlayer.html",{"playerList":playerList})
 
-@post_required
-def getTeamDetail(request):
-    id_code = request.POST['id_code']
+def teamDetail(request):
+    id_code = request.REQUEST['id_code']
     team = Team.objects.get(id_code=id_code);
     players = toPlayersView(team.players.all())
     data = json.load(open(settings.TEAM_PROFILE_DIR+'/'+team.profile+'/profile','r'))
-    response_data ={}
-    response_data['team'] = toTeamView(team)
-    response_data['players'] = players
-    response_data['team_data'] = data
-    return HttpResponse(json.dumps(response_data,cls=CJsonEncoder),content_type='application/json')
+    if request.method == 'GET':
+        return render(request,"team/teamDetail.html",{"team":team,"players":players,"team_data":data})
+    else:
+        response_data ={}
+        response_data['team'] = toTeamView(team)
+        response_data['players'] = players
+        response_data['team_data'] = data
+        return HttpResponse(json.dumps(response_data,cls=CJsonEncoder),content_type='application/json')
 
-@post_required
-def getPlayerDetail(request):
-    id_code = request.POST['id_code']
+def playerDetail(request):
+    id_code = request.REQUEST['id_code']
     player = Player.objects.get(id_code=id_code);
-    response_data ={}
-    response_data['players'] = toPlayersView([player])
-    return HttpResponse(json.dumps(response_data,cls=CJsonEncoder),content_type='application/json')
+    if request.method == 'GET':
+        data = json.load(open(settings.PLAYER_PROFILE_DIR+'/'+player.profile,'r'))
+        teammates = list(player.team.players.all())
+        teammates.remove(player)
+        return render(request,"team/playerDetail.html",{"player":player,"player_data":data,"teammates":teammates})
+    else:
+        response_data ={}
+        response_data['players'] = toPlayersView([player])
+        return HttpResponse(json.dumps(response_data,cls=CJsonEncoder),content_type='application/json')
 
 
 # Team do something view

@@ -1,52 +1,31 @@
-var teamData = {}
+var team_data = {};
 $(function(){
-    //  获取球队信息
     var codeTypeMap = {
-        'team':{
-            url:'/team/getTeamDetail',
-            bindTmpl:bindTeamTmpl
-        },
-        'player':{
-            url:'/team/getPlayerDetail',
-            bindTmpl:bindPlayerTmpl
-        }
-    };
+            'team':{
+                url:'/team/teamDetail',
+                bindTmpl:bindTeamTmpl
+            },
+            'player':{
+                url:'/team/playerDetail',
+                bindTmpl:bindPlayerTmpl
+            }
+        };
+    //  获取球队信息
     $("[data-code]").on("click",function(){
         var id_code = $(this).data("code");
         var code_type = $(this).data("code-type");
         var map = codeTypeMap[code_type];
         $.post(map.url,{id_code:id_code},function(data){
+            $(".teamList-right").css("width","400px");
             $(".teamList-right").removeClass("opacity")
             setTimeout(function(){
                 $(".teamList-right").hide();
+
                 map.bindTmpl(data)
                 $(".teamList-right").show();
                 $(".teamList-right").addClass("opacity")
-            },500)
+            },500);
         });
-    });
-
-    //  页面切换
-    $(".into-detail").on("click",function(e){
-        var id_code = $(".teamDetail").data("id_code");
-        $(".teamList-container").eq(0).removeClass("active");
-        $(".teamList-container").eq(1).addClass("active");
-    });
-    $(".out-detail").on("click",function(e){
-        $(".teamList-container").eq(1).removeClass("active");
-        $(".teamList-container").eq(0).addClass("active");
-    });
-
-    //  查看某个球员
-    $(".detail-players").on("click",function(e){
-        var $target = $(e.target).parent('.player');
-        if($target.length === 0){
-            return;
-        }
-        var index = $target.data("playerIndex");
-        var player_data = teamData.players[index];
-        bindPlayerTmpl(player_data);
-        $(".into-detail").click();
     });
 
     //  申请加入
@@ -88,20 +67,20 @@ $(function(){
 
 
 function bindTeamTmpl(data){
-    teamData = data;
+    team_data = data;
     var container = $(".teamDetail");
-    container.data("id_code",data.team.id_code);
     var team = data.team;
     var players = data.players;
     var data_profile = data.team_data;
     var players_container = container.find('.detail-players');
+    container.prev().find(".into-detail").attr("href","/team/teamDetail?id_code="+data.team.id_code);
     container.find(".team-logo").attr("src","/static/upload/"+team.logo);
     container.find(".detail-name").html(team.name);
     container.find(".detail-desc").html(team.desc);
     players_container.html("");
     for (var i = 0; i < players.length; i++) {
         var player = players[i];
-        var $div = $("<div>").addClass("player").data('playerIndex', i);
+        var $div = $("<a>").addClass("player").data('playerIndex', i).attr('href', "/team/playerDetail?id_code="+player.id_code).attr('target', '_blank');;
         var $img = $("<img>").attr("src","/static/upload/"+player.img_path);
         var $name = $("<div>").html(player.name);
         var $position = $("<div>").html(player.position);
@@ -120,10 +99,12 @@ function bindTeamTmpl(data){
 
 function bindPlayerTmpl(data){
     var player = data;
+
     if(data.players !== undefined){
         player = data.players[0];
     }
     var container = $(".playerDetail");
+    container.prev().find(".into-detail").attr("href","/team/playerDetail?id_code="+player.id_code);
     container.data('id_code', player.id_code);
     container.find(".player-logo").attr("src","/static/upload/"+player.img_path);
     container.find(".detail-name").html(player.name);

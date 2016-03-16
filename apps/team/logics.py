@@ -12,32 +12,57 @@ import utils.files.logics as fileLogics
 
 TEAM_DATA = {
     'name':'',
-    'point':'0',  #  得分
-    'shot':'0/0',  # 投篮
-    'three':'0/0', #三分
-    'rebound':'0', # 篮板
-    'steal':'0', # 抢断
-    'assist':'0', # 助攻
-    'turnover':'0', # 失误
-    'block':'0', # 盖帽
+    'point':0,  #  得分
+    'shot':{
+        'in':0,
+        'all':0,
+        'rate':0
+    },  # 投篮
+    'three':{
+        'in':0,
+        'all':0,
+        'rate':0
+    }, # 三分
+    'free':{
+        'in':0,
+        'all':0,
+        'rate':0
+    }, # 罚球
+    'rebound':0, # 篮板
+    'steal':0, # 抢断
+    'assist':0, # 助攻
+    'turnover':0, # 失误
+    'block':0, # 盖帽
     'players':[],
-    'game':"0",
-    "win":"0"
+    'game':0,
+    'win':0
 }
 PLAYER_DATA = {
     # 'name':'',
-    'point':'0',  #  得分
-    'assist':'0', # 助攻
-    'shot':'0/0',  # 投篮
-    'three':'0/0', #三分
-    'rebound':'0', # 篮板
-    'steal':'0', # 抢断
-    "free":'0/0', #  罚球
-    'turnover':'0', # 失误
-    'block':'0', # 盖帽
-    "doubledouble":'0',
-    "threedouble":'0',
-    'game':"0",
+    'point':0,  #  得分
+    'shot':{
+        'in':0,
+        'all':0,
+        'rate':0
+    },  # 投篮
+    'three':{
+        'in':0,
+        'all':0,
+        'rate':0
+    },
+    'free':{
+        'in':0,
+        'all':0,
+        'rate':0
+    },
+    'rebound':0, # 篮板
+    'steal':0, # 抢断
+    'assist':0, # 助攻
+    'turnover':0, # 失误
+    'block':0, # 盖帽
+    "doubledouble":0,
+    "threedouble":0,
+    'game':0,
 }
 # Team do something
 @transaction.atomic

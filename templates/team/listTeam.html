@@ -4,7 +4,7 @@
 {%endblock%}
 {% block title %}球队列表{% endblock %}
 {%block content%}
-    <div class="teamList-container active">
+    <div class="teamList-container">
         <div class="teamList-left">
             <header class="teamList-header">
                 球队列表
@@ -31,7 +31,7 @@
         <div class="teamList-right opacity" >
             <header class="teamList-header">
                 球队信息
-                <span class="into-detail">详情<i class='iconfont'>&#xe603;</i></span>
+                <a  href='#' class="into-detail" target='_blank'>详情<i class='iconfont'>&#xe603;</i></a >
             </header><!-- /header -->
             <section class="teamDetail">
                 <header class="detail-info">
@@ -73,45 +73,6 @@
             </section>
         </div>
     </div>
-
-    <!-- 球队详情  -->
-    <div class="teamList-container">
-        <div class="teamList-left">
-            <header class="teamList-header">
-                球队详情
-                <span class="out-detail"><i class='iconfont'>&#xe604;</i>返回</span>
-            </header><!-- /header -->
-            <section class="teamList-content" >
-                球队的详情页面
-            </section>
-        </div>
-        <div class="teamList-right opacity" >
-            <header class="teamList-header">
-                球员信息
-            </header><!-- /header -->
-            <section class="playerDetail">
-                <header class="detail-info">
-                    <img class="player-logo"src="/static/upload/{{team.logo}}" alt="">
-                    <div>
-                        <div>姓名:<span class="detail-name"></span></div>
-                        <div>球衣:<span class="detail-number"></span></div>
-                        <div>位置:<span class="detail-position"></span></div>
-                        <div>身高:<span class="detail-height"></span> 体重:<span class="detail-weight"></span></div>
-                        <div>加入时间:<span class="detail-join-time"></span></div>
-                    </div>
-                    <div>
-                        <label>简介:</label>
-                        <span class="detail-desc"></span>
-                    </div>
-                </header><!-- /header -->
-                <section class="detail-data">
-                    
-                </section>
-            </section>
-        </div>
-    </div>
-
-
 {%endblock%}
 {%block footer%}
 <!-- 申请加入球队modal -->
