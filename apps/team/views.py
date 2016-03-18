@@ -27,21 +27,21 @@ def teamDetail(request):
     id_code = request.REQUEST['id_code']
     team = Team.objects.get(id_code=id_code);
     players = toPlayersView(team.players.all())
-    data = json.load(open(settings.TEAM_PROFILE_DIR+'/'+team.profile+'/profile','r'))
+    data = Logics.getTeamProfile(id_code);
     if request.method == 'GET':
         return render(request,"team/teamDetail.html",{"team":team,"players":players,"team_data":data})
     else:
         response_data ={}
         response_data['team'] = toTeamView(team)
         response_data['players'] = players
-        response_data['team_data'] = data
+        response_data['team_data'] = toTeamProfileView(data)
         return HttpResponse(json.dumps(response_data,cls=CJsonEncoder),content_type='application/json')
 
 def playerDetail(request):
     id_code = request.REQUEST['id_code']
     player = Player.objects.get(id_code=id_code);
     if request.method == 'GET':
-        data = json.load(open(settings.PLAYER_PROFILE_DIR+'/'+player.profile,'r'))
+        data = Logics.getPlayerProfile(id_code)
         teammates = list(player.team.players.all())
         teammates.remove(player)
         return render(request,"team/playerDetail.html",{"player":player,"player_data":data,"teammates":teammates})
@@ -165,6 +165,7 @@ def editPlayer(request):
             response_data["message"] = '保存成功'
         return HttpResponse(json.dumps(response_data),content_type="application/json")
 
+# 改变球员号码和位置
 @login_required
 @post_required
 def changeNumAndPos(request):
@@ -242,35 +243,6 @@ def leaveTeam(request):
             response_data.message = '保存成功'
     return HttpResponse(json.dumps(response_data),content_type="application/json")
 
-# get somthing
-@login_required
-def getMyTeam(request):
-    user = request.user
-    team = Team.objects.get(manager=user,status=1)
-    identity = 'normal'
-    if team is None:
-        player = Player.objects.get(user=user,status=1)
-        if team is not None:
-            team = player.team
-            identity = 'player'
-    else:
-        identity = 'manager'
-    return render(request,"team/info",{team:team,identity:identity})
-
-def getTeam(request):
-    team = Team.objects.get(name=request.GET['name'])
-    return render(request,"team/info",{team:team})
-
-
-@login_required
-def getMyPlayer(request):
-    user = request.user
-    player = Player.objects.get(user=user,status=1)
-    return render(request,"team/info",{player:player,isPlayer:True})
-
-def getPlayer(request):
-    player = Player.objects.get(user_username=request.GET['name'])
-    return render(request,"team/player",{player:player})
 
 
 def checkNum(request):
@@ -301,8 +273,8 @@ def toPlayersView(players):
         obj['number'] = player.number
         obj['create_time'] = player.create_time
         obj['desc'] = player.desc
-        data = json.load(open(settings.PLAYER_PROFILE_DIR+'/'+player.profile,'r'))
-        obj['player_data'] = data
+        data = Logics.getPlayerProfile(player.id_code)
+        obj['player_data'] = toPlayerProfileView(data)
         result.append(obj)
     return result
 
@@ -316,6 +288,67 @@ def toTeamView(team):
     obj['create_time'] = team.create_time
     obj['desc'] = team.desc
     return obj
+
+# 对象转字典
+def toTeamProfileView(profile):
+    obj={
+        'point':profile.point,  #  得分
+        'shot':{
+            'in':profile.shot_in,
+            'all':profile.shot_all,
+            'rate':profile.shot_rate
+        },  # 投篮
+        'three':{
+            'in':profile.three_in,
+            'all':profile.three_all,
+            'rate':profile.three_rate
+        }, # 三分
+        'free':{
+            'in':profile.free_in,
+            'all':profile.free_all,
+            'rate':profile.free_rate
+        }, # 罚球
+        'rebound':profile.rebound, # 篮板
+        'steal':profile.steal, # 抢断
+        'assist':profile.assist, # 助攻
+        'turnover':profile.turnover, # 失误
+        'block':profile.block, # 盖帽
+        # 'players':[],
+        'game':profile.game,
+        'win':profile.win
+    }
+    return obj
+
+def toPlayerProfileView(profile):
+    obj={
+        'point':profile.point,  #  得分
+        'shot':{
+            'in':profile.shot_in,
+            'all':profile.shot_all,
+            'rate':profile.shot_rate
+        },  # 投篮
+        'three':{
+            'in':profile.three_in,
+            'all':profile.three_all,
+            'rate':profile.three_rate
+        }, # 三分
+        'free':{
+            'in':profile.free_in,
+            'all':profile.free_all,
+            'rate':profile.free_rate
+        }, # 罚球
+        'rebound':profile.rebound, # 篮板
+        'steal':profile.steal, # 抢断
+        'assist':profile.assist, # 助攻
+        'turnover':profile.turnover, # 失误
+        'block':profile.block, # 盖帽
+        # 'players':[],
+        'game':profile.game,
+        'doubledouble':profile.doubledouble,
+        'threedouble':profile.threedouble
+    }
+    return obj
+
 
 class CJsonEncoder(json.JSONEncoder):
     def default(self, obj):

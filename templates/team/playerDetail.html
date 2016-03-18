@@ -54,9 +54,9 @@
                                 <tbody>
                                     <tr>
                                         <td>{% widthratio player_data.point player_data.game 1%}</td>
-                                        <td>{% widthratio player_data.shot.all player_data.game 1%}</td>
-                                        <td>{% widthratio player_data.three.all player_data.game 1%}</td>
-                                        <td>{% widthratio player_data.free.all player_data.game 1%}</td>
+                                        <td>{% widthratio player_data.shot_all player_data.game 1%}</td>
+                                        <td>{% widthratio player_data.three_all player_data.game 1%}</td>
+                                        <td>{% widthratio player_data.free_all player_data.game 1%}</td>
                                         <td>{% widthratio player_data.assist player_data.game 1%}</td>
                                         <td>{% widthratio player_data.steal player_data.game 1%}</td>
                                         <td>{% widthratio player_data.rebound player_data.game 1%}</td>
@@ -89,12 +89,12 @@
                                 <tbody>
                                     <tr>
                                         <td>{{player_data.point}}</td>
-                                        <td>{{player_data.shot.all}}</td>
-                                        <td>{{player_data.shot.rate}}</td>
-                                        <td>{{player_data.three.all}}</td>
-                                        <td>{{player_data.three.rate}}</td>
-                                        <td>{{player_data.free.all}}</td>
-                                        <td>{{player_data.free.rate}}</td>
+                                        <td>{{player_data.shot_all}}</td>
+                                        <td>{{player_data.shot_rate}}</td>
+                                        <td>{{player_data.three_all}}</td>
+                                        <td>{{player_data.three_rate}}</td>
+                                        <td>{{player_data.free_all}}</td>
+                                        <td>{{player_data.free_rate}}</td>
                                         <td>{{player_data.assist}}</td>
                                         <td>{{player_data.steal}}</td>
                                         <td>{{player_data.rebound}}</td>
@@ -120,12 +120,12 @@
             </header><!-- /header -->
             <section class="detail-players">
                 {% for each in teammates %}
-                    <div class="player">
+                    <a href="/team/playerDetail?id_code={{each.id_code}}" target="_blank" class="player">
                         <img src="/static/upload/{{each.user.img_path}}" alt="">
                         <div>
                             {{each.user.first_name}}
                         </div>
-                    </div>
+                    </a>
                 {% endfor %}
             </section>
         </div>

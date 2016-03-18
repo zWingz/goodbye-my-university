@@ -7,6 +7,7 @@ from django.conf import settings
 from django.db import transaction
 from django.db import models  
 from django.contrib.auth.models import User  
+from apps.team.models import TeamProfile,PlayerProfile
 import utils.files.logics as fileLogics
 
 @transaction.atomic
@@ -46,3 +47,12 @@ def cheangePwd(user,pwd):
 def setPostToModel(model, post):
     for key, value in post.items():
         setattr(model, key, value)
+
+
+def getTeamProfile(id_code):
+    profile = TeamProfile.objects.get(id_code=id_code)
+    return profile
+
+def getPlayerProfile(id_code):
+    profile = PlayerProfile.objects.get(id_code=id_code)
+    return profile

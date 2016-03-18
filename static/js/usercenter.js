@@ -131,7 +131,7 @@ $(function(){
         var $target = $(e.target);
         if($target.hasClass("players-item")){
             var id_code = $target.data("idcode");
-            $.post("/team/getPlayerDetail",{id_code:id_code},function(data){
+            $.post("/team/playerDetail",{id_code:id_code},function(data){
                 // console.log(data.players);
                 bindPlayerTmpl(data.players[0]);
                 $(".playerDetailContainer").css("transform","scale(1)");

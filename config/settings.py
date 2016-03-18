@@ -6,8 +6,8 @@ import os
 BASEDIR = os.getcwd()
 VENDORS_ROOT = os.path.join(BASEDIR, "vendors")
 UPLOADED_DIR = os.path.join(BASEDIR, "static/upload")
-TEAM_PROFILE_DIR = os.path.join(BASEDIR, "static/files/teamProfiles")
-PLAYER_PROFILE_DIR = os.path.join(BASEDIR, "static/files/playerProfiles")
+# TEAM_PROFILE_DIR = os.path.join(BASEDIR, "static/files/teamProfiles")
+# PLAYER_PROFILE_DIR = os.path.join(BASEDIR, "static/files/playerProfiles")
 GAME_PROFILE_DIR = os.path.join(BASEDIR, "static/files/gameProfiles")
 
 # ini 文件Dir
@@ -154,7 +154,8 @@ INSTALLED_APPS = (
     'apps.users',
     'apps.team',
     'apps.usual',
-    'apps.message'
+    'apps.message',
+    'apps.game'
 )
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False

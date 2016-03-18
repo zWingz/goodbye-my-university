@@ -6,7 +6,7 @@ from django import forms
 from django.conf import settings
 from django.db import transaction
 from django.db import models  
-from apps.team.models import Team,Player
+from apps.team.models import Team,Player,TeamProfile,PlayerProfile
 from django.contrib.auth.models import User  
 import utils.files.logics as fileLogics
 
@@ -80,13 +80,19 @@ def saveTeam(user,postData):
         # logo = postData['logo']
         team.school = postData['school']
         team.desc = postData['desc']
-        os.mkdir(os.path.join(settings.TEAM_PROFILE_DIR,team.id_code))
-        with open(settings.TEAM_PROFILE_DIR+"/"+team.id_code+"/profile","w+") as fp:
-            fp.write(json.dumps(TEAM_DATA))
+        teamProfile = TeamProfile()
+        teamProfile = defaultProfile(teamProfile,team.id_code)
+        # os.mkdir(os.path.join(settings.TEAM_PROFILE_DIR,team.id_code))
+        # with open(settings.TEAM_PROFILE_DIR+"/"+team.id_code+"/profile","w+") as fp:
+        #     fp.write(json.dumps(TEAM_DATA))
+        teamProfile.save()
         team.save()
-        if not user.player is None:
+        try:
             user.player.team = team
             user.player.save() 
+            user.status = 'double'
+        except:
+            pass
         user.save()
         fileLogics.setIdCode("TEAM",int(team.id_code)+1)
         return True;
@@ -136,9 +142,12 @@ def savePlayer(user,postData):
     player = Player()
     player.id_code = fileLogics.getIdCode("PLAYER")
     player.user = user
+    user.first_name = postData['first_name']
     user.status = 'player'
-    with open(settings.PLAYER_PROFILE_DIR+"/"+player.id_code,"w+") as fp:
-        fp.write(json.dumps(PLAYER_DATA))
+    playerProfile = PlayerProfile()
+    playerProfile = defaultProfile(playerProfile,player.id_code)
+    # with open(settings.PLAYER_PROFILE_DIR+"/"+player.id_code,"w+") as fp:
+    #     fp.write(json.dumps(PLAYER_DATA))
     player.profile = player.id_code
     height = postData['height']
     if height[-2:] != 'cm':
@@ -150,6 +159,7 @@ def savePlayer(user,postData):
     player.weight = weight
     player.position = postData['position']
     player.desc = postData['desc']
+    playerProfile.save()
     player.save()
     user.save()
     fileLogics.setIdCode("PLAYER",int(player.id_code)+1)
@@ -209,3 +219,34 @@ def checkNum(team,num):
         return True;
     else:
         return False;
+
+def defaultProfile(tmp,id_code):
+    tmp.id_code = id_code
+    tmp.point = 0
+    tmp.shot_in = 0
+    tmp.shot_all = 0
+    tmp.shot_rate = 0
+    tmp.three_in = 0
+    tmp.three_all = 0
+    tmp.three_rate = 0
+    tmp.free_in = 0
+    tmp.free_all = 0
+    tmp.free_rate = 0
+    tmp.rebound = 0
+    tmp.steal = 0
+    tmp.assist = 0
+    tmp.turnover = 0
+    tmp.block = 0
+    tmp.win = 0
+    tmp.game = 0
+    tmp.doubledouble = 0
+    tmp.threedouble = 0
+    return tmp;
+
+def getTeamProfile(id_code):
+    profile = TeamProfile.objects.get(id_code=id_code)
+    return profile
+
+def getPlayerProfile(id_code):
+    profile = PlayerProfile.objects.get(id_code=id_code)
+    return profile

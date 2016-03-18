@@ -7,6 +7,7 @@ from django.conf import settings
 from django.db import transaction
 from django.db import models  
 from apps.game.models import Game
+from apps.team.models import Team
 from django.contrib.auth.models import User  
 import utils.files.logics as fileLogics
 import copy 
@@ -15,7 +16,7 @@ RESULT = {
     'lost':{}
 }
 TEAM_DATA = {
-    'name':''
+    'name':'',
     'point':'',  #  得分
     'shot':'',  # 投篮
     'three':'', #三分
@@ -24,11 +25,11 @@ TEAM_DATA = {
     'steal':'', # 抢断
     'assist':'', # 助攻
     'turnover':'', # 失误
-    'block':'' # 盖帽
+    'block':'', # 盖帽
     'players':[]
 }
 PLAYER_DATA = {
-    'name':''
+    'name':'',
     'point':'',  #  得分
     'shot':'',  # 投篮
     'three':'', #三分
@@ -41,11 +42,13 @@ PLAYER_DATA = {
     'foul':'' # 犯规
 }
 @transaction.atomic
-def saveGame(team_one,team_two,game_time):
+def saveGame(team_one,team_two,game_time,location):
     game = Game()
     game.team_one = team_one
     game.team_two = team_two
     game.game_time = game_time
+    game.location = location
+    game.weeknum = str(game_time.isocalendar()[0])+str(game_time.isocalendar()[1])
     game.save()
     return True
 
@@ -58,7 +61,7 @@ def saveDetailData(postData):
     # lost = copy.deepcopy(TEAM_DATA)
     result = postData['game_data']
     path = os.path.join(settings.GAME_PROFILE_DIR,game_time.strftime('%Y-%m-%d'))
-    if !os.path.exists(path):
+    if not os.path.exists(path):
         os.mkdir(path)
     with open(os.path.join(path,game.id_code),"wb+") as fp:
         fp.write(json.dumps(result))

@@ -44,17 +44,18 @@ def usercenter(request):
     if status == 'double':
         team = request.user.team.all()[0]
         player = request.user.player
-        player_data = json.load(open(settings.PLAYER_PROFILE_DIR+"/"+player.profile,'r'));
-        team_data = json.load(open(settings.TEAM_PROFILE_DIR+"/"+team.profile+"/profile","r"))
+        player_data = Logics.getPlayerProfile(player.id_code)
+        # player_data = json.load(open(settings.PLAYER_PROFILE_DIR+"/"+player.profile,'r'));
+        # team_data = json.load(open(settings.TEAM_PROFILE_DIR+"/"+team.profile+"/profile","r"))
+        team_data = Logics.getTeamProfile(team.id_code)
         isManager = True
     elif status == 'player':
         player = request.user.player
-        player_data = json.load(open(settings.PLAYER_PROFILE_DIR+"/"+player.profile,'r'));
+        player_data = Logics.getPlayerProfile(player.id_code)
         team = player.team
-
     elif status == 'manager':
         team = request.user.team.all()[0]
-        team_data = json.load(open(settings.TEAM_PROFILE_DIR+"/"+team.profile+"/profile","r"))
+        team_data = Logics.getTeamProfile(team.id_code)
         isManager = True
     msg = Message.objects.filter(receiver=request.user).order_by("-create_time");
     return render(request,"users/usercenter.html",{

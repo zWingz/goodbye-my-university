@@ -22,8 +22,6 @@ urlpatterns = patterns(
     url('^changeLogo$', 'changeLogo'),
     url('^changeTeamName$', 'changeTeamName'),
     url('^disbandTeam$', 'disbandTeam'),
-    url('^getTeam$', 'getTeam'),
-    url('^getMyTeam$', 'getMyTeam'),
     # Player
     # getPlayerDetail
     url('^playerDetail$', 'playerDetail'),
@@ -34,7 +32,6 @@ urlpatterns = patterns(
     
     url('^agreeInviteJoinTeam$', 'agreeInviteJoinTeam'),
     url('^leaveTeam$', 'leaveTeam'),
-    url('^getPlayer$', 'getPlayer'),
 
     url('^checkNum$', 'checkNum'),
 )
