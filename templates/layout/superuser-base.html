@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/admin-global.css">
+    <link rel="stylesheet" type="text/css" href="/static/vendors/amazeui/dist/css/amazeui.css">
+    <title>{% block title %}{% endblock %}</title>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <header class="header">
+        UBA管理后台
+    </header><!-- /header -->
+    <section class="container">
+        <nav class="side-bar">
+            <ul class="unstyle">
+                <li class="side-bar-item active"><a href="" title="">用户管理</a></li>
+                <li class="side-bar-item"><a href="" title="">球队管理</a></li>
+                <li class="side-bar-item"><a href="" title="">球员管理</a></li>
+                <li class="side-bar-item"><a href="" title="">比赛管理</a></li>
+            </ul>
+        </nav>
+        {% block content %}{% endblock %}
+    </section>
+    <footer>
+        {%block footer%}{%endblock%}
+    </footer>
+
+    <script type="text/javascript" src="/static/vendors/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/vendors/amazeui/dist/js/amazeui.min.js"></script>
+    <script type="text/javascript" src="/static/js/admin-global.js"></script>
+    <script type="text/javascript"></script>
+    {%block js%}{%endblock%}
+</body>
+</html>

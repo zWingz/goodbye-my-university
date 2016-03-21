@@ -1,0 +1,324 @@
+{% extends "layout/superuser-base.html" %}
+{% block title %}{{title}}{% endblock %}
+{%block content%}
+<div class="content-container">
+    <div class="fixtures">
+        <header class="fixtures-title">
+            本周赛程
+        </header><!-- /header -->
+        {% if games %}
+        <table class="am-table am-table-hover">
+            <thead>
+                <tr>
+                    <th>时间</th>
+                    <th>地点</th>
+                    <th>状态</th>
+                    <th>主场</th>
+                    <th>比分</th>
+                    <th>客场</th>
+                    <th>数据</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for game in games %}
+                    <tr id-code="{{game.id_code}}">
+                        <td class="game-time">
+                            <div>
+                                {{game.game_date}}
+                            </div>
+                            <div>
+                                  {{game.game_time}}
+                             </div>
+                         </td>
+                        <td class="location">{{game.location}}</td>
+                        <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
+                        <td class="team_one"><img src="/static/upload/{{game.team_one.logo}}">{{game.team_one}}</td>
+                        <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
+                        <td class="team_two"><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</td>
+                        <td class="game-data">
+                            <input class="upload-input" type="file" name="upfile" value="" placeholder="">
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {%else%}
+        <button type="button" class="am-btn am-btn-default" create-type='now'>本周暂无赛程,请创建赛程</button>
+        {% endif %}
+    </div>
+    <div class="fixtures">
+        <header class="fixtures-title">
+            下周赛程
+        </header><!-- /header -->
+        {% if nextgames %}
+        <table class="am-table am-table-hover fixtures">
+            <thead>
+                <tr>
+                    <th>时间</th>
+                    <th>地点</th>
+                    <th>状态</th>
+                    <th>主场</th>
+                    <th>比分</th>
+                    <th>客场</th>
+                    <th>数据</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for game in games %}
+                    <tr>
+                        <td class="game-time">
+                            <div>
+                                {{game.game_date}}
+                            </div>
+                            <div>
+                                  {{game.game_time}}
+                             </div>
+                         </td>
+                        <td class="location">{{game.location}}</td>
+                        <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
+                        <td class="team_one"><img src="/static/upload/{{game.team_one.logo}}">{{game.team_one}}</td>
+                        <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
+                        <td class="team_two"><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</td>
+                        <td class="game-data">data</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {%else%}
+        <button type="button" class="am-btn am-btn-default mt10" create-type='next'>下周暂无赛程,请创建赛程</button>
+        {%endif%}
+    </div>
+</div>
+{%endblock%}
+{%block footer%}
+    <div class="am-modal am-modal-no-btn" tabindex="-1" id="createFixtures-modal">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">
+              <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+            </div>
+            <div class="am-modal-bd">
+                <header id="fixtures-week">
+                    
+                </header><!-- /header -->
+                <table id="createFixtures-table" class="">
+                    <thead>
+                        <tr class="game-time">
+                            <th></th>
+                            <th>9:30</th>
+                            <th>11:00</th>
+                            <th>14:00</th>
+                            <th>15:30</th>
+                            <th>17:00</th>
+                            <th>20:00</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="">星期一</td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                        </tr>
+                        <tr>
+                            <td class="">星期二</td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                        </tr>
+                        <tr>
+                            <td class="">星期三</td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                        </tr>
+                        <tr>
+                            <td class="">星期四</td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                        </tr>
+                        <tr>
+                            <td class="">星期五</td>
+                           <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                        </tr>
+                        <tr>
+                            <td class="">星期六</td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                        </tr>
+                        <tr>
+                            <td class="">星期日</td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                            <td class="fixtures-item"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button id="createFixtures-btn" type="button" class="am-btn am-btn-default">生成赛程</button>
+                <button id="saveFixtures-btn" type="button" class="am-btn am-btn-default">保存赛程</button>
+            </div>
+        </div>
+    </div>
+{%endblock%}
+{%block js%}
+<script type="text/javascript" src="/static/vendors/moment/min/moment.min.js"></script>
+<script type="text/javascript" >
+    $(function(){
+        var fixtures = [];
+        var weekday = getWeekDate();
+        var timeArr = ["09:30","11:00","14:00","05:30","17:00","20:00"];
+        $("#fixtures-week").html(weekday[0]+" 至 "+weekday[6]);
+
+        $("[create-type]").on("click",function(){
+            $("#createFixtures-modal").attr("create-type",$(this).attr("create-type"))
+            $("#createFixtures-modal").modal("open");
+        });
+
+        $("#createFixtures-modal").on("open.modal.amui",function(){
+            if($(this).attr("create-type") === 'next') {
+                weekday = getWeekDate(moment().add(7, 'days').format("YYYY-MM-DD"));
+                $("#fixtures-week").html(weekday[0]+" 至 "+weekday[6]);
+            }
+        });
+
+        $(".fixtures-item").each(function(){
+            var $this = $(this);
+            var $tr = $this.parent();
+            var colIndex = $tr.index();
+            var rowIndex = $this.index();
+            $this.attr('colIndex', colIndex).attr("rowIndex",rowIndex-1);
+        });
+
+        // 新建赛程
+        $("#createFixtures-btn").on("click",function(){
+            var postData = [];
+            $("#createFixtures-table tbody tr").each(function(){
+                var trArr = [];
+                $(this).find("td").each(function(){
+                    if($(this).hasClass("active")){
+                        var colIndex = $(this).attr("colIndex");
+                        var rowIndex = $(this).attr("rowIndex");
+                        var obj = {};
+                        obj.time = {};
+                        obj.time.date = weekday[colIndex];
+                        obj.time.time = timeArr[rowIndex];
+                        obj.index = {col:colIndex,row:rowIndex}
+                        trArr.push(obj)
+                    }
+                });
+                postData.push(trArr);
+            });
+            $.post('/game/createFixtures',{"fixtures":JSON.stringify(postData)}, function(data, textStatus, xhr) {
+                /*optional stuff to do after success */
+                // console.log(data);
+                fixtures = data;
+                var timeLen = data.length;
+                for (var i = 0; i < timeLen; i++) {
+                    var gameLen = data[i].length;
+                    for (var j= 0; j < gameLen; j++) {
+                        var game = data[i][j];
+                        if(typeof game.location !== "undefined"){
+                            var $td = $("#createFixtures-table tbody tr").eq(game.index.col).find("td").eq(+game.index.row+1);
+                            $td.addClass('game-item');
+                            var locationDiv = $("<div>").addClass("game-item-location").append(game.location);
+                            var $team = $("<div>").append($("<div class='team-name'>").append(game.team_one.name).attr("id_code",game.team_one.id_code))
+                                                                        .append($("<i>").addClass('iconfont').append("&#xe607;"))
+                                                                        .append($("<div class='team-name'>").append(game.team_two.name).attr("id_code",game.team_two.id_code))
+                            $td.append(locationDiv).append($team).removeClass('active');
+                        }
+                    }
+                }
+            });
+        });
+
+        //  选择比赛时间
+        $(".fixtures-item").on("click",function(e){
+            var $target = $(this);
+            $target.addClass("active");
+        });
+
+        // 保存赛程
+        $("#saveFixtures-btn").on("click",function(){
+            console.log(fixtures);
+            $.post('/game/saveFixtures', {fixtures: JSON.stringify(fixtures)}, function(data, textStatus, xhr) {
+                /*optional stuff to do after success */
+                console.log(data)
+            });
+        });
+
+        // 上传数据
+        $(".upload-input").on("change",function(event){
+            event.preventDefault();
+            var formData = new FormData();
+            var id_code = $(this).parents("tr").attr("id-code")
+            console.log(id_code);
+            formData.append("file",this.files[0]);
+            formData.append('id_code',id_code)
+            console.log(this.files[0]);
+            $.ajax({
+                url: "/game/uploadData",
+                type: 'post',
+                dataType: 'json',
+                data: formData,
+                processData:false,
+                contentType:false,
+            })
+            .done(function(data) {
+                console.log(data);
+            });
+        });
+    });
+    //返回本周的日期
+    function getWeekDate(currentdate){
+        var date = typeof currentdate === 'undefined' ? new Date():new Date(currentdate);
+        var week_day = date.getDay();
+        if(week_day === 0){
+            week_day = 7;
+        }
+        var result = [];
+        var result_date; 
+        for(var i=0;i<7;i++){
+            result_date = new Date();
+            result_date.setFullYear(date.getFullYear());
+            result_date.setMonth(date.getMonth());
+            result_date.setDate(date.getDate() + (i-week_day+1));
+            result.push(dateFormat(result_date));
+        }
+        return result;
+    }
+
+
+    //格式化日期为 YYYY-mm-dd
+    function dateFormat(date){
+        var year = date.getFullYear();
+        var month = date.getMonth()+1;
+        var day = date.getDate();
+        return year+"-"+(+month<10?"0"+month:month)+"-"+(+day<10?"0"+day:day);
+    }
+</script>
+
+{%endblock%}

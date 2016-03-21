@@ -82,6 +82,15 @@ class TeamProfile(Document):
     win = IntField(required=False)
     game = IntField(required=False)
 
+    def save(self, *args, **kwargs):
+        if self.shot_all != 0:
+            self.shot_rate = self.shot_in / self.shot_all
+        if self.three_all != 0:
+            self.three_rate = self.three_in / self.three_all
+        if self.free_all != 0:
+            self.free_rate = self.free_in / self.free_all
+        super(TeamProfile, self).save(*args, **kwargs)
+
 class PlayerProfile(Document):
     id_code = StringField(max_length=10,unique=True)
     point = IntField(required=False)
@@ -103,4 +112,12 @@ class PlayerProfile(Document):
     threedouble = IntField(required=False)
     game = IntField(required=False)
 
+    def save(self, *args, **kwargs):
+        if self.shot_all != 0:
+            self.shot_rate = self.shot_in / self.shot_all
+        if self.three_all != 0:
+            self.three_rate = self.three_in / self.three_all
+        if self.free_all != 0:
+            self.free_rate = self.free_in / self.free_all
+        super(PlayerProfile, self).save(*args, **kwargs)
 

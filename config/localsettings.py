@@ -11,6 +11,10 @@ DEV_MODE = True
 TEMPLATE_DEBUG = DEBUG
 OAUTH_ENABLED = False
 
+MONGODB_CFG = {
+    "host":"192.168.201.67",
+    "username":'zwing'
+}
 
 LOG_DIR = "/home/zwing/sites/web"
 # 日志配置
