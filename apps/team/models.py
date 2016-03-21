@@ -61,7 +61,7 @@ class Player(models.Model):
     def __str__(self):
         return self.user.username 
  
-connect('webbasketball',host='192.168.201.67',username="zwing")
+connect('webbasketball',host=settings.MONGODB_CFG['host'],username=settings.MONGODB_CFG['username'])
 class TeamProfile(Document):
     id_code = StringField(max_length=10,unique=True)
     point = IntField(required=False)
