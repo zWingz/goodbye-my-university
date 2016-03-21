@@ -5,39 +5,24 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 import apps.game.logics as Logics
-from apps.game.models import Game
+from apps.game.models import Game,GameProfile,PlayerGameProfile,TeamGameProfile
 from apps.team.models import Team,TeamProfile
 from utils.Decorator.decorator import post_required
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
-@login_required
-@post_required
-def saveGame(request):
-    response_data = {}
-    result = Logics.saveGame(request.POST)
-    return redirect(getGame,game=request.POST['game'])
 
 def getGame(request):
-    id_code = request.GET['game']
+    id_code = request.GET['id_code']
     game = Game.objects.get(id_code = id_code)
     team_one = game.team_one
     team_two = game.team_two
-    path = open(os.path.join(settings.GAME_PROFILE_DIR,game.profile),'r')
-    game_data = json.load(path)
-    return render(request,"game/detial",{team_one:team_one,team_two:team_two,game_data:game_data})
+    game_profile = GameProfile.objects.get(id_code=id_code)
+    return render(request,"game/detail.html",{"game":game,"game_profile":game_profile})
+
 
 location = ["loc_a","loc_b","loc_c","loc_d","loc_e"]
 
-GAME_TIME = [
-    [{"time":"2016-03-14 18:00","location":""}],
-    [],
-    [{"time":"2016-03-16 18:30","location":""}],
-    [],
-    [{"time":"2016-03-18 18:30","location":""}],
-    [{"time":"2016-03-19 10:30","location":""},{"time":"2016-03-19 14:30","location":""},{"time":"2016-03-19 16:30","location":""}],
-    [{"time":"2016-03-20 10:30","location":""},{"time":"2016-03-20 14:30","location":""},{"time":"2016-03-20 16:30","location":""}]
-];
 
 # 新建赛程
 # @post_required

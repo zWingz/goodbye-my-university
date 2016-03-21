@@ -7,11 +7,13 @@ from django.contrib.auth.decorators import login_required
 import apps.team.logics as Logics
 import apps.message.logics as MsgLogics
 from apps.team.models import Team,Player
+from apps.game.models import Game
 from apps.message.models import Message
 from datetime import datetime
 from utils.files.logics import saveFile
 from utils.Decorator.decorator import post_required
 from django.contrib.auth.models import User  
+from django.db.models import Q
 # Create your views here.
 
 def listTeam(request):
@@ -29,7 +31,8 @@ def teamDetail(request):
     players = toPlayersView(team.players.all())
     data = Logics.getTeamProfile(id_code);
     if request.method == 'GET':
-        return render(request,"team/teamDetail.html",{"team":team,"players":players,"team_data":data})
+        games = Game.objects.filter(Q(team_one=team)|Q(team_two=team))
+        return render(request,"team/teamDetail.html",{"team":team,"players":players,"team_data":data,"games":games})
     else:
         response_data ={}
         response_data['team'] = toTeamView(team)

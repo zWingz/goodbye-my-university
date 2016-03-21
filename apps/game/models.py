@@ -41,13 +41,13 @@ class PlayerGameProfile(Document):
     point = IntField(required=False,default=0)
     shot_in = IntField(required=False,default=0)
     shot_all = IntField(required=False,default=0)
-    shot_rate = IntField(required=False,default=0)
+    shot_rate = FloatField(required=False,default=0)
     three_in = IntField(required=False,default=0)
     three_all = IntField(required=False,default=0)
-    three_rate = IntField(required=False,default=0)
+    three_rate = FloatField(required=False,default=0)
     free_in = IntField(required=False,default=0)
     free_all = IntField(required=False,default=0)
-    free_rate = IntField(required=False,default=0)
+    free_rate = FloatField(required=False,default=0)
     rebound = IntField(required=False,default=0)
     steal = IntField(required=False,default=0)
     assist = IntField(required=False,default=0)
@@ -56,11 +56,11 @@ class PlayerGameProfile(Document):
     team_game = ReferenceField("TeamGameProfile")
     def save(self, *args, **kwargs):
         if self.shot_all != 0:
-            self.shot_rate = self.shot_in / self.shot_all
+            self.shot_rate = round(self.shot_in / self.shot_all*100,2)
         if self.three_all != 0:
-            self.three_rate = self.three_in / self.three_all
+            self.three_rate = round(self.three_in / self.three_all*100,2)
         if self.free_all != 0:
-            self.free_rate = self.free_in / self.free_all
+            self.free_rate = round(self.free_in / self.free_all*100,2)
         super(PlayerGameProfile, self).save(*args, **kwargs)
 
 class TeamGameProfile(Document):
@@ -69,13 +69,13 @@ class TeamGameProfile(Document):
     point = IntField(required=False)
     shot_in = IntField(required=False)
     shot_all = IntField(required=False)
-    shot_rate = IntField(required=False)
+    shot_rate = FloatField(required=False)
     three_in = IntField(required=False)
     three_all = IntField(required=False)
-    three_rate = IntField(required=False)
+    three_rate = FloatField(required=False)
     free_in = IntField(required=False)
     free_all = IntField(required=False)
-    free_rate = IntField(required=False)
+    free_rate = FloatField(required=False)
     rebound = IntField(required=False)
     steal = IntField(required=False)
     assist = IntField(required=False)
@@ -84,11 +84,11 @@ class TeamGameProfile(Document):
     players = ListField(EmbeddedDocumentField("PlayerGameProfile"))
     def save(self, *args, **kwargs):
         if self.shot_all != 0:
-            self.shot_rate = self.shot_in / self.shot_all
+            self.shot_rate = round(self.shot_in / self.shot_all*100,2)
         if self.three_all != 0:
-            self.three_rate = self.three_in / self.three_all
+            self.three_rate = round(self.three_in / self.three_all*100,2)
         if self.free_all != 0:
-            self.free_rate = self.free_in / self.free_all
+            self.free_rate = round(self.free_in / self.free_all*100,2)
         super(TeamGameProfile, self).save(*args, **kwargs)
 
 class GameProfile(Document):
