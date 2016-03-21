@@ -20,7 +20,6 @@ $(function(){
             $(".teamList-right").removeClass("opacity")
             setTimeout(function(){
                 $(".teamList-right").hide();
-
                 map.bindTmpl(data)
                 $(".teamList-right").show();
                 $(".teamList-right").addClass("opacity")
@@ -92,7 +91,9 @@ function bindTeamTmpl(data){
     var game = data_profile['game'];
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i];
-        table.find('[data-type="'+key+'"]').text((data_profile[key]/game).toFixed(2));
+        if(game !== 0){
+            table.find('[data-type="'+key+'"]').text((data_profile[key]/game).toFixed(2));
+        }
     }
 }
 

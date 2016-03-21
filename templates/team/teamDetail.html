@@ -30,7 +30,43 @@
                     </ul>
                     <div class="my-tabs-bd">
                         <div class="my-tabs-panel ">
-                            比赛
+                            {% if games %}
+                    <table class="am-table am-table-hover data-table fixtures">
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>地点</th>
+                                <th>状态</th>
+                                <th>主场</th>
+                                <th>比分</th>
+                                <th>客场</th>
+                                <th>数据</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for game in games %}
+                            <tr>
+                                <td class="game-time">
+                                    <div>
+                                        {{game.game_date}}
+                                    </div>
+                                    <div>
+                                          {{game.game_time}}
+                                     </div>
+                                 </td>
+                                <td class="location">{{game.location}}</td>
+                                <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
+                                <td class="team_one"><img src="/static/upload/{{game.team_one.logo}}">{{game.team_one}}</td>
+                                <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
+                                <td class="team_two"><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</td>
+                                <td class="game-data">data</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {%else%}
+                    暂无赛程
+                    {% endif %}
                         </div>
                         <div class="my-tabs-panel ">
                             <header class="table-head">平均数据</header>

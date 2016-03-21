@@ -40,7 +40,7 @@
                                 <td class="team_one"><img src="/static/upload/{{game.team_one.logo}}">{{game.team_one}}</td>
                                 <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
                                 <td class="team_two"><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</td>
-                                <td class="game-data">data</td>
+                                <td class="game-data"><a href="/game/getGame?id_code={{game.id_code}}" target="_blank" title="">查看数据</a></td>
                             </tr>
                         {% endfor %}
                         </tbody>

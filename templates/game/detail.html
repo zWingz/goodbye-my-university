@@ -1,0 +1,160 @@
+{% extends "layout/base.html" %}
+{%block head%}
+<link rel="stylesheet" type="text/css" href="/static/css/game.css">
+{%endblock%}
+{% block title %}比赛数据{% endblock %}
+{%block content%}
+   <div class="game-container">
+       <div class="game-left">
+        <header class="team-info">
+            <a href="/team/teamDetail?id_code={{game.team_one.id_code}}">
+                <img src="/static/upload/{{game.team_one.logo}}" alt="">
+                <span class="team-name">{{game.team_one.name}}</span>
+            </a>
+            {% if game.status == 0 %}
+                未赛
+            {% else%}
+                <div class="point">
+                    {{game.point}}
+                </div>
+            {% endif %}
+            <a href="/team/teamDetail?id_code={{game.team_one.id_code}}">
+                <span class="team-name">{{game.team_two.name}}</span>
+                <img src="/static/upload/{{game.team_two.logo}}" alt="">
+            </a>
+        </header><!-- /header -->
+        {% if game.status == 0 %}
+            未赛
+        {% else%}
+            <section class="game-data-container">
+                <header class="game-data-head">
+                    <div>
+                        {{game_profile.team_one_profile.name}}
+                    </div>
+                    <table class="am-table am-table-hover">
+                        <thead>
+                            <tr>
+                                <th>球员</th>
+                                <th >得分</th>
+                                <th >篮板</th>
+                                <th >助攻</th>
+                                <th >投篮</th>
+                                <th >三分</th>
+                                <th>罚球</th>
+                                <th >抢断</th>
+                                <th >盖帽</th>
+                                <th >失误</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for player in game_profile.team_one_profile.players %}
+                                <tr>
+                                    <td>{{player.name}}</td>
+                                    <td>{{player.point}}</td>
+                                    <td>{{player.rebound}}</td>
+                                    <td>{{player.assist}}</td>
+                                    <td>{{player.shot_in}}/{{player.shot_all}}</td>
+                                    <td>{{player.three_in}}/{{player.three_all}}</td>
+                                    <td>{{player.free_in}}/{{player.free_all}}</td>
+                                    <td>{{player.steal}}</td>
+                                    <td>{{player.block}}</td>
+                                    <td>{{player.turnover}}</td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td>总计:</td>
+                                <td>{{game_profile.team_one_profile.point}}</td>
+                                <td>{{game_profile.team_one_profile.rebound}}</td>
+                                <td>{{game_profile.team_one_profile.assist}}</td>
+                                <td>{{game_profile.team_one_profile.shot_in}}/{{game_profile.team_one_profile.shot_all}}</td>
+                                <td>{{game_profile.team_one_profile.three_in}}/{{game_profile.team_one_profile.three_all}}</td>
+                                <td>{{game_profile.team_one_profile.free_in}}/{{game_profile.team_one_profile.free_all}}</td>
+                                <td>{{game_profile.team_one_profile.steal}}</td>
+                                <td>{{game_profile.team_one_profile.block}}</td>
+                                <td>{{game_profile.team_one_profile.turnover}}</td>
+                            </tr>
+                            <tr>
+                                <td>命中率:</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>{{game_profile.team_one_profile.shot_rate}}%</td>
+                                <td>{{game_profile.team_one_profile.three_rate}}%</td>
+                                <td>{{game_profile.team_one_profile.free_rate}}%</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {{game_profile.team_two_profile.name}}
+                    <table class="am-table am-table-hover">
+                        <thead>
+                            <tr>
+                                <th>球员</th>
+                                <th >得分</th>
+                                <th >篮板</th>
+                                <th >助攻</th>
+                                <th >投篮</th>
+                                <th >三分</th>
+                                <th>罚球</th>
+                                <th >抢断</th>
+                                <th >盖帽</th>
+                                <th >失误</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for player in game_profile.team_two_profile.players %}
+                                <tr>
+                                    <td>{{player.name}}</td>
+                                    <td>{{player.point}}</td>
+                                    <td>{{player.rebound}}</td>
+                                    <td>{{player.assist}}</td>
+                                    <td>{{player.shot_in}}/{{player.shot_all}}</td>
+                                    <td>{{player.three_in}}/{{player.three_all}}</td>
+                                    <td>{{player.free_in}}/{{player.free_all}}</td>
+                                    <td>{{player.steal}}</td>
+                                    <td>{{player.block}}</td>
+                                    <td>{{player.turnover}}</td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td>总计:</td>
+                                <td>{{game_profile.team_two_profile.point}}</td>
+                                <td>{{game_profile.team_two_profile.rebound}}</td>
+                                <td>{{game_profile.team_two_profile.assist}}</td>
+                                <td>{{game_profile.team_two_profile.shot_in}}/{{game_profile.team_two_profile.shot_all}}</td>
+                                <td>{{game_profile.team_two_profile.three_in}}/{{game_profile.team_two_profile.three_all}}</td>
+                                <td>{{game_profile.team_two_profile.free_in}}/{{game_profile.team_two_profile.free_all}}</td>
+                                <td>{{game_profile.team_two_profile.steal}}</td>
+                                <td>{{game_profile.team_two_profile.block}}</td>
+                                <td>{{game_profile.team_two_profile.turnover}}</td>
+                            </tr>
+                            <tr>
+                                <td>命中率:</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>{{game_profile.team_two_profile.shot_rate}}%</td>
+                                <td>{{game_profile.team_two_profile.three_rate}}%</td>
+                                <td>{{game_profile.team_two_profile.free_rate}}%</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </header><!-- /header -->
+            </section>
+        {%endif%}
+       </div>
+       <div class="game-right">
+        right
+       </div>
+   </div>
+{%endblock%}
+{%block js%}
+<script type="text/javascript" src="/static/vendors/moment/min/moment.min.js"></script>
+<script type="text/javascript" src="/static/js/game.js"></script>
+
+{%endblock%}

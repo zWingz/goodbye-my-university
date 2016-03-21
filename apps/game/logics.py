@@ -88,20 +88,22 @@ def saveData(game,data):
                 team_one = each
                 team_one_gprofile = TeamGameProfile()
                 team_one_gprofile.id_code = game.team_one.id_code
+                team_one_gprofile.name = game.team_one.name
                 saveProfile(team_one_gprofile,each)
                 point = str(int(each['point']))+" - "
                 team_one_profile = TeamProfile.objects.get(id_code=str(int(each['id_code'])))
                 saveProfile(team_one_profile,each)
-                team_one_profile.game += 1
+                # team_one_profile.game += 1
             else:
                 team_two = each
                 team_two_gprofile = TeamGameProfile()
                 team_two_gprofile.id_code = game.team_two.id_code
+                team_two_gprofile.name = game.team_two.name
                 saveProfile(team_two_gprofile,each)
                 point = point + str(int(each['point']))
                 team_two_profile = TeamProfile.objects.get(id_code=str(int(each['id_code'])))
                 saveProfile(team_two_profile,each)
-                team_two_profile.game += 1
+                # team_two_profile.game += 1
             game.point = point
             game.status = 1
     if int(team_one['point']) > int(team_two['point']):
@@ -119,7 +121,7 @@ def saveData(game,data):
             player_profile = PlayerProfile.objects.get(id_code=str(int(each['id_code'])))
             saveProfile(player_profile,each)
             saveProfile(player_game_profile,each)
-            player_profile.game += 1
+            # player_profile.game += 1
             if checkDoubleCount(each) >= 3:
                 player_profile.threedouble +=1
             elif checkDoubleCount(each) >= 2:
@@ -132,12 +134,14 @@ def saveData(game,data):
                 player_game_profile.team_game = team_two_gprofile
             player_profile.save()
             player_game_profile.id_code = player.id_code
+            player_game_profile.name = player.user.first_name
             player_game_profile.save()
+    team_one_gprofile.save()
+    team_two_gprofile.save()
     game_profile = GameProfile()
     game_profile.id_code = game.id_code
     game_profile.team_one_profile = team_one_gprofile
     game_profile.team_two_profile = team_two_gprofile
-
     game.save()
     game_profile.save()
     return True
@@ -170,6 +174,8 @@ def saveProfile(profile,data):
     profile.assist = (profile.assist or 0) + int(data['point'])
     profile.turnover = (profile.turnover or 0) + int(data['turnover'])
     profile.block = (profile.block or 0) + int(data['block'])
+    if hasattr(profile,"game"):
+        profile.game += 1
 
 
 def parseDatFromExcel(file_name):
