@@ -1,0 +1,105 @@
+{% extends "layout/base.html" %}
+{%block head%}
+<link rel="stylesheet" type="text/css" href="/static/css/game.css">
+{%endblock%}
+{% block title %}赛程{% endblock %}
+{%block content%}
+   <div class="game-container">
+       <div class="game-left">
+            <div class="fixtures-container">
+                <section class="fixtures">
+                    <aside>
+                        本周赛程
+                    </aside>
+                    {% if games %}
+                    <table class="am-table am-table-hover data-table">
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>地点</th>
+                                <th>状态</th>
+                                <th>主场</th>
+                                <th>比分</th>
+                                <th>客场</th>
+                                <th>数据</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for game in games %}
+                            <tr>
+                                <td class="game-time">
+                                    <div>
+                                        {{game.game_date}}
+                                    </div>
+                                    <div>
+                                          {{game.game_time}}
+                                     </div>
+                                 </td>
+                                <td class="location">{{game.location}}</td>
+                                <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
+                                <td class="team_one"><img src="/static/upload/{{game.team_one.logo}}">{{game.team_one}}</td>
+                                <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
+                                <td class="team_two"><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</td>
+                                <td class="game-data">data</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {%else%}
+                    暂无赛程
+                    {% endif %}
+                </section>
+                <section class="fixtures">
+                    <aside>
+                        下周赛程
+                    </aside>
+                    {% if nextgames %}
+                    <table class="am-table am-table-hover data-table">
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>地点</th>
+                                <th>状态</th>
+                                <th>主场</th>
+                                <th>比分</th>
+                                <th>客场</th>
+                                <th>数据</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for game in games %}
+                            <tr>
+                                <td class="game-time">
+                                    <div>
+                                        {{game.game_date}}
+                                    </div>
+                                    <div>
+                                          {{game.game_time}}
+                                     </div>
+                                 </td>
+                                <td class="location">{{game.location}}</td>
+                                <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
+                                <td class="team_one"><img src="/static/upload/{{game.team_one.logo}}">{{game.team_one}}</td>
+                                <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
+                                <td class="team_two"><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</td>
+                                <td class="game-data">data</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {%else%}
+                    暂无赛程
+                    {% endif %}
+                </section>
+            </div>
+       </div>
+       <div class="game-right">
+        right
+       </div>
+   </div>
+{%endblock%}
+{%block js%}
+<script type="text/javascript" src="/static/vendors/moment/min/moment.min.js"></script>
+<script type="text/javascript" src="/static/js/game.js"></script>
+
+{%endblock%}

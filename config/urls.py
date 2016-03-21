@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^team/',include("apps.team.urls")),
     url(r'^msg/',include("apps.message.urls")),
     url(r'^game/',include("apps.game.urls")),
+    url(r'^admin/',include("apps.admin.urls")),
 ]
