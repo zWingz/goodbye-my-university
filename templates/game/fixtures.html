@@ -81,7 +81,7 @@
                                 <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
                                 <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_one.id_code}}" title="" target="_blank"><img src="/static/upload/{{game.team_one.logo}}">{{game.team_one}}</a></td>
                                 <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
-                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_two.id_code}}" title="" target="_blank"></a><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</td>
+                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_two.id_code}}" title="" target="_blank"><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</a></td>
                                 <td class="game-data"></td>
                             </tr>
                         {% endfor %}
