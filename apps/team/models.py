@@ -80,6 +80,7 @@ class TeamProfile(Document):
     turnover = IntField(required=False)
     block = IntField(required=False)
     win = IntField(required=False)
+    win_rate = FloatField(required=False)
     game = IntField(required=False)
 
     def save(self, *args, **kwargs):
@@ -89,6 +90,8 @@ class TeamProfile(Document):
             self.three_rate = round(self.three_in / self.three_all*100,2)
         if self.free_all != 0:
             self.free_rate = round(self.free_in / self.free_all*100,2)
+        if self.game != 0:
+            self.win_rate = round(self.win / self.game*100,2)
         super(TeamProfile, self).save(*args, **kwargs)
 
 class PlayerProfile(Document):

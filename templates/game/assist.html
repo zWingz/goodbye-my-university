@@ -1,0 +1,30 @@
+<div class="my-tabs-panel">
+    <table class="am-table am-table-hover data-table am-table-compact rank">
+        <thead>
+            <tr>
+                <th>排名</th>
+                <th>球员</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for player in assistPlayer %}
+            <tr>
+                <td class="forloop">{{forloop.counter}}</td>
+                <td>
+                    <a href="/team/playerDetail?id_code={{player.id_code}}" title="" target="_blank" class="player-info">
+                       <img src="/static/upload/{{player.user.img_path}}" alt="">
+                       <div class="inb">
+                           {{player.user.first_name}}
+                           <div>
+                               {{player.number}}  {{player.position}}/{{player.team.name}}
+                           </div>
+                       </div>
+                    </a>
+                </td>
+                <td class="rank-data">{{player.assist}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

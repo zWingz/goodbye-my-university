@@ -1,5 +1,15 @@
 var team_data = {};
 $(function(){
+
+    $(window).on("scroll",function(e){
+        var top = getScrollTop();
+        if(top > 110){
+            $(".teamList-right").css("top",top-110+"px")
+        }else{
+            $(".teamList-right").css("top","0px")
+        }
+    });
+
     var codeTypeMap = {
             'team':{
                 url:'/team/teamDetail',
@@ -16,6 +26,7 @@ $(function(){
         var code_type = $(this).data("code-type");
         var map = codeTypeMap[code_type];
         $.post(map.url,{id_code:id_code},function(data){
+            console.log(data);
             $(".teamList-right").css("width","400px");
             $(".teamList-right").removeClass("opacity")
             setTimeout(function(){
@@ -93,6 +104,8 @@ function bindTeamTmpl(data){
         var key = keys[i];
         if(game !== 0){
             table.find('[data-type="'+key+'"]').text((data_profile[key]/game).toFixed(2));
+        }else {
+            table.find('[data-type="'+key+'"]').text(data_profile[key]);
         }
     }
 }
@@ -126,4 +139,19 @@ function bindPlayerTmpl(data){
         var key = keys[i];
         table.find('[data-type="'+key+'"]').text((data_profile[key]/game));
     }
+}
+
+
+function getScrollTop()
+{
+    var scrollTop=0;
+    if(document.documentElement&&document.documentElement.scrollTop)
+    {
+        scrollTop=document.documentElement.scrollTop;
+    }
+    else if(document.body)
+    {
+        scrollTop=document.body.scrollTop;
+    }
+    return scrollTop;
 }

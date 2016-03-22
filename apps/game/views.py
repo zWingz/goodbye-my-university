@@ -6,9 +6,10 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 import apps.game.logics as Logics
 from apps.game.models import Game,GameProfile,PlayerGameProfile,TeamGameProfile
-from apps.team.models import Team,TeamProfile
+from apps.team.models import Team,TeamProfile,Player,PlayerProfile
 from utils.Decorator.decorator import post_required
 from django.contrib.auth.decorators import login_required
+from django.db.models import F
 # Create your views here.
 
 
@@ -17,7 +18,10 @@ def getGame(request):
     game = Game.objects.get(id_code = id_code)
     team_one = game.team_one
     team_two = game.team_two
-    game_profile = GameProfile.objects.get(id_code=id_code)
+    try:
+        game_profile = GameProfile.objects.get(id_code=id_code)
+    except GameProfile.DoesNotExist:
+        game_profile = None
     return render(request,"game/detail.html",{"game":game,"game_profile":game_profile})
 
 
@@ -80,10 +84,23 @@ def getFixtures(request):
         now = datetime.datetime.now()
         weeknum = request.GET.get('weeknum',str(now.isocalendar()[0])+str(now.isocalendar()[1])) 
         games = Game.objects.filter(weeknum=weeknum)
-
         next_weeknum = int(weeknum)+1
         next_games = Game.objects.filter(weeknum=next_weeknum)
-        return render(request,"game/fixtures.html",{"games":games,"nextgames":next_games})
+        teamsProfile = TeamProfile.objects.all().order_by("-win_rate")[0:5]
+        teams = getModelByIdCode(teamsProfile,"TeamProfile")
+        pointPlayer = getModelByIdCode(PlayerProfile.objects.all().order_by("-point")[0:5],"PlayerProfile")
+        assistPlayer = getModelByIdCode(PlayerProfile.objects.all().order_by("-assist")[0:5],"PlayerProfile")
+        reboundPlayer = getModelByIdCode(PlayerProfile.objects.all().order_by("-rebound")[0:5],"PlayerProfile")
+        blockPlayer = getModelByIdCode(PlayerProfile.objects.all().order_by("-block")[0:5],"PlayerProfile")
+        stealPlayer = getModelByIdCode(PlayerProfile.objects.all().order_by("-steal")[0:5],"PlayerProfile")
+
+        return render(request,"game/fixtures.html",{"games":games,"nextgames":next_games,
+                                                                                                    "teams":teams,
+                                                                                                    "pointPlayer":pointPlayer,
+                                                                                                    "assistPlayer":assistPlayer,
+                                                                                                    "reboundPlayer":reboundPlayer,
+                                                                                                    "blockPlayer":blockPlayer,
+                                                                                                    "stealPlayer":stealPlayer})
 
 @post_required
 def uploadData(request):
@@ -128,3 +145,25 @@ def toTeamView(team):
     obj['name'] = team.name
     obj['school'] = team.school
     return obj
+
+
+def getModelByIdCode(list,modelType):
+    result = []
+    if modelType == 'TeamProfile':
+        for each in list:
+            team = Team.objects.get(id_code=each.id_code)
+            team.win_rate = each.win_rate
+            team.game = each.game
+            result.append(team)
+    elif modelType == 'PlayerProfile':
+        for each in list:
+            player = Player.objects.get(id_code=each.id_code)
+            if each.game != 0 :
+                player.point = each.point/each.game
+                player.rebound = each.rebound/each.game
+                player.assist = each.assist/each.game
+                player.steal = each.steal/each.game
+                player.block = each.block/each.game
+                result.append(player)
+            player.game = each.game
+    return result

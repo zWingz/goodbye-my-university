@@ -6,11 +6,11 @@
 {%block content%}
    <div class="game-container">
        <div class="game-left">
-            <div class="fixtures-container">
+            {# <div class="fixtures-container"> #}
+                <header class="game-header">
+                    本周赛程
+                </header><!-- /header -->
                 <section class="fixtures">
-                    <aside>
-                        本周赛程
-                    </aside>
                     {% if games %}
                     <table class="am-table am-table-hover data-table">
                         <thead>
@@ -37,10 +37,10 @@
                                  </td>
                                 <td class="location">{{game.location}}</td>
                                 <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
-                                <td class="team_one"><img src="/static/upload/{{game.team_one.logo}}">{{game.team_one}}</td>
+                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_one.id_code}}" title="" target="_blank"><img src="/static/upload/{{game.team_one.logo}}">{{game.team_one}}</a></td>
                                 <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
-                                <td class="team_two"><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</td>
-                                <td class="game-data"><a href="/game/getGame?id_code={{game.id_code}}" target="_blank" title="">查看数据</a></td>
+                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_two.id_code}}" title="" target="_blank"><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</a></td>
+                                <td class="game-data">{%if game.status = 1%}<a href="/game/getGame?id_code={{game.id_code}}" target="_blank" title="">查看</a>{%endif%}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -49,10 +49,10 @@
                     暂无赛程
                     {% endif %}
                 </section>
+                <header class="game-header">
+                    下周赛程
+                </header><!-- /header -->
                 <section class="fixtures">
-                    <aside>
-                        下周赛程
-                    </aside>
                     {% if nextgames %}
                     <table class="am-table am-table-hover data-table">
                         <thead>
@@ -67,7 +67,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                        {% for game in games %}
+                        {% for game in nextgames %}
                             <tr>
                                 <td class="game-time">
                                     <div>
@@ -79,10 +79,10 @@
                                  </td>
                                 <td class="location">{{game.location}}</td>
                                 <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
-                                <td class="team_one"><img src="/static/upload/{{game.team_one.logo}}">{{game.team_one}}</td>
+                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_one.id_code}}" title="" target="_blank"><img src="/static/upload/{{game.team_one.logo}}">{{game.team_one}}</a></td>
                                 <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
-                                <td class="team_two"><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</td>
-                                <td class="game-data">data</td>
+                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_two.id_code}}" title="" target="_blank"></a><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</td>
+                                <td class="game-data"></td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -91,10 +91,57 @@
                     暂无赛程
                     {% endif %}
                 </section>
-            </div>
+            {# </div> #}
        </div>
        <div class="game-right">
-        right
+           <header class="game-header">
+               排行榜:
+           </header>
+             <div class="my-tabs" id="rank-tab" changeType="click">
+                 <ul class="my-tabs-nav unstyle">
+                   <li class="my-tabs-active">战绩</li>
+                   <li >得分</li>
+                   <li >篮板</li>
+                   <li >助攻</li>
+                   <li >抢断</li>
+                   <li >盖帽</li>
+                 </ul>
+                 <div class="my-tabs-bd">
+                     <div class="my-tabs-panel my-tabs-active">
+                         <table class="am-table am-table-hover data-table rank">
+                             <thead>
+                                 <tr>
+                                     <th>排名</th>
+                                     <th>球队</th>
+                                     <th>胜率</th>
+                                     <th>场次</th>
+                                 </tr>
+                             </thead>
+                             <tbody>
+                                 {% for team in teams %}
+                                 <tr>
+                                     <td>{{forloop.counter}}</td>
+                                     <td>
+                                        <a href="/team/teamDetail?id_code={{team.id_code}}" title="" target="_blank">
+                                            <img src="/static/upload/{{team.logo}}" alt="">{{team.name}}
+                                        </a>
+                                     </td>
+                                     <td>{{team.win_rate}}</td>
+                                     <td>{{team.game}}</td>
+                                 </tr>
+                                 {% endfor %}
+                             </tbody>
+                         </table>
+                     </div>
+                     {%include "game/point.html" %}
+                     {%include "game/rebound.html" %}
+                     {%include "game/assist.html" %}
+                     {%include "game/steal.html" %}
+                     {%include "game/block.html" %}
+
+                 </div>
+             </div>
+            
        </div>
    </div>
 {%endblock%}

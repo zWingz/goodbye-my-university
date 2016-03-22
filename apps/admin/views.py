@@ -15,8 +15,20 @@ import xlrd
 
 
 def admin_index(request):
-    return render(request,"layout/superuser-base.html");
+    if not request.user.is_authenticated() or not request.user.is_superuser:
+        return render(request,"admin/login.html")
+    else:
+        return render(request,"layout/superuser-base.html")
 
+def loginAdmin(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        pws = request.POST['password']
+        user = authenticate(username=username, password=pws)
+        if user and user.is_superuser:
+            auth_login(request,user)
+    # return render(request, "users/login.html")
+    return redirect('/admin/')
 
 
 
