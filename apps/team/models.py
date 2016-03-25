@@ -14,9 +14,9 @@ class Team(models.Model):
         db_table = 'team'
     id_code = models.CharField(max_length=10,null=True,unique=True)
     name = models.CharField(max_length=10)
-    manager = models.ForeignKey(User,to_field="username",related_name="team")
-    logo = models.CharField(max_length=20,null=True)
-    profile = models.CharField(max_length=20,null=True)
+    manager = models.ForeignKey(User,to_field="id_code",related_name="team")
+    logo = models.CharField(max_length=20,default="teamImg.jpg")
+    # profile = models.CharField(max_length=20,null=True)
     desc = models.TextField()
     school = models.CharField(max_length=10,null=True)
     status = models.IntegerField(default=1)  # 判断是否生效字段
@@ -43,7 +43,7 @@ class Player(models.Model):
     team = models.ForeignKey(Team,related_name="players",on_delete=models.CASCADE,null=True)
     height = models.CharField(max_length=10,null=True)
     weight = models.CharField(max_length=10,null=True)
-    profile = models.CharField(max_length=20)
+    # profile = models.CharField(max_length=20)
     school = models.CharField(max_length=10,null=True)
     desc = models.TextField(null=True)
     position = models.CharField(max_length=5,null=True)
@@ -80,6 +80,7 @@ class TeamProfile(Document):
     turnover = IntField(required=False)
     block = IntField(required=False)
     win = IntField(required=False)
+    lose = IntField(required=False)
     win_rate = FloatField(required=False)
     game = IntField(required=False)
 
@@ -92,6 +93,9 @@ class TeamProfile(Document):
             self.free_rate = round(self.free_in / self.free_all*100,2)
         if self.game != 0:
             self.win_rate = round(self.win / self.game*100,2)
+        else:
+            self.win_rate = 0
+        self.lose = self.game - self.win
         super(TeamProfile, self).save(*args, **kwargs)
 
 class PlayerProfile(Document):

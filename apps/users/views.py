@@ -7,7 +7,9 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 import apps.users.logics as Logics
 from apps.message.models import Message
-from datetime import datetime
+from apps.game.models import Game
+from django.db.models import Q
+import datetime
 from django.contrib.auth.views import logout as auth_logout
 from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login,authenticate
 # Create your views here.
@@ -39,6 +41,8 @@ def usercenter(request):
     status = request.user.status
     player = False
     team = False
+    games = False
+    nextgames = False
     player_data = {}
     team_data = {}
     if status == 'double':
@@ -57,6 +61,11 @@ def usercenter(request):
         team = request.user.team.all()[0]
         team_data = Logics.getTeamProfile(team.id_code)
         isManager = True
+    if team :
+        now = datetime.datetime.now()
+        weeknum = str(now.isocalendar()[0])+str(now.isocalendar()[1])
+        games = Game.objects.filter(Q(team_one=team)|Q(team_two=team),weeknum=weeknum)
+        nextgames =  Game.objects.filter(Q(team_one=team)|Q(team_two=team),weeknum=int(weeknum)+1)
     msg = Message.objects.filter(receiver=request.user).order_by("-create_time");
     return render(request,"users/usercenter.html",{
                                                                                                     "player":player,
@@ -64,6 +73,8 @@ def usercenter(request):
                                                                                                     "team":team,
                                                                                                     "team_data":team_data,
                                                                                                     "isManager":isManager,
+                                                                                                    "games":games,
+                                                                                                    "nextgames":nextgames,
                                                                                                     "msg":msg
                                                                                                     })
 

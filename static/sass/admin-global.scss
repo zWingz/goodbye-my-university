@@ -38,7 +38,7 @@ html,body {
     font-size: 20px;
     padding-left: 20px;
 }
-.container {
+.admin-container {
     display: flex;
     min-height: 100%;
     padding-top: $nav-bar-height;
@@ -127,4 +127,17 @@ html,body {
     .team-name {
         display:inline-block;
     }
+}
+
+
+
+// 新闻模块 创建新闻
+.note-editor.note-frame {
+    border:1px solid #ddd !important;
+}
+#news-cover {
+    height:250px;
+    width:350px;
+    margin-bottom: 10px;
+    display:none;
 }

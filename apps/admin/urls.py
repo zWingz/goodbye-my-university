@@ -15,6 +15,9 @@ urlpatterns = patterns(
     url(r'^$', 'admin_index'),
     url(r'^login$', 'loginAdmin'),
     url('^fixtures$', 'getFixtures'),
+    url('^createNews$', 'createNews'),
+    url('^uploadImg$', 'uploadImg'),
+    url('^userlist$', 'getUserList'),
     # url('^saveFixtures$', 'saveFixtures'),
     # url('^fixtures$', 'getFixtures'),
 )

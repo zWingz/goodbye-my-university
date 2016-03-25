@@ -4,9 +4,9 @@ $(function(){
     $(window).on("scroll",function(e){
         var top = getScrollTop();
         if(top > 110){
-            $(".teamList-right").css("top",top-110+"px")
+            $(".flex-right").css("top",top-110+"px")
         }else{
-            $(".teamList-right").css("top","0px")
+            $(".flex-right").css("top","0px")
         }
     });
 
@@ -27,13 +27,13 @@ $(function(){
         var map = codeTypeMap[code_type];
         $.post(map.url,{id_code:id_code},function(data){
             console.log(data);
-            $(".teamList-right").css("width","400px");
-            $(".teamList-right").removeClass("opacity")
+            $(".flex-right").css("width","400px");
+            $(".flex-right").removeClass("opacity")
             setTimeout(function(){
-                $(".teamList-right").hide();
+                $(".flex-right").hide();
                 map.bindTmpl(data)
-                $(".teamList-right").show();
-                $(".teamList-right").addClass("opacity")
+                $(".flex-right").show();
+                $(".flex-right").addClass("opacity")
             },500);
         });
     });

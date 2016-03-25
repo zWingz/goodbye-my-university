@@ -4,10 +4,10 @@
 {%endblock%}
 {% block title %}赛程{% endblock %}
 {%block content%}
-   <div class="game-container">
-       <div class="game-left">
+   <div class="flex-container">
+       <div class="flex-left">
             {# <div class="fixtures-container"> #}
-                <header class="game-header">
+                <header class="flex-header">
                     本周赛程
                 </header><!-- /header -->
                 <section class="fixtures">
@@ -46,10 +46,13 @@
                         </tbody>
                     </table>
                     {%else%}
-                    暂无赛程
+                    <div class="none-data">
+                        <i class="iconfont">&#xe608;</i>
+                        暂无赛程
+                    </div>
                     {% endif %}
                 </section>
-                <header class="game-header">
+                <header class="flex-header">
                     下周赛程
                 </header><!-- /header -->
                 <section class="fixtures">
@@ -88,13 +91,16 @@
                         </tbody>
                     </table>
                     {%else%}
-                    暂无赛程
+                    <div class="none-data">
+                        <i class="iconfont">&#xe608;</i>
+                        暂无赛程
+                    </div>
                     {% endif %}
                 </section>
             {# </div> #}
        </div>
-       <div class="game-right">
-           <header class="game-header">
+       <div class="flex-right">
+           <header class="flex-header">
                排行榜:
            </header>
              <div class="my-tabs" id="rank-tab" changeType="click">

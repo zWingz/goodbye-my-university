@@ -3,13 +3,16 @@ import json, os, datetime
 import copy
 from django.conf import settings
 from django.http import HttpResponse
-from django.http import HttpResponseRedirect
 # import apps.game.logics as Logics
 from apps.game.models import Game
 from apps.team.models import Team,TeamProfile
+from apps.message.models import News
 from utils.Decorator.decorator import post_required
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login as auth_login,authenticate
+from django.contrib.auth.models import User  
 import xlrd
+from utils.files.logics import saveFile
 # Create your views here.
 
 
@@ -21,7 +24,9 @@ def admin_index(request):
         return render(request,"layout/superuser-base.html")
 
 def loginAdmin(request):
+    print("login")
     if request.method == "POST":
+        print("login post")
         username = request.POST['username']
         pws = request.POST['password']
         user = authenticate(username=username, password=pws)
@@ -44,8 +49,35 @@ def getFixtures(request):
     return render(request,"admin/game-list.html",{"title":"近期赛程","games":games,"nextgames":next_games})
 
 
+def createNews(request):
+    return render(request,"admin/createnews.html")
+
+
+
+@login_required
+@post_required
+def uploadImg(request):
+    upfile = request.FILES['file']
+    response_data = {}
+    fileInfo = saveFile(upfile,os.path.join(settings.UPLOADED_DIR))
+    if fileInfo:
+        response_data['success'] = 1
+        response_data['message'] = '修改成功'
+        response_data['fileInfo']={
+                                                "filename":fileInfo['fileName'],
+                                                "url":"/static/upload/" + fileInfo['fileUName'],
+                                                "uname":fileInfo['fileUName']
+                                                    };
+    return HttpResponse(json.dumps(response_data),content_type="application/json")
+
+
+
 def superuser_required(fnc):
     def wraper(request):
         if request.user.is_superuser:
             return fnc(request)
     return wraper
+
+
+def getUserList(request):
+    return render(request,"admin/userList.html")

@@ -5,7 +5,7 @@ import datetime
 from django.conf import settings
 from django.db import transaction
 from django.db import models  
-from apps.message.models import Message
+from apps.message.models import Message,News
 from django.contrib.auth.models import User  
 import utils.files.logics as fileLogics
 
@@ -44,3 +44,12 @@ def listAllMsg(user):
     msgs = Message.objects.filter(receiver=user)
     return msgs;
 
+@transaction.atomic
+def saveNews(publisher,title,content,img):
+    new = News()
+    new.publisher = publisher
+    new.title = title
+    new.content = content
+    new.img = img
+    new.save()
+    return True

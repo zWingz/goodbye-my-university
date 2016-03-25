@@ -1,0 +1,95 @@
+{% extends "layout/superuser-base.html" %}
+{% block title %}发布新闻{% endblock %}
+{%block head%}
+<link rel="stylesheet" type="text/css" href="/static/vendors/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/static/vendors/summernote/dist/summernote.css">
+{%endblock%}
+{%block content%}
+<div class="content-container">
+    <div class="my-form">
+        <div class="my-form-group">
+            <label class="my-form-label">标题:</label>
+            <input type="text" id="title" name="title" value="" placeholder="输入标题" class="my-form-input">
+        </div>
+        <div class="my-form-group">
+            <textarea name="content" id="news-content"></textarea>
+        </div>
+        <div class="my-form-group">
+            <img id="news-cover" src="">
+            <div class="am-form-group am-form-file">
+              <button type="button" class="am-btn am-btn-default am-btn-sm">
+                <i class="am-icon-cloud-upload"></i> 请选择新闻封面</button>
+              <input id="uploadImgBtn" type="file">
+            </div>
+        </div>
+        <div class="my-form-group">
+            <button id="save-btn" type="button" class="am-btn am-btn-success am-btn-sm">保存</button>
+        </div>
+    </div>
+</div>
+{%endblock%}
+{%block js%}
+<script type="text/javascript" src="/static/vendors/moment/min/moment.min.js"></script>
+<script type="text/javascript" src="/static/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/vendors/summernote/dist/summernote.min.js"></script>
+<script type="text/javascript" >
+    $(function(){
+        initTextNote();
+        $('#uploadImgBtn').on('change', function() {
+              var data = new FormData();
+              data.append('file',this.files[0])
+              $.ajax({
+                  data: data,
+                  type: "POST",
+                  url: "/admin/uploadImg",
+                  cache: false,
+                  contentType: false,
+                  processData: false,
+                  success: function (data) {
+                    $("#news-cover").data("filename",data.fileInfo.uname).attr('src',data.fileInfo.url).show();
+
+                  }
+              });
+            });
+        $("#save-btn").on("click",function(){
+            var content = $("#news-content").summernote("code");
+            var title = $("#title").val();
+            var img = $("#news-cover").data("filename");
+            $(this).attr("disabled","disabled")
+            $.post('/msg/createNew', {title:title,content:content,img:img}, function(data ) {
+                location.reload()
+            });
+        });
+    });
+
+    function initTextNote(){
+        $("#news-content").summernote({
+            height: 300,                 // set editor height
+            minHeight: 300,             // set minimum height of editor
+            maxHeight: null,             // set maximum height of editor
+            lang: 'zh-CN',
+            placeholder:"新闻内容....",
+            callbacks:{
+                onImageUpload: function(files) {
+                      var data = new FormData();
+                      data.append("file", files[0]);
+                      var url = "/admin/uploadImg";
+                      $.ajax({
+                          data: data,
+                          type: "POST",
+                          url: url,
+                          cache: false,
+                          contentType: false,
+                          processData: false,
+                          success: function (data) {
+                            var fileInfo = data.fileInfo;
+                              $('#news-content').summernote('insertImage',fileInfo.url, fileInfo.filename);
+                          }
+                      });
+                    }
+            }
+        });
+    }
+</script>
+
+{%endblock%}

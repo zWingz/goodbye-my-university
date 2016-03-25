@@ -12,8 +12,8 @@ class Message(models.Model):
     class Meta:
         db_table = 'message'
     id_code = models.CharField(max_length=10)
-    sender = models.ForeignKey(User,to_field="username",related_name="send")
-    receiver =models.ForeignKey(User,to_field="username",related_name="receive")
+    sender = models.ForeignKey(User,to_field="id_code",related_name="send")
+    receiver =models.ForeignKey(User,to_field="id_code",related_name="receive")
     title = models.CharField(max_length=20,default="")
     content = models.CharField(max_length=200)
     msg_type = models.IntegerField()
@@ -26,6 +26,27 @@ class Message(models.Model):
             self.create_time = datetime.datetime.now()
         super(Message, self).save(*args, **kwargs)
         fileLogics.setIdCode("MESSAGE",int(self.id_code)+1)
+
+    def __str__(self):
+        return self.id_code
+
+
+class News(models.Model):
+    class Meta:
+        db_table = 'news'
+    id_code = models.CharField(max_length=10)
+    publisher = models.ForeignKey(User,to_field='id_code')
+    title = models.CharField(max_length=15)
+    content = models.TextField()
+    img = models.CharField(max_length=15)
+    create_time = models.DateTimeField()
+
+    def save(self,*args,**kwargs):
+        if not self.id_code:
+            self.id_code = fileLogics.getIdCode("NEWS")
+            self.create_time = datetime.datetime.now()
+        super(News, self).save(*args, **kwargs)
+        fileLogics.setIdCode("NEWS",int(self.id_code)+1)
 
     def __str__(self):
         return self.id_code
