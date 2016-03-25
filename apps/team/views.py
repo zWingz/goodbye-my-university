@@ -9,7 +9,7 @@ import apps.message.logics as MsgLogics
 from apps.team.models import Team,Player
 from apps.game.models import Game
 from apps.message.models import Message
-from datetime import datetime
+import datetime
 from utils.files.logics import saveFile
 from utils.Decorator.decorator import post_required
 from django.contrib.auth.models import User  
@@ -27,12 +27,18 @@ def listPlayer(request):
 
 def teamDetail(request):
     id_code = request.REQUEST['id_code']
-    team = Team.objects.get(id_code=id_code);
+    team = Team.objects.get(id_code=id_code,status=1);
     players = toPlayersView(team.players.all())
     data = Logics.getTeamProfile(id_code);
     if request.method == 'GET':
-        games = Game.objects.filter(Q(team_one=team)|Q(team_two=team))
-        return render(request,"team/teamDetail.html",{"team":team,"players":players,"team_data":data,"games":games})
+        now = datetime.datetime.now()
+        weeknum = str(now.isocalendar()[0])+str(now.isocalendar()[1])
+        games = Game.objects.filter(Q(team_one=team)|Q(team_two=team),weeknum=weeknum)
+        nextgames =  Game.objects.filter(Q(team_one=team)|Q(team_two=team),weeknum=int(weeknum)+1)
+        otherTeam = list(Team.objects.all().order_by('?')[:5])
+        index = otherTeam.index(team)
+        del otherTeam[index]
+        return render(request,"team/teamDetail.html",{"team":team,"players":players,"team_data":data,"games":games,"nextgames":nextgames,"otherTeam":otherTeam})
     else:
         response_data ={}
         response_data['team'] = toTeamView(team)
@@ -355,7 +361,7 @@ def toPlayerProfileView(profile):
 
 class CJsonEncoder(json.JSONEncoder):
     def default(self, obj):
-        if isinstance(obj, datetime):
+        if isinstance(obj, datetime.datetime):
             return obj.strftime('%Y-%m-%d %H:%M:%S')
         elif isinstance(obj, date):
             return obj.strftime('%Y-%m-%d')

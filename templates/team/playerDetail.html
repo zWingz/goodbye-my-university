@@ -5,8 +5,8 @@
 {% block title %}球员信息{% endblock %}
 {%block content%}
     <!-- 球队详情  -->
-    <div class="detail-container">
-        <div class="detail-left">
+    <div class="flex-container">
+        <div class="flex-left">
             <section class="detail-content" >
                 <div class="player-info">
                     <img class="player-logo"src="/static/upload/{{player.user.img_path}}" alt="">
@@ -114,16 +114,19 @@
                 </div>
             </section>
         </div>
-        <div class="detail-right opacity" >
-            <header class="detail-header">
+        <div class="flex-right opacity" >
+            <header class="flex-header">
                 他的队友
             </header><!-- /header -->
-            <section class="detail-players">
+            <section class="teammates">
                 {% for each in teammates %}
                     <a href="/team/playerDetail?id_code={{each.id_code}}" target="_blank" class="player">
                         <img src="/static/upload/{{each.user.img_path}}" alt="">
                         <div>
                             {{each.user.first_name}}
+                            <div>
+                                {{each.number}} / {{each.position}}
+                            </div>
                         </div>
                     </a>
                 {% endfor %}

@@ -13,7 +13,11 @@ from django.conf.urls import patterns, url
 urlpatterns = patterns(
     'apps.admin.views',
     url(r'^$', 'admin_index'),
+    url(r'^login$', 'loginAdmin'),
     url('^fixtures$', 'getFixtures'),
+    url('^createNews$', 'createNews'),
+    url('^uploadImg$', 'uploadImg'),
+    url('^userlist$', 'getUserList'),
     # url('^saveFixtures$', 'saveFixtures'),
     # url('^fixtures$', 'getFixtures'),
 )

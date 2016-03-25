@@ -1,0 +1,31 @@
+{% extends "layout/base.html" %}
+{%block head%}
+<link rel="stylesheet" type="text/css" href="/static/css/news.css">
+<style type="text/css">
+    #news-content {
+
+    }
+    #news-content p {
+        margin:0px;
+    }
+</style>
+{%endblock%}
+{% block title %}新闻详情 | UBA{% endblock %}
+{% block content%}
+
+<div class="flex-container">
+    <div class="flex-left">
+        <div class="flex-header">
+            {{news.title}}
+        </div>
+        <div id="news-content">
+            {% autoescape off %}
+                {{news.content}}
+            {% endautoescape %}
+        </div>
+    </div>
+</div>
+
+{%endblock%}
+{%block js%}
+{%endblock%}

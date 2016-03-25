@@ -4,6 +4,7 @@ from django.conf import settings
 from django.http import HttpResponse
 import apps.message.logics as Logics
 from apps.team.models import Team,Player
+from apps.message.models import News
 from utils.Decorator.decorator import post_required
 from django.contrib.auth.decorators import login_required
 # Create your views here.
@@ -108,3 +109,20 @@ def unReadMsgCount(request):
                         }
     else:
         return {}
+
+
+def getNew(request):
+    id_code = request.GET['id_code']
+    news = News.objects.get(id_code=id_code)
+    return render(request,"news/news.html",{"news":news})
+
+@login_required
+@post_required
+def createNew(request):
+    if request.user.is_superuser:
+        response_data = {}
+        result = Logics.saveNews(request.user,request.POST['title'],request.POST['content'],request.POST['img'])
+        if result :
+            response_data['success'] = 1
+            response_data['message'] = '发布成功'
+        return HttpResponse(json.dumps(response_data),content_type="application/json")

@@ -4,9 +4,9 @@
 {%endblock%}
 {% block title %}球队列表{% endblock %}
 {%block content%}
-    <div class="teamList-container">
-        <div class="teamList-left">
-            <header class="teamList-header">
+    <div class="flex-container">
+        <div class="flex-left">
+            <header class="flex-header">
                 球队列表
             </header><!-- /header -->
             <section class="teamList-content" >
@@ -28,8 +28,8 @@
                 {% endfor %}
             </section>
         </div>
-        <div class="teamList-right opacity" >
-            <header class="teamList-header">
+        <div class="flex-right opacity"  >
+            <header class="flex-header">
                 球队信息
                 <a  href='#' class="into-detail" target='_blank'>详情<i class='iconfont'>&#xe603;</i></a >
             </header><!-- /header -->

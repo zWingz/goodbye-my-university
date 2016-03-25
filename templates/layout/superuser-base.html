@@ -12,14 +12,19 @@
 <body>
     <header class="header">
         UBA管理后台
+        <div class="fr">
+            管理员
+            {{user.first_name}}
+        </div>
     </header><!-- /header -->
-    <section class="container">
+    <section class="admin-container">
         <nav class="side-bar">
             <ul class="unstyle">
-                <li class="side-bar-item active"><a href="" title="">用户管理</a></li>
+                <li class="side-bar-item"><a href="" title="">用户管理</a></li>
                 <li class="side-bar-item"><a href="" title="">球队管理</a></li>
                 <li class="side-bar-item"><a href="" title="">球员管理</a></li>
-                <li class="side-bar-item"><a href="" title="">比赛管理</a></li>
+                <li class="side-bar-item" data-nav-type="fixtures"><a href="fixtures" title="">比赛管理</a></li>
+                <li class="side-bar-item" data-nav-type="createNews"><a href="createNews" title="">新闻</a></li>
             </ul>
         </nav>
         {% block content %}{% endblock %}
