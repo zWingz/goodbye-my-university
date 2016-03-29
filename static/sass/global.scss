@@ -1,6 +1,7 @@
 @import "base";
 // @import "common";
-$header-bgc:#0732A2;
+// $header-bgc:#0732A2;
+$header-bgc:#408ed6;
 $header-title-height:110px;
 $hader-nav-height:40px;
 html,body{
@@ -17,12 +18,18 @@ html,body{
     z-index: 111;
     .header-title {
         margin:0px;
-        font-size: 60px;
-        font-weight: bold;
-        color:#fcfcfc;
-        background: $header-bgc;
+        background-color:#408ed6;
+        // font-size: 60px;
+        // font-weight: bold;
+        // color:#fcfcfc;
+        // background-color: $header-bgc;
+        // background-image: url(/static/files/banner.02png);
+        // background-size: 100% 200px;
         height:$header-title-height;
         line-height: $header-title-height;
+        img {
+            margin-left: -60px;
+        }
     }
     .header-nav {
         position:relative;
@@ -221,4 +228,12 @@ $base-blue:#0732A2;
     .iconfont {
         font-size: 37px;
     }
+}
+
+
+#my-popup {
+    top: 18%;
+    width: 350px;
+    margin-left: -125px;
+    font-size: 16px;
 }

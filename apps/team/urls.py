@@ -34,4 +34,7 @@ urlpatterns = patterns(
     url('^leaveTeam$', 'leaveTeam'),
 
     url('^checkNum$', 'checkNum'),
+
+    # 同意比赛
+    url('^agreeInviteGame$', 'agreeInviteGame'),
 )

@@ -1,4 +1,5 @@
-$base-blue:#0732A2;
+// $base-blue:#0732A2;
+$base-blue:#408ed6;
 //  球员信息container,in  the usercenter-content,第三个flex-item
 .playerDetailContainer {
     position:fixed;
@@ -208,14 +209,20 @@ $base-blue:#0732A2;
     }
     .player-info {
         .info-avatar{
-            img{
-                width:80px;
-                height:135px;
-            }
+            width:96px;
+            height:156px;
+            background-image: url("/static/files/clothes.png");
+            background-repeat: no-repeat;
+            // img{
+            //     // position:absolute;
+            //     float:left;
+            //     width:80px;
+            //     height:135px;
+            // }
             i {
-                position: absolute;
-                top: 22%;
-                left: 14%;
+                text-align: center;
+                margin-top: 40px;
+                display:block;
                 font-size: 46px;
             }
         }

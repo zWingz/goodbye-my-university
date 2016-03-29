@@ -44,11 +44,20 @@ $(function(){
         $("#applyModal").find(".am-modal-bd").attr("team-id-code",id_code).attr("join-type","apply");
         $("#applyModal").modal("open");
     });
+    // 邀请加入
     $(".invite-join-team").on("click",function(){
         var id_code = $(this).parent().data("code");
         $("#applyModal").find(".am-modal-bd").attr("team-id-code",id_code).attr("join-type","invite");
         $("#applyModal").modal("open");
     });
+    // 邀请比赛
+    $(".invite-game").on("click",function(){
+        var id_code = $(this).parent().data("code");
+        $("#inviteGameModal").find(".am-modal-bd").attr("team-id-code",id_code);
+        $("#inviteGameModal").modal("open");
+    });
+
+    // 邀请,申请加入的提交btn
     $("#saveApplyJoin").on('click',function(){
         var postData = {},url = '';
         var container = $(this).parent();
@@ -69,9 +78,38 @@ $(function(){
             url = '/msg/inviteJoinTeam';
         }
         $.post(url,postData,function(data){
-            console.log(data);
+            msgPopup(data.message);
+            if (data.success === 1) {
+                reload();
+            }
         });
     });
+
+    // 邀请比赛btn
+    $("#invite-game-btn").on('click',function(){
+        var postData = {},url = '/msg/inviteGame';
+        var container = $(this).parent().parent();
+        postData.id_code = container.attr("team-id-code");
+        var game_date = container.find("[name='game-date']").val();
+        postData.game_date = game_date
+        var game_time = container.find("[name='game-time']").val();
+        var desc =container.find("[name='saysomething']").val();
+        var location = container.find("[name='location']").val();
+        var tmp = $("<div>").append(
+            $("<div class='msg-content-label'>").append("日期:").append($("<span class='msg-content-game-date'>").append(game_date))
+            .append("时间:").append($("<span class='msg-content-game-time'>").append(game_time)))
+            .append($("<div class='msg-content-label'>").append("地点:").append($("<span class='msg-content-location'>").append(location)))
+            .append($("<div class='msg-content-label'>").append("留言:").append($("<span>").append(desc))
+            );
+        postData.content= tmp.html();
+        $.post(url,postData,function(data){
+            msgPopup(data.message);
+            if (data.success === 1) {
+                reload();
+            }
+        });
+    });
+
 });
 
 
@@ -132,12 +170,13 @@ function bindPlayerTmpl(data){
     var data_profile = player.player_data;
     var keys = Object.keys(data_profile);
     var game = data_profile.game;
-    if(game == 0){
-        return;
-    }
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i];
-        table.find('[data-type="'+key+'"]').text((data_profile[key]/game));
+        if(game !== 0){
+            table.find('[data-type="'+key+'"]').text((data_profile[key]/game));
+        }else {
+            table.find('[data-type="'+key+'"]').text((data_profile[key]));
+        }
     }
 }
 

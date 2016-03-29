@@ -43,7 +43,6 @@ def getFixtures(request):
     now = datetime.datetime.now()
     weeknum = request.GET.get('weeknum',str(now.isocalendar()[0])+str(now.isocalendar()[1])) 
     games = Game.objects.filter(weeknum=weeknum)
-
     next_weeknum = int(weeknum)+1
     next_games = Game.objects.filter(weeknum=next_weeknum)
     return render(request,"admin/game-list.html",{"title":"近期赛程","games":games,"nextgames":next_games})

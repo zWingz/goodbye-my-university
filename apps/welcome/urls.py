@@ -7,7 +7,6 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns(
-    '',
-    # AccountFFFFF
-    url('', 'apps.welcome.views.welcome'),
+    'apps.welcome.views',
+    url('', 'welcome'),
 )

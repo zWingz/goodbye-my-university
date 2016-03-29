@@ -81,6 +81,7 @@ class TeamGameProfile(Document):
     assist = IntField(required=False)
     turnover = IntField(required=False)
     block = IntField(required=False)
+    game_id_code = StringField(max_length=10)
     players = ListField(EmbeddedDocumentField("PlayerGameProfile"))
     def save(self, *args, **kwargs):
         if self.shot_all != 0:
@@ -91,7 +92,3 @@ class TeamGameProfile(Document):
             self.free_rate = round(self.free_in / self.free_all*100,2)
         super(TeamGameProfile, self).save(*args, **kwargs)
 
-class GameProfile(Document):
-    id_code = StringField(max_length=10,unique=True)
-    team_one_profile = ReferenceField(TeamGameProfile)
-    team_two_profile = ReferenceField(TeamGameProfile)

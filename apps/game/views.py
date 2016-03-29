@@ -5,11 +5,11 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 import apps.game.logics as Logics
-from apps.game.models import Game,GameProfile,PlayerGameProfile,TeamGameProfile
+from apps.game.models import Game,PlayerGameProfile,TeamGameProfile
 from apps.team.models import Team,TeamProfile,Player,PlayerProfile
 from utils.Decorator.decorator import post_required
 from django.contrib.auth.decorators import login_required
-from django.db.models import F
+from django.db.models import F,Q
 # Create your views here.
 
 
@@ -19,8 +19,8 @@ def getGame(request):
     team_one = game.team_one
     team_two = game.team_two
     try:
-        game_profile = GameProfile.objects.get(id_code=id_code)
-    except GameProfile.DoesNotExist:
+        game_profile = TeamGameProfile.objects.filter(game_id_code=id_code)
+    except TeamGameProfile.DoesNotExist:
         game_profile = None
     return render(request,"game/detail.html",{"game":game,"game_profile":game_profile})
 
@@ -45,7 +45,9 @@ def createFixtures(request):
     index = 0;
     for time in fixtures:
         for game in time:
-            if(teams_count < index + 2):
+            if len(Game.objects.filter(Q(team_one = teams[index])|Q(team_two = teams[index]),game_date=game['time']['date'])) != 0:
+                index = index + 1;
+            if (teams_count < index + 2):
                 break;
             game['location'] = location[time.index(game)%sum_location]
             game['team_one'] = {"id_code":teams[index].id_code,"name":teams[index].name,"logo":teams[index].logo}
@@ -57,8 +59,6 @@ def createFixtures(request):
 
 def saveFixtures(request):
     fixtures = json.loads(request.POST['fixtures'])
-    print(fixtures)
-    index = 0
     for time in fixtures:
         if len(time) != 0:
             for game in time:
@@ -66,8 +66,7 @@ def saveFixtures(request):
                 team_two = Team.objects.get(id_code=game['team_two']['id_code'])
                 time = game['time']['time']
                 date = game['time']['date']
-                Logics.saveGame(team_one,team_two,date,time,game['location'],index)
-        index = index + 1
+                Logics.saveGame(team_one,team_two,date,time,game['location'])
     response_data={}
     response_data['success'] = 1
     return HttpResponse(json.dumps(response_data),content_type="application/json")
@@ -147,16 +146,18 @@ def toTeamView(team):
     return obj
 
 
-def getModelByIdCode(list,modelType):
+def getModelByIdCode(objlist,modelType):
     result = []
+    if len(objlist)==0:
+        return result
     if modelType == 'TeamProfile':
-        for each in list:
+        for each in objlist:
             team = Team.objects.get(id_code=each.id_code)
             team.win_rate = each.win_rate
             team.game = each.game
             result.append(team)
     elif modelType == 'PlayerProfile':
-        for each in list:
+        for each in objlist:
             player = Player.objects.get(id_code=each.id_code)
             if each.game != 0 :
                 player.point = each.point/each.game

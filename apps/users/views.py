@@ -37,30 +37,19 @@ def login(request):
 
 @login_required
 def usercenter(request):
-    isManager = False;
     status = request.user.status
-    player = False
-    team = False
-    games = False
-    nextgames = False
-    player_data = {}
-    team_data = {}
-    if status == 'double':
+    isManager = False;player = False;team = False;games = False;nextgames = False;
+    player_data = {};team_data = {}
+    if status == 'manager':
         team = request.user.team.all()[0]
         player = request.user.player
         player_data = Logics.getPlayerProfile(player.id_code)
-        # player_data = json.load(open(settings.PLAYER_PROFILE_DIR+"/"+player.profile,'r'));
-        # team_data = json.load(open(settings.TEAM_PROFILE_DIR+"/"+team.profile+"/profile","r"))
         team_data = Logics.getTeamProfile(team.id_code)
         isManager = True
     elif status == 'player':
         player = request.user.player
         player_data = Logics.getPlayerProfile(player.id_code)
         team = player.team
-    elif status == 'manager':
-        team = request.user.team.all()[0]
-        team_data = Logics.getTeamProfile(team.id_code)
-        isManager = True
     if team :
         now = datetime.datetime.now()
         weeknum = str(now.isocalendar()[0])+str(now.isocalendar()[1])

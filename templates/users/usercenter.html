@@ -101,7 +101,7 @@
                     {%else%}
                     <div class="player-info my-form">
                             <div class="info-avatar">
-                                <img class="team-avatar" src="/static/files/clothes.png" alt="">
+                                {# <img class="team-avatar" src="/static/files/clothes.png" alt=""> #}
                                 <i>{%if user.player.number%}{{user.player.number}}{%else%}null{%endif%}</i>
                             </div>
                             <div class="info-group">
@@ -481,8 +481,12 @@
                                 </div>
                                 {% if each.status == 0 %}
                                     <div class="message-action am-btn-group am-btn-group-xs">
-                                        <button type="button" class="am-btn am-btn-primary" data-msg-type='{% if each.msg_type == 0 %}agree-apply{%elif each.msg_type == 4 %}agree-invite{%endif%}'>同意</button>
+                                        <button type="button" class="am-btn am-btn-primary" data-msg-type='{{each.msg_type}}'>同意</button>
                                         <button type="button" class="am-btn am-btn-danger" data-msg-type=''>拒绝</button>
+                                    </div>
+                                {% else %}
+                                    <div class="message-action am-btn-group am-btn-group-xs">
+                                        <button type="button" class="am-btn am-btn-default" disabled="disabled">已阅读</button>
                                     </div>
                                 {% endif %}
                             </div>
@@ -523,7 +527,29 @@
                 </div>
             </header><!-- /header -->
             <section class="detail-data">
-                
+                <table class="am-table data-table">
+                    <caption>场均数据</caption>
+                    <thead>
+                        <tr>
+                            <th>得分</th>
+                            <th>助攻</th>
+                            <th>篮板</th>
+                            <th>抢断</th>
+                            <th>盖帽</th>
+                            <th>失误</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-type='point'>data</td>
+                            <td data-type='assist'>data</td>
+                            <td data-type='rebound'>data</td>
+                            <td data-type='steal'>data</td>
+                            <td data-type='block'>data</td>
+                            <td data-type='turnover'>data</td>
+                            </tr>
+                    </tbody>
+                </table>
             </section>
         </section>
     </div>

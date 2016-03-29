@@ -16,9 +16,9 @@ urlpatterns = patterns(
     url('^readMsg$', 'readMsg'),
     url('^applyJoinTeam$', 'applyJoinTeam'),
     url('^inviteJoinTeam$', 'inviteJoinTeam'),
+    url('^inviteGame$', 'inviteGame'),
     url('^listUnReadMsg$', 'listUnReadMsg'),
     url('^listAllMsg$', 'listAllMsg'),
     url('^createNew$', 'createNew'),
     url('^getNew$', 'getNew'),
-
 )
