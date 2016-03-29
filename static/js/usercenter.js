@@ -14,7 +14,6 @@ $(function(){
             $target.parents(".content-bd").find(".my-form-input").each(function(index,input){
                 postData[$(this).attr("name")] = $(this).val();
             });
-            console.log(postData);
             $.ajax({
                     url: '/team/editPlayer',
                     type: 'post',
@@ -90,25 +89,36 @@ $(function(){
         var $target = $(e.target);
         var type = $target.data("msg-type");
         var container = $target.parents(".message-item");
+        var id_code = container.find(".sender-name").data("id-code");
+        var msg_id_code = container.data('id-code')
+        var postData = {};
+        postData.id_code = id_code;
+        postData.msg_id_code = msg_id_code;
         console.log(type)
         switch(type){
-            case 'agree-apply':
-                var id_code = container.find(".sender-name").data("id-code");
-                var msg_id_code = container.data('id-code')
+            case 0:
                 $("#applyModal").data("id-code",id_code).data("msg-id-code",msg_id_code);
                 $("#applyModal").modal("open");
                 break;
-            case 'agree-invite':
-                var id_code = container.find(".sender-name").data("id-code");
-                var msg_id_code = container.data('id-code');
-                var postData = {};
-                postData.id_code = id_code;
-                postData.msg_id_code = msg_id_code;
+            case 4:
                 postData['r-position']= container.find(".msg-content-position").text();
                 postData['r-number'] = container.find(".msg-content-number").text();
-                console.log(postData)
                 $.post("/team/agreeInviteJoinTeam",postData,function(data){
-                    console.log(data);
+                    msgPopup(data.message);
+                    if (data.success === 1) {
+                        reload();
+                    }
+                });
+                break;
+            case 5:
+                postData['game-date']= container.find(".msg-content-game-date").text();
+                postData['game-time'] = container.find(".msg-content-game-time").text();
+                 postData['location'] = container.find(".msg-content-location").text();
+                $.post("/team/agreeInviteGame",postData,function(data){
+                    msgPopup(data.message);
+                    if (data.success === 1) {
+                        reload();
+                    }
                 });
                 break;
         }
@@ -147,7 +157,7 @@ $(function(){
 function bindPlayerTmpl(player){
     var container = $(".playerDetail");
     container.data('id_code', player.id_code);
-    container.find(".player-logo").attr("src","/static/upload/"+player.img_path);
+    container.find(".player-logo").attr("src","/static/files/userImg/"+player.img_path);
     container.find(".detail-name").html(player.name);
     container.find(".detail-number").html(player.number);
     container.find(".detail-position").html(player.position);
@@ -155,6 +165,19 @@ function bindPlayerTmpl(player){
     container.find(".detail-weight").html(player.weight);
     container.find(".detail-join-time").html(new Date(player.create_time).toLocaleDateString());
     container.find(".detail-desc").html(player.desc);
+    var table = container.find(".detail-data");
+    var data_profile = player.player_data;
+    var keys = Object.keys(data_profile);
+    var game = data_profile.game;
+    console.log(player);
+    for (var i = 0; i < keys.length; i++) {
+        var key = keys[i];
+        if(game !== 0){
+            table.find('[data-type="'+key+'"]').text((data_profile[key]/game));
+        }else {
+            table.find('[data-type="'+key+'"]').text((data_profile[key]));
+        }
+    }
 }
 
 //  左侧兰tabs事件

@@ -82,15 +82,12 @@ def saveTeam(user,postData):
         team.desc = postData['desc']
         teamProfile = TeamProfile()
         teamProfile = defaultProfile(teamProfile,team.id_code)
-        # os.mkdir(os.path.join(settings.TEAM_PROFILE_DIR,team.id_code))
-        # with open(settings.TEAM_PROFILE_DIR+"/"+team.id_code+"/profile","w+") as fp:
-        #     fp.write(json.dumps(TEAM_DATA))
         teamProfile.save()
         team.save()
         try:
             user.player.team = team
             user.player.save() 
-            user.status = 'double'
+            user.status = 'manager'
         except:
             pass
         user.save()
@@ -146,8 +143,6 @@ def savePlayer(user,postData):
     user.status = 'player'
     playerProfile = PlayerProfile()
     playerProfile = defaultProfile(playerProfile,player.id_code)
-    # with open(settings.PLAYER_PROFILE_DIR+"/"+player.id_code,"w+") as fp:
-    #     fp.write(json.dumps(PLAYER_DATA))
     player.profile = player.id_code
     height = postData['height']
     if height[-2:] != 'cm':

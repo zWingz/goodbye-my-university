@@ -10,7 +10,7 @@ UPLOADED_DIR = os.path.join(BASEDIR, "static/upload")
 # PLAYER_PROFILE_DIR = os.path.join(BASEDIR, "static/files/playerProfiles")
 GAME_PROFILE_DIR = os.path.join(BASEDIR, "static/files/gameProfiles")
 USER_IMG = os.path.join(BASEDIR,"static/files/userImg")
-USER_IMG = os.path.join(BASEDIR,"static/files/teamLogo")
+TEAM_IMG = os.path.join(BASEDIR,"static/files/teamLogo")
 
 # ini 文件Dir
 ID_CODE_INI = os.path.join(BASEDIR, "config/id_code.ini")
@@ -180,7 +180,7 @@ DATABASE_ROUTERS = [
 EMAIL_HOST_USER = 'afs@youmi.net'
 
 DEBUG = True
-
+PAGE_COUNT = 5
 # localsettings 放到最后，以覆盖默认配置
 from config.localsettings import *
 

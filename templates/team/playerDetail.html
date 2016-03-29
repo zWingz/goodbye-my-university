@@ -9,7 +9,7 @@
         <div class="flex-left">
             <section class="detail-content" >
                 <div class="player-info">
-                    <img class="player-logo"src="/static/upload/{{player.user.img_path}}" alt="">
+                    <img class="player-logo"src="/static/files/userImg/{{player.user.img_path}}" alt="">
                     <div class="detail-name">
                         <div class="player-name">{{player.user.first_name}}</div>
                         <div>
@@ -24,15 +24,22 @@
                         <li><span>学校:</span>{{player.school}}</li>
                         <li><span>加入日期:</span>{{player.create_time|date:'Y-m-d'}}</li>
                     </ul>
-                    <a class="player-team" href="/team/teamDetail?id_code={{player.team.id_code}}" target="_blank" title="">
-                        <img class="team-logo" src="/static/upload/{{player.team.logo}}" alt="">
-                        {{player.team.name}}
-                    </a>
+                    {% if player.team %}
+                        <a class="player-team" href="/team/teamDetail?id_code={{player.team.id_code}}" target="_blank" title="">
+                            <img class="team-logo" src="/static/files/teamLogo/{{player.team.logo}}" alt="">
+                            {{player.team.name}}
+                        </a>
+                    {% else %}
+                        <a class="player-team" href="#" title="">
+                            <img class="team-logo" src="/static/files/teamLogo/teamImg.jpg" alt="">
+                            自由球员
+                        </a>
+                    {% endif %}
                 </div>
                 <div class="my-tabs" id="detail-tab" changeType="click">
                     <ul class="my-tabs-nav unstyle">
                       <li class="my-tabs-active">数据</li>
-                      <li >介绍</li>
+                      <li >近期比赛</li>
                     </ul>
                     <div class="my-tabs-bd">
                         <div class="my-tabs-panel my-tabs-active">
@@ -108,7 +115,50 @@
                             </table>
                         </div>
                         <div class="my-tabs-panel ">
-                            个人信息
+                            {% if games %}
+                            <table class="am-table am-table-hover data-table fixtures">
+                                <thead>
+                                    <tr>
+                                        <th>时间</th>
+                                        <th>地点</th>
+                                        <th>状态</th>
+                                        <th>主场</th>
+                                        <th>比分</th>
+                                        <th>客场</th>
+                                        <th>数据</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for game in games %}
+                                    <tr>
+                                        <td class="game-time">
+                                            <div>
+                                                {{game.game_date}}
+                                            </div>
+                                            <div>
+                                                  {{game.game_time}}
+                                             </div>
+                                         </td>
+                                        <td class="location">{{game.location}}</td>
+                                        <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
+                                        <td class="team-td"><a href="/tean/teamDetail?id_code={{game.team_one.id_code}}" title=""><img src="/static/files/teamLogo/{{game.team_one.logo}}">{{game.team_one}}</a></td>
+                                        <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
+                                        <td class="team-td"><a href="/tean/teamDetail?id_code={{game.team_two.id_code}}" title=""><img src="/static/files/teamLogo/{{game.team_two.logo}}">{{game.team_two}}</a></td>
+                                        <td class="game-data">
+                                            {% if game.status == 1 %}
+                                                <a href="/game/getGame?id_code={{game.id_code}}" target="_blank" title="">查看</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            {%else%}
+                            <div class="none-data">
+                                <i class="iconfont">&#xe608;</i>
+                                他近期无比赛
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -121,7 +171,7 @@
             <section class="teammates">
                 {% for each in teammates %}
                     <a href="/team/playerDetail?id_code={{each.id_code}}" target="_blank" class="player">
-                        <img src="/static/upload/{{each.user.img_path}}" alt="">
+                        <img src="/static/files/userImg/{{each.user.img_path}}" alt="">
                         <div>
                             {{each.user.first_name}}
                             <div>

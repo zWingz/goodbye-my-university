@@ -6,7 +6,7 @@ from django import forms
 from django.conf import settings
 from django.db import transaction
 from django.db import models  
-from apps.game.models import Game,GameProfile,PlayerGameProfile,TeamGameProfile
+from apps.game.models import Game,PlayerGameProfile,TeamGameProfile
 from apps.team.models import Team,Player,TeamProfile,PlayerProfile
 from django.contrib.auth.models import User  
 import utils.files.logics as fileLogics
@@ -43,7 +43,7 @@ PLAYER_DATA = {
     'foul':'' # 犯规
 }
 @transaction.atomic
-def saveGame(team_one,team_two,date,time,location,week_index):
+def saveGame(team_one,team_two,date,time,location):
     game = Game()
     game.team_one = team_one
     game.team_two = team_two
@@ -52,7 +52,18 @@ def saveGame(team_one,team_two,date,time,location,week_index):
     game.location = location
     num = datetime.datetime.strptime(date, "%Y-%m-%d")
     game.weeknum = str(num.isocalendar()[0])+str(num.isocalendar()[1])
-    game.week_index = week_index
+    game.week_index = num.weekday()
+    game.save()
+    return True
+
+@transaction.atomic
+def editGame(game,date,time,location):
+    game.game_date = date
+    game.game_time = time
+    game.location = location
+    num = datetime.datetime.strptime(date, "%Y-%m-%d")
+    game.weeknum = str(num.isocalendar()[0])+str(num.isocalendar()[1])
+    game.week_index = num.weekday()
     game.save()
     return True
 
@@ -73,7 +84,7 @@ def saveDetailData(postData):
     game.save()
     return True
 
-
+@transaction.atomic
 def saveData(game,data):
     team_one = None
     team_two = None
@@ -94,7 +105,7 @@ def saveData(game,data):
                 team_one_profile = TeamProfile.objects.get(id_code=str(int(each['id_code'])))
                 saveProfile(team_one_profile,each)
                 # team_one_profile.game += 1
-            else:
+            elif str(int(each['id_code'])) == game.team_two.id_code:
                 team_two = each
                 team_two_gprofile = TeamGameProfile()
                 team_two_gprofile.id_code = game.team_two.id_code
@@ -104,6 +115,8 @@ def saveData(game,data):
                 team_two_profile = TeamProfile.objects.get(id_code=str(int(each['id_code'])))
                 saveProfile(team_two_profile,each)
                 # team_two_profile.game += 1
+            else:
+                return False;
             game.point = point
             game.status = 1
     if int(team_one['point']) > int(team_two['point']):
@@ -138,12 +151,14 @@ def saveData(game,data):
             player_game_profile.save()
     team_one_gprofile.save()
     team_two_gprofile.save()
-    game_profile = GameProfile()
-    game_profile.id_code = game.id_code
-    game_profile.team_one_profile = team_one_gprofile
-    game_profile.team_two_profile = team_two_gprofile
+    # game_profile = GameProfile()
+    # game_profile.id_code = game.id_code
     game.save()
-    game_profile.save()
+    # game_profile.save()
+    team_one_gprofile.game_id_code = game.id_code
+    team_two_gprofile.game_id_code = game.id_code
+    team_one_gprofile.save()
+    team_two_gprofile.save()
     return True
 
 

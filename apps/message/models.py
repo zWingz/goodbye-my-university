@@ -11,11 +11,11 @@ import utils.files.logics as fileLogics
 class Message(models.Model):
     class Meta:
         db_table = 'message'
-    id_code = models.CharField(max_length=10)
+    id_code = models.CharField(max_length=10,unique=True)
     sender = models.ForeignKey(User,to_field="id_code",related_name="send")
     receiver =models.ForeignKey(User,to_field="id_code",related_name="receive")
     title = models.CharField(max_length=20,default="")
-    content = models.CharField(max_length=200)
+    content = models.TextField()
     msg_type = models.IntegerField()
     create_time = models.DateTimeField()
     status = models.IntegerField()  # 判断是否已读

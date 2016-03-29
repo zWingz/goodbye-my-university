@@ -3,3 +3,10 @@ def post_required(fnc):
         if request.method == "POST":
             return fnc(request)
     return wraper
+
+
+def admin_required(fnc):
+    def wraper(request):
+        if request.user.is_superuser:
+            return fnc(request)
+    return wraper

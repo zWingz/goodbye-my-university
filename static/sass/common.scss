@@ -173,6 +173,15 @@
 .relative {
     position: relative;
 }
+.vertical-middle {
+    vertical-align: middle;
+}
+.color-000 {
+    color:#000;
+    &:hover {
+        color:#408ed6;
+    }
+}
 @font-face {
   font-family: 'iconfont';
   src: url('//at.alicdn.com/t/font_1458831145_5583885.eot'); /* IE9*/
@@ -253,6 +262,12 @@
     }
     .my-form-submit {
 
+    }
+    select {
+        border:1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        vertical-align: 0px;
     }
 }
 

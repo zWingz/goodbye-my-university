@@ -9,7 +9,7 @@
         <div class="flex-left">
             <section class="detail-content" >
                 <div class="team-info">
-                    <img class="team-logo"src="/static/upload/{{team.logo}}" alt="">
+                    <img class="team-logo"src="/static/files/teamLogo/{{team.logo}}" alt="">
                     <div>
                         <h4 class="team-name">{{team.name}}</h4>
                         <ul class="unstyle">
@@ -69,9 +69,9 @@
                                          </td>
                                         <td class="location">{{game.location}}</td>
                                         <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
-                                        <td class="team-td"><a href="/tean/teamDetail?id_code={{game.team_one.id_code}}" title=""><img src="/static/upload/{{game.team_one.logo}}">{{game.team_one}}</a></td>
+                                        <td class="team-td"><a href="/tean/teamDetail?id_code={{game.team_one.id_code}}" title=""><img src="/static/files/teamLogo/{{game.team_one.logo}}">{{game.team_one}}</a></td>
                                         <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
-                                        <td class="team-td"><a href="/tean/teamDetail?id_code={{game.team_two.id_code}}" title=""><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</a></td>
+                                        <td class="team-td"><a href="/tean/teamDetail?id_code={{game.team_two.id_code}}" title=""><img src="/static/files/teamLogo/{{game.team_two.logo}}">{{game.team_two}}</a></td>
                                         <td class="game-data">
                                             {% if game.status == 1 %}
                                                 <a href="/game/getGame?id_code={{game.id_code}}" target="_blank" title="">查看</a>
@@ -114,9 +114,9 @@
                                          </td>
                                         <td class="location">{{game.location}}</td>
                                         <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
-                                        <td class="team-td"><a href="/tean/teamDetail?id_code={{game.team_one.id_code}}" title=""><img src="/static/upload/{{game.team_one.logo}}">{{game.team_one}}</a></td>
+                                        <td class="team-td"><a href="/tean/teamDetail?id_code={{game.team_one.id_code}}" title=""><img src="/static/files/teamLogo/{{game.team_one.logo}}">{{game.team_one}}</a></td>
                                         <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
-                                        <td class="team-td"><a href="/tean/teamDetail?id_code={{game.team_two.id_code}}" title=""><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</a></td>
+                                        <td class="team-td"><a href="/tean/teamDetail?id_code={{game.team_two.id_code}}" title=""><img src="/static/files/teamLogo/{{game.team_two.logo}}">{{game.team_two}}</a></td>
                                         <td class="game-data">
                                             {% if game.status == 1 %}
                                                 <a href="/game/getGame?id_code={{game.id_code}}" target="_blank" title="">查看</a>
@@ -216,7 +216,7 @@
                                 <tbody>
                                     {% for player in players %}
                                         <tr>
-                                            <td><a href="#" title="" onclick="showPlayer('{{player.id_code}}',event);"><img class="player-img" src="/static/upload/{{player.img_path}}" alt="{{player.name}}"><span>{{player.name}}</span></a></td>
+                                            <td><a href="#" title="" onclick="showPlayer('{{player.id_code}}',event);"><img class="player-img" src="/static/files/userImg/{{player.img_path}}" alt="{{player.name}}"><span>{{player.name}}</span></a></td>
                                             <td>{{player.number}}</td>
                                             <td>{{player.position}}</td>
                                             <td>{{player.height}}</td>
@@ -238,7 +238,7 @@
             <section class="teammates">
                 {% for each in otherTeam %}
                     <a href="/team/teamDetail?id_code={{each.id_code}}" target="_blank" class="player">
-                        <img src="/static/upload/{{each.logo}}" alt="">
+                        <img src="/static/files/teamLogo/{{each.logo}}" alt="">
                         <div>
                             {{each.name}}
                             <div>

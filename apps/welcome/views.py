@@ -12,7 +12,6 @@ def welcome(request):
     next_day = today+ datetime.timedelta(days=1)
     prev_day = today -  datetime.timedelta(days=1)
     today_game = Game.objects.filter(game_date=today.strftime("%Y-%m-%d"))
-    print(today_game)
     next_day_game = Game.objects.filter(game_date=next_day.strftime("%Y-%m-%d"))
     prev_day_game = Game.objects.filter(game_date=prev_day.strftime("%Y-%m-%d"))
     return render(request,"index.html",{

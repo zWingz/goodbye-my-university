@@ -14,6 +14,8 @@ urlpatterns = patterns(
     'apps.game.views',
     url('^createFixtures$', 'createFixtures'),
     url('^getGame$', 'getGame'),
+    url('^editGame$', 'editGame'),
+    url('^deleteGame$', 'deleteGame'),
     url('^saveFixtures$', 'saveFixtures'),
     url('^fixtures$', 'getFixtures'),
     url('^uploadData$', 'uploadData'),

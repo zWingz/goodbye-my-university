@@ -2,12 +2,13 @@
 {% block title %}{{title}}{% endblock %}
 {%block content%}
 <div class="content-container">
-    <div class="fixtures">
+    <button id="create-game-btn" type="button" class="am-btn am-btn-primary am-btn-sm">创建比赛</button>
+    <div class="fixtures mt10">
         <header class="fixtures-title">
             本周赛程
         </header><!-- /header -->
         {% if games %}
-        <table class="am-table am-table-hover">
+        <table class="am-table am-table-hover data-table">
             <thead>
                 <tr>
                     <th>时间</th>
@@ -16,27 +17,37 @@
                     <th>主场</th>
                     <th>比分</th>
                     <th>客场</th>
-                    <th>数据</th>
+                    <th>操作</th>
                 </tr>
             </thead>
             <tbody>
                 {% for game in games %}
                     <tr id-code="{{game.id_code}}">
-                        <td class="game-time">
-                            <div>
+                        <td>
+                            <div class="game-date">
                                 {{game.game_date}}
                             </div>
-                            <div>
+                            <div class="game-time">
                                   {{game.game_time}}
                              </div>
                          </td>
                         <td class="location">{{game.location}}</td>
                         <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
-                        <td class="team_one"><img src="/static/upload/{{game.team_one.logo}}">{{game.team_one}}</td>
+                        <td class="team_one "><a class="color-000" href="/team/teamDetail?id_code={{game.team_one.id_code}}" title=""><img src="/static/files/teamLogo/{{game.team_one.logo}}">{{game.team_one}}</a></td>
                         <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
-                        <td class="team_two"><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</td>
-                        <td class="game-data">
-                            <input class="upload-input" type="file" name="upfile" value="" placeholder="">
+                        <td class="team_two"><a class="color-000" href="/team/teamDetail?id_code={{game.team_two.id_code}}" title=""><img src="/static/files/teamLogo/{{game.team_two.logo}}">{{game.team_two}}</a></td>
+                        <td class="game-action">
+                            {%if game.status != 1%}
+                            <div class="am-form-file inb vertical-middle">
+                              <button type="button" class="am-btn am-btn-link am-btn-sm">
+                                <i class="am-icon-cloud-upload"></i> 上传比赛数据</button>
+                              <input class="upload-input" type="file" name="upfile" action-type='upload'>
+                            </div>
+                                <button type="button" class="am-btn am-btn-link am-btn-sm" action-type='edit'>编辑</button>
+                                <button type="button" class="am-btn am-btn-link am-btn-sm" action-type='delete'>删除</button>
+                            {% else %}
+                            <a href="/game/getGame?id_code={{game.id_code}}" target="_blank" title="">查看</a>
+                            {%endif%}
                         </td>
                     </tr>
                 {% endfor %}
@@ -51,7 +62,7 @@
             下周赛程
         </header><!-- /header -->
         {% if nextgames %}
-        <table class="am-table am-table-hover fixtures">
+        <table class="am-table am-table-hover data-table">
             <thead>
                 <tr>
                     <th>时间</th>
@@ -60,26 +71,34 @@
                     <th>主场</th>
                     <th>比分</th>
                     <th>客场</th>
-                    <th>数据</th>
+                    <th>操作</th>
                 </tr>
             </thead>
             <tbody>
                 {% for game in nextgames %}
-                    <tr>
-                        <td class="game-time">
-                            <div>
+                    <tr id-code="{{game.id_code}}">
+                        <td>
+                            <div class="game-date">
                                 {{game.game_date}}
                             </div>
-                            <div>
+                            <div class="game-time">
                                   {{game.game_time}}
                              </div>
                          </td>
                         <td class="location">{{game.location}}</td>
                         <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
-                        <td class="team_one"><img src="/static/upload/{{game.team_one.logo}}">{{game.team_one}}</td>
+                        <td class="team_two"><a class="color-000" href="/team/teamDetail?id_code={{game.team_one.id_code}}" title=""><img src="/static/files/teamLogo/{{game.team_one.logo}}">{{game.team_one}}</a></td>
                         <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
-                        <td class="team_two"><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</td>
-                        <td class="game-data">data</td>
+                        <td class="team_two"><a class="color-000" href="/team/teamDetail?id_code={{game.team_two.id_code}}" title=""><img src="/static/files/teamLogo/{{game.team_two.logo}}">{{game.team_two}}</a></td>
+                        <td class="game-action">
+                            <div class="am-form-file inb vertical-middle">
+                              <button type="button" class="am-btn am-btn-link am-btn-sm" >
+                                <i class="am-icon-cloud-upload"></i> 上传比赛数据</button>
+                              <input class="upload-input" type="file" name="upfile" action-type='upload'>
+                            </div>
+                            <button type="button" class="am-btn am-btn-link am-btn-sm" action-type='edit'>编辑</button>
+                            <button type="button" class="am-btn am-btn-link am-btn-sm" action-type='delete'>删除</button>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -183,11 +202,144 @@
             </div>
         </div>
     </div>
+
+    <!-- 编辑比赛modal -->
+    <div class="am-modal am-modal-no-btn" tabindex="-1" id="editGameModal">
+      <div class="am-modal-dialog">
+        <div class="am-modal-hd">
+          <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+        </div>
+        <div class="am-modal-bd my-form am-date-validator">
+            <div class="my-form-group">
+                <input type="text" name="game-date" class="am-form-field game-date-picker" value="" placeholder="选择日期" data-am-datepicker readonly>
+                <input type="time" name="game-time" class="my-form-input" value="" placeholder="">
+            </div>
+            <div class="my-form-group">
+                <label class="my-form-label">地点:</label>
+                <input type="text" name="location" class="my-form-input" value="" placeholder="">
+            </div>
+            <div class="my-form-group dis-none team-select">
+                <select name="team_one" ></select>
+                <i class="iconfont">&#xe607;</i>
+                <select name="team_two" ></select>
+            </div>
+            <div class="my-form-group">
+                <button id="edit-game-btn" type="button" class='am-btn am-btn-success am-btn-sm'>提交</button>
+            </div>
+        </div>
+      </div>
+    </div>
 {%endblock%}
 {%block js%}
 <script type="text/javascript" src="/static/vendors/moment/min/moment.min.js"></script>
 <script type="text/javascript" >
     $(function(){
+        initFixturesTable();
+        // 操作
+        $(".game-action").on("click",function(e){
+            console.log(e.target)
+            var $target = $(e.target);
+            var type = $target.attr('action-type');
+            var container = $(this).parents("tr");
+            var id_code = container.attr("id-code")
+            switch(type){
+                case 'edit':
+                    var modal = $("#editGameModal");
+                    modal.find('.am-modal-bd').removeAttr('id_code').attr('id_code', id_code);
+                    modal.find('[name="game-date"]').datepicker('setValue',container.find('.game-date').text().trim())
+                    modal.find('[name="game-time"]').val(container.find('.game-time').text().trim())
+                    modal.find('[name="location"]').val(container.find('.location').text())
+                    modal.modal("open");
+                    break;
+                case 'delete':
+                    $.post('/game/deleteGame', {id_code: id_code}, function(data, textStatus, xhr) {
+                        msgPopup(data.message);
+                        if(data.success === 1) {
+                            reload();
+                        }
+                    });
+                    break;
+            }
+        });
+
+
+        // 创建比赛
+        $("#create-game-btn").on("click",function(e){
+            var modal = $("#editGameModal");
+            $.ajax({
+                url: '/team/listAllTeam',
+                type: 'post',
+                dataType: 'json',
+            })
+            .done(function(data) {
+                var selectDiv = modal.find(".team-select");
+                data.forEach(function(ele){
+                    var $option = $("<option>").attr('value', ele.id_code).text(ele.name);
+                    selectDiv.find('select').append($option)
+                });
+                selectDiv.show();
+                modal.modal("open");
+            })
+            
+        });
+
+        // 编辑比赛btn
+        $("#edit-game-btn").on('click',function(){
+            var postData = {};
+            var container = $(this).parent().parent();
+            var game_date = container.find("[name='game-date']").val();
+            var game_time = container.find("[name='game-time']").val();
+            var location = container.find("[name='location']").val();
+            postData.id_code = container.attr("id_code");
+            postData['game-date'] = game_date
+            postData['game-time'] = game_time;
+            postData['location'] = location;
+            var team_one = container.find("[name='team_one']").val();
+            var team_two = container.find("[name='team_two']").val();
+            if(team_one !== '' && team_two !== ''){
+                if(team_one === team_two){
+                    msgPopup("不能选择相同队伍");
+                    return;
+                }
+                postData.team_one = team_one;
+                postData.team_two = team_two;
+            }
+            $.post('/game/editGame', postData, function(data, textStatus, xhr) {
+                msgPopup(data.message);
+                if(data.success === 1) {
+                    reload();
+                }
+            });
+        });
+
+
+        // 上传数据
+        $(".upload-input").on("change",function(event){
+            event.preventDefault();
+            var id_code = $(this).parents("tr").attr("id-code")
+            var formData = new FormData();
+            formData.append("file",this.files[0]);
+            formData.append('id_code',id_code)
+            $.ajax({
+                url: "/game/uploadData",
+                type: 'post',
+                dataType: 'json',
+                data: formData,
+                processData:false,
+                contentType:false,
+            })
+            .done(function(data) {
+                msgPopup(data.message);
+                if(data.success === 1){
+                    reload();
+                }
+            });
+        });
+
+    });
+
+// 初始化新建赛程的表格
+    function initFixturesTable(){
         var fixtures = [];
         var weekday = getWeekDate();
         var timeArr = ["09:30","11:00","14:00","05:30","17:00","20:00"];
@@ -233,8 +385,6 @@
                 postData.push(trArr);
             });
             $.post('/game/createFixtures',{"fixtures":JSON.stringify(postData)}, function(data, textStatus, xhr) {
-                /*optional stuff to do after success */
-                // console.log(data);
                 fixtures = data;
                 var timeLen = data.length;
                 for (var i = 0; i < timeLen; i++) {
@@ -266,32 +416,14 @@
             console.log(fixtures);
             $.post('/game/saveFixtures', {fixtures: JSON.stringify(fixtures)}, function(data, textStatus, xhr) {
                 /*optional stuff to do after success */
-                console.log(data)
+                msgPopup(data.message);
+                if(data.success === 1) {
+                    reload()
+                }
             });
         });
+    }
 
-        // 上传数据
-        $(".upload-input").on("change",function(event){
-            event.preventDefault();
-            var formData = new FormData();
-            var id_code = $(this).parents("tr").attr("id-code")
-            console.log(id_code);
-            formData.append("file",this.files[0]);
-            formData.append('id_code',id_code)
-            console.log(this.files[0]);
-            $.ajax({
-                url: "/game/uploadData",
-                type: 'post',
-                dataType: 'json',
-                data: formData,
-                processData:false,
-                contentType:false,
-            })
-            .done(function(data) {
-                console.log(data);
-            });
-        });
-    });
     //返回本周的日期
     function getWeekDate(currentdate){
         var date = typeof currentdate === 'undefined' ? new Date():new Date(currentdate);
@@ -319,6 +451,17 @@
         var day = date.getDate();
         return year+"-"+(+month<10?"0"+month:month)+"-"+(+day<10?"0"+day:day);
     }
+
+    // 时间选择器禁止今天以及之前的选择
+(function(){
+    var nowTemp = new Date();
+    $(".game-date-picker").datepicker({
+          onRender: function(date, viewMode) {
+            var viewDate = nowTemp;
+            return date.valueOf() < viewDate.valueOf() ? 'am-disabled' : '';
+          }
+        })
+})();
 </script>
 
 {%endblock%}

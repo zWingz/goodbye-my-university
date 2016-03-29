@@ -38,12 +38,11 @@ class Player(models.Model):
     class Meta:
         db_table = 'player'
     id_code = models.CharField(max_length=10,null=True)
-    user = models.OneToOneField(User,to_field="username",related_name="player")  
+    user = models.OneToOneField(User,to_field="id_code",related_name="player")  
     number = models.IntegerField(null=True)
     team = models.ForeignKey(Team,related_name="players",on_delete=models.CASCADE,null=True)
     height = models.CharField(max_length=10,null=True)
     weight = models.CharField(max_length=10,null=True)
-    # profile = models.CharField(max_length=20)
     school = models.CharField(max_length=10,null=True)
     desc = models.TextField(null=True)
     position = models.CharField(max_length=5,null=True)

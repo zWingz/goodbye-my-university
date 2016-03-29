@@ -58,9 +58,9 @@
                                  </td>
                                 <td class="location">{{game.location}}</td>
                                 <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
-                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_one.id_code}}" title="" target="_blank"><img src="/static/upload/{{game.team_one.logo}}">{{game.team_one}}</a></td>
+                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_one.id_code}}" title="" target="_blank"><img src="/static/files/teamLogo/{{game.team_one.logo}}">{{game.team_one}}</a></td>
                                 <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
-                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_two.id_code}}" title="" target="_blank"><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</a></td>
+                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_two.id_code}}" title="" target="_blank"><img src="/static/files/teamLogo/{{game.team_two.logo}}">{{game.team_two}}</a></td>
                                 <td class="game-data">{%if game.status = 1%}<a href="/game/getGame?id_code={{game.id_code}}" target="_blank" title="">查看</a>{%endif%}</td>
                             </tr>
                         {% endfor %}
@@ -105,9 +105,9 @@
                                  </td>
                                 <td class="location">{{game.location}}</td>
                                 <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
-                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_one.id_code}}" title="" target="_blank"><img src="/static/upload/{{game.team_one.logo}}">{{game.team_one}}</a></td>
+                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_one.id_code}}" title="" target="_blank"><img src="/static/files/teamLogo/{{game.team_one.logo}}">{{game.team_one}}</a></td>
                                 <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
-                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_two.id_code}}" title="" target="_blank"><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</a></td>
+                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_two.id_code}}" title="" target="_blank"><img src="/static/files/teamLogo/{{game.team_two.logo}}">{{game.team_two}}</a></td>
                                 <td class="game-data">{%if game.status = 1%}<a href="/game/getGame?id_code={{game.id_code}}" target="_blank" title="">查看</a>{%endif%}</td>
                             </tr>
                         {% endfor %}
@@ -152,9 +152,9 @@
                                  </td>
                                 <td class="location">{{game.location}}</td>
                                 <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
-                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_one.id_code}}" title="" target="_blank"><img src="/static/upload/{{game.team_one.logo}}">{{game.team_one}}</a></td>
+                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_one.id_code}}" title="" target="_blank"><img src="/static/files/teamLogo/{{game.team_one.logo}}">{{game.team_one}}</a></td>
                                 <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
-                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_two.id_code}}" title="" target="_blank"><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</a></td>
+                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_two.id_code}}" title="" target="_blank"><img src="/static/files/teamLogo/{{game.team_two.logo}}">{{game.team_two}}</a></td>
                                 <td class="game-data">{%if game.status = 1%}<a href="/game/getGame?id_code={{game.id_code}}" target="_blank" title="">查看</a>{%endif%}</td>
                             </tr>
                         {% endfor %}

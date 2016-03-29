@@ -4,9 +4,11 @@ from django.conf import settings
 from django.http import HttpResponse
 import apps.message.logics as Logics
 from apps.team.models import Team,Player
+from apps.game.models import Game
 from apps.message.models import News
 from utils.Decorator.decorator import post_required
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 # Create your views here.
 
 MSG_TYPE = {
@@ -14,7 +16,8 @@ MSG_TYPE = {
     'join_team':1,
     "leave_team":2,
     "other":3,
-    'invite_join_team':4
+    'invite_join_team':4,
+    'invite_game':5
 }
 
 @login_required
@@ -79,9 +82,34 @@ def inviteJoinTeam(request):
     else:
         # team = Team.objects.get(id_code=request.POST['id_code'])
         receiver = Player.objects.get(id_code=request.POST['id_code']).user
-        title = sender.team.all()[0]+"邀请你加入其球队"
+        title = sender.team.all()[0].name+"邀请你加入其球队"
         content = request.POST['content']
         msg_type = MSG_TYPE['invite_join_team']
+        result = Logics.saveMsg(sender,receiver,title,content,msg_type)
+        if result:
+            response_data['success'] = 1
+            response_data['message'] = '邀请成功'
+    return HttpResponse(json.dumps(response_data),content_type="application/json")
+
+# 邀请比赛
+@login_required
+@post_required
+def inviteGame(request):
+    response_data = {}
+    sender = request.user
+    team = Team.objects.get(id_code=request.POST['id_code'])
+    game_date = request.POST['game_date']
+    # game_time = request.POST['game-time']
+    # location = request.POST['location']
+    receiver = team.manager
+    if len(Game.objects.filter(Q(team_one = team)|Q(team_two = team),game_date=game_date)) != 0:
+        response_data['success'] = 0
+        response_data['message'] = '该球队当天有比赛'
+    else:
+        # team = Team.objects.get(id_code=request.POST['id_code'])
+        title = sender.team.all()[0].name+"邀请你们球队进行比赛"
+        content = request.POST['content']
+        msg_type = MSG_TYPE['invite_game']
         result = Logics.saveMsg(sender,receiver,title,content,msg_type)
         if result:
             response_data['success'] = 1

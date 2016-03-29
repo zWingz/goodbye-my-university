@@ -6,7 +6,7 @@
     <div class="usercenter-container">
         <div class="usercenter-left">
             <header class="user-info">
-                <img class="user-logo user-avatar" src="/static/upload/{{user.img_path}}" alt="">
+                <img class="user-logo user-avatar" src="/static/files/userImg/{{user.img_path}}" alt="">
                 <aside class="user-name">
                     {{user.first_name}}
                 </aside>
@@ -28,7 +28,7 @@
                 <article class="content-bd">
                     <div class="base-info my-form">
                         <div class="info-avatar">
-                            <img class="user-avatar" src="/static/upload/{{user.img_path}}" alt="">
+                            <img class="user-avatar" src="/static/files/userImg/{{user.img_path}}" alt="">
                             <div class="am-form-group am-form-file">
                               <button  type="button" class="am-btn am-btn-default am-btn-sm">
                                 <i class="am-icon-cloud-upload"></i> 上传头像</button>
@@ -101,7 +101,7 @@
                     {%else%}
                     <div class="player-info my-form">
                             <div class="info-avatar">
-                                <img class="team-avatar" src="/static/files/clothes.png" alt="">
+                                {# <img class="team-avatar" src="/static/files/clothes.png" alt=""> #}
                                 <i>{%if user.player.number%}{{user.player.number}}{%else%}null{%endif%}</i>
                             </div>
                             <div class="info-group">
@@ -231,7 +231,7 @@
                     {% else %}
                         <div class="team-info my-form">
                             <div class="info-avatar">
-                                <img class="team-avatar" src="/static/upload/{{team.logo}}" alt="">
+                                <img class="team-avatar" src="/static/files/teamLogo/{{team.logo}}" alt="">
                                 {%if  isManager %}
                                 <div class="am-form-group am-form-file">
                                   <button  type="button" class="am-btn am-btn-default am-btn-sm">
@@ -299,9 +299,9 @@
                                                  </td>
                                                 <td class="location">{{game.location}}</td>
                                                 <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
-                                                <td class="team-td"><a href="/tean/teamDetail?id_code={{game.team_one.id_code}}" title=""><img src="/static/upload/{{game.team_one.logo}}">{{game.team_one}}</a></td>
+                                                <td class="team-td"><a href="/tean/teamDetail?id_code={{game.team_one.id_code}}" title=""><img src="/static/files/teamLogo/{{game.team_one.logo}}">{{game.team_one}}</a></td>
                                                 <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
-                                                <td class="team-td"><a href="/tean/teamDetail?id_code={{game.team_two.id_code}}" title=""><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</a></td>
+                                                <td class="team-td"><a href="/tean/teamDetail?id_code={{game.team_two.id_code}}" title=""><img src="/static/files/teamLogo/{{game.team_two.logo}}">{{game.team_two}}</a></td>
                                                 <td class="game-data">
                                                     {% if game.status == 1 %}
                                                         <a href="/game/getGame?id_code={{game.id_code}}" target="_blank" title="">查看</a>
@@ -344,9 +344,9 @@
                                                  </td>
                                                 <td class="location">{{game.location}}</td>
                                                 <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
-                                                <td class="team-td"><a href="/tean/teamDetail?id_code={{game.team_one.id_code}}" title=""><img src="/static/upload/{{game.team_one.logo}}">{{game.team_one}}</a></td>
+                                                <td class="team-td"><a href="/tean/teamDetail?id_code={{game.team_one.id_code}}" title=""><img src="/static/files/teamLogo/{{game.team_one.logo}}">{{game.team_one}}</a></td>
                                                 <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
-                                                <td class="team-td"><a href="/tean/teamDetail?id_code={{game.team_two.id_code}}" title=""><img src="/static/upload/{{game.team_two.logo}}">{{game.team_two}}</a></td>
+                                                <td class="team-td"><a href="/tean/teamDetail?id_code={{game.team_two.id_code}}" title=""><img src="/static/files/teamLogo/{{game.team_two.logo}}">{{game.team_two}}</a></td>
                                                 <td class="game-data">
                                                     {% if game.status == 1 %}
                                                         <a href="/game/getGame?id_code={{game.id_code}}" target="_blank" title="">查看</a>
@@ -437,7 +437,7 @@
                                     <aside class="players">
                                         {% for player in team.players.all %}
                                             <div class="players-item" data-idCode="{{player.id_code}}">
-                                                <img src="/static/upload/{{player.user.img_path}}" alt="">
+                                                <img src="/static/files/userImg/{{player.user.img_path}}" alt="">
                                                 <div class="players-item-info">
                                                     <div>姓名:<span class="detail-name">{{player.user.first_name}}</span></div>
                                                     <div>球衣:<span class="detail-number">{{player.number}}</span></div>
@@ -463,7 +463,7 @@
                         {% for each in msg %}
                             <div class="message-item" data-id-code="{{each.id_code}}">
                                 <header class="message-head">
-                                    <img src="/static/upload/{{each.sender.img_path}}" alt="">
+                                    <img src="/static/files/userImg/{{each.sender.img_path}}" alt="">
                                     <div class='sender-name' data-id-code="{{each.sender.id_code}}">
                                         {{each.sender.first_name}}
                                     </div>
@@ -481,8 +481,12 @@
                                 </div>
                                 {% if each.status == 0 %}
                                     <div class="message-action am-btn-group am-btn-group-xs">
-                                        <button type="button" class="am-btn am-btn-primary" data-msg-type='{% if each.msg_type == 0 %}agree-apply{%elif each.msg_type == 4 %}agree-invite{%endif%}'>同意</button>
+                                        <button type="button" class="am-btn am-btn-primary" data-msg-type='{{each.msg_type}}'>同意</button>
                                         <button type="button" class="am-btn am-btn-danger" data-msg-type=''>拒绝</button>
+                                    </div>
+                                {% else %}
+                                    <div class="message-action am-btn-group am-btn-group-xs">
+                                        <button type="button" class="am-btn am-btn-default" disabled="disabled">已阅读</button>
                                     </div>
                                 {% endif %}
                             </div>
@@ -509,7 +513,7 @@
         </header><!-- /header -->
         <section class="playerDetail">
             <header class="detail-info">
-                <img class="player-logo"src="/static/upload/{{team.logo}}" alt="">
+                <img class="player-logo"src="/static/files/teamLogo/{{team.logo}}" alt="">
                 <div class="my-form">
                     <div>姓名:<span class="detail-name">d</span></div>
                     <div>球衣:<span class="detail-number">dddd</span></div>
@@ -523,7 +527,29 @@
                 </div>
             </header><!-- /header -->
             <section class="detail-data">
-                
+                <table class="am-table data-table">
+                    <caption>场均数据</caption>
+                    <thead>
+                        <tr>
+                            <th>得分</th>
+                            <th>助攻</th>
+                            <th>篮板</th>
+                            <th>抢断</th>
+                            <th>盖帽</th>
+                            <th>失误</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-type='point'>data</td>
+                            <td data-type='assist'>data</td>
+                            <td data-type='rebound'>data</td>
+                            <td data-type='steal'>data</td>
+                            <td data-type='block'>data</td>
+                            <td data-type='turnover'>data</td>
+                            </tr>
+                    </tbody>
+                </table>
             </section>
         </section>
     </div>

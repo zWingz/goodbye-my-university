@@ -1,4 +1,5 @@
-$base-blue:#0732A2;
+// $base-blue:#0732A2;
+$base-blue:#408ed6;
 .flex-container {
     transform:translate3d(0,0,0);
     .flex-left,.flex-right {
@@ -16,6 +17,7 @@ $base-blue:#0732A2;
         overflow: hidden;
         padding:0px;
         position: relative;
+        display:none;
     }
     .opacity{
         opacity:1;
@@ -148,4 +150,11 @@ $base-blue:#0732A2;
             font-size: 13px;
         }
     }
+}
+
+
+.game-date-picker {
+    display:inline-block;
+    width:200px;
+    height:30px;
 }

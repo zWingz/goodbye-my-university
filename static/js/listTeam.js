@@ -26,15 +26,17 @@ $(function(){
         var code_type = $(this).data("code-type");
         var map = codeTypeMap[code_type];
         $.post(map.url,{id_code:id_code},function(data){
-            console.log(data);
-            $(".flex-right").css("width","400px");
-            $(".flex-right").removeClass("opacity")
+            $(".flex-right").show();
             setTimeout(function(){
-                $(".flex-right").hide();
-                map.bindTmpl(data)
-                $(".flex-right").show();
-                $(".flex-right").addClass("opacity")
-            },500);
+                $(".flex-right").css("width","400px");
+                $(".flex-right").removeClass("opacity")
+                setTimeout(function(){
+                    $(".flex-right").hide();
+                    map.bindTmpl(data)
+                    $(".flex-right").show();
+                    $(".flex-right").addClass("opacity")
+                },500);
+            },100);
         });
     });
 
@@ -44,11 +46,20 @@ $(function(){
         $("#applyModal").find(".am-modal-bd").attr("team-id-code",id_code).attr("join-type","apply");
         $("#applyModal").modal("open");
     });
+    // 邀请加入
     $(".invite-join-team").on("click",function(){
         var id_code = $(this).parent().data("code");
         $("#applyModal").find(".am-modal-bd").attr("team-id-code",id_code).attr("join-type","invite");
         $("#applyModal").modal("open");
     });
+    // 邀请比赛
+    $(".invite-game").on("click",function(){
+        var id_code = $(this).parent().data("code");
+        $("#inviteGameModal").find(".am-modal-bd").attr("team-id-code",id_code);
+        $("#inviteGameModal").modal("open");
+    });
+
+    // 邀请,申请加入的提交btn
     $("#saveApplyJoin").on('click',function(){
         var postData = {},url = '';
         var container = $(this).parent();
@@ -69,9 +80,38 @@ $(function(){
             url = '/msg/inviteJoinTeam';
         }
         $.post(url,postData,function(data){
-            console.log(data);
+            msgPopup(data.message);
+            if (data.success === 1) {
+                reload();
+            }
         });
     });
+
+    // 邀请比赛btn
+    $("#invite-game-btn").on('click',function(){
+        var postData = {},url = '/msg/inviteGame';
+        var container = $(this).parent().parent();
+        postData.id_code = container.attr("team-id-code");
+        var game_date = container.find("[name='game-date']").val();
+        postData.game_date = game_date
+        var game_time = container.find("[name='game-time']").val();
+        var desc =container.find("[name='saysomething']").val();
+        var location = container.find("[name='location']").val();
+        var tmp = $("<div>").append(
+            $("<div class='msg-content-label'>").append("日期:").append($("<span class='msg-content-game-date'>").append(game_date))
+            .append("时间:").append($("<span class='msg-content-game-time'>").append(game_time)))
+            .append($("<div class='msg-content-label'>").append("地点:").append($("<span class='msg-content-location'>").append(location)))
+            .append($("<div class='msg-content-label'>").append("留言:").append($("<span>").append(desc))
+            );
+        postData.content= tmp.html();
+        $.post(url,postData,function(data){
+            msgPopup(data.message);
+            if (data.success === 1) {
+                reload();
+            }
+        });
+    });
+
 });
 
 
@@ -84,14 +124,14 @@ function bindTeamTmpl(data){
     var data_profile = data.team_data;
     var players_container = container.find('.detail-players');
     container.prev().find(".into-detail").attr("href","/team/teamDetail?id_code="+data.team.id_code);
-    container.find(".team-logo").attr("src","/static/upload/"+team.logo);
+    container.find(".team-logo").attr("src","/static/files/teamLogo/"+team.logo);
     container.find(".detail-name").html(team.name);
     container.find(".detail-desc").html(team.desc);
     players_container.html("");
     for (var i = 0; i < players.length; i++) {
         var player = players[i];
         var $div = $("<a>").addClass("player").data('playerIndex', i).attr('href', "/team/playerDetail?id_code="+player.id_code).attr('target', '_blank');;
-        var $img = $("<img>").attr("src","/static/upload/"+player.img_path);
+        var $img = $("<img>").attr("src","/static/files/userImg/"+player.img_path);
         var $name = $("<div>").html(player.name);
         var $position = $("<div>").html(player.position);
         $div.append($img).append($name).append($position);
@@ -120,7 +160,7 @@ function bindPlayerTmpl(data){
     var container = $(".playerDetail");
     container.prev().find(".into-detail").attr("href","/team/playerDetail?id_code="+player.id_code);
     container.data('id_code', player.id_code);
-    container.find(".player-logo").attr("src","/static/upload/"+player.img_path);
+    container.find(".player-logo").attr("src","/static/files/userImg/"+player.img_path);
     container.find(".detail-name").html(player.name);
     container.find(".detail-number").html(player.number);
     container.find(".detail-position").html(player.position);
@@ -132,12 +172,13 @@ function bindPlayerTmpl(data){
     var data_profile = player.player_data;
     var keys = Object.keys(data_profile);
     var game = data_profile.game;
-    if(game == 0){
-        return;
-    }
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i];
-        table.find('[data-type="'+key+'"]').text((data_profile[key]/game));
+        if(game !== 0){
+            table.find('[data-type="'+key+'"]').text((data_profile[key]/game));
+        }else {
+            table.find('[data-type="'+key+'"]').text((data_profile[key]));
+        }
     }
 }
 
@@ -155,3 +196,16 @@ function getScrollTop()
     }
     return scrollTop;
 }
+
+
+// 时间选择器禁止今天以及之前的选择
+(function(){
+    var nowTemp = new Date();
+    $(".game-date-picker").datepicker({
+          onRender: function(date, viewMode) {
+            // 默认 days 视图，与当前日期比较
+            var viewDate = nowTemp;
+            return date.valueOf() < viewDate.valueOf() ? 'am-disabled' : '';
+          }
+        })
+})();

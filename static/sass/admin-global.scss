@@ -77,6 +77,12 @@ html,body {
 
 
 //  近期赛程table
+
+.game-date-picker {
+    display:inline-block !important;
+    width:200px !important;
+    height:30px;
+}
 #createFixtures-modal {
     width:952px;
     margin-left: -476px;
@@ -140,4 +146,14 @@ html,body {
     width:350px;
     margin-bottom: 10px;
     display:none;
+}
+
+
+
+
+#my-popup {
+    top: 18%;
+    width: 350px;
+    margin-left: -125px;
+    font-size: 16px;
 }

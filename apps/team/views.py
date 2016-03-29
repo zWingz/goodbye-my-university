@@ -1,15 +1,14 @@
 from django.shortcuts import render
-import json, os, time
+import json, os, datetime
 from django.conf import settings
 from django.http import HttpResponse
-from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 import apps.team.logics as Logics
 import apps.message.logics as MsgLogics
 from apps.team.models import Team,Player
-from apps.game.models import Game
+from apps.game.models import Game,TeamGameProfile,PlayerGameProfile
+from apps.game.logics import saveGame
 from apps.message.models import Message
-import datetime
 from utils.files.logics import saveFile
 from utils.Decorator.decorator import post_required
 from django.contrib.auth.models import User  
@@ -17,13 +16,30 @@ from django.db.models import Q
 # Create your views here.
 
 def listTeam(request):
-    teamList = Team.objects.all();
-    return render(request,"team/listTeam.html",{"teamList":teamList})
+    if request.method == "GET":
+        teamList = Team.objects.all()[0:5];
+        return render(request,"team/listTeam.html",{"teamList":teamList})
+    else:
+        page = request.POST.get("page",1)
+        count = settings.PAGE_COUNT
+        teamList = Team.objects.all()[(page-1)*count:page*count]
+        return HttpResponse(json.dumps(toTeamView(teamList),cls=CJsonEncoder),content_type="application/json")
+
+@post_required
+def listAllTeam(request):
+    teamList = Team.objects.filter(status=1)
+    return HttpResponse(json.dumps(toTeamView(teamList),cls=CJsonEncoder),content_type="application/json")
 
 
 def listPlayer(request):
-    playerList = Player.objects.all();
-    return render(request,"team/listPlayer.html",{"playerList":playerList})
+    if request.method == "GET":
+        playerList = Player.objects.all()[0:5];
+        return render(request,"team/listPlayer.html",{"playerList":playerList})
+    else:
+        page = request.POST.get("page",1)
+        count = settings.PAGE_COUNT
+        playerList = Player.objects.all()[(page-1)*count:page*count]
+        return HttpResponse(json.dumps(toPlayerView(playerList),cls=CJsonEncoder),content_type="application/json")
 
 def teamDetail(request):
     id_code = request.REQUEST['id_code']
@@ -47,14 +63,24 @@ def teamDetail(request):
         return HttpResponse(json.dumps(response_data,cls=CJsonEncoder),content_type='application/json')
 
 def playerDetail(request):
-    id_code = request.REQUEST['id_code']
-    player = Player.objects.get(id_code=id_code);
     if request.method == 'GET':
+        id_code = request.GET['id_code']
+        player = Player.objects.get(id_code=id_code);
         data = Logics.getPlayerProfile(id_code)
-        teammates = list(player.team.players.all())
-        teammates.remove(player)
-        return render(request,"team/playerDetail.html",{"player":player,"player_data":data,"teammates":teammates})
+        player_game_profile = PlayerGameProfile.objects.filter(id_code=player.id_code).order_by("-_id")[0:5]
+        games = []
+        for each in player_game_profile:
+            game_id_code = each.team_game.game_id_code
+            games.append(Game.objects.get(id_code=game_id_code))
+        if player.team is not None:
+            teammates = list(player.team.players.all())
+            teammates.remove(player)
+        else:
+            teammates = []
+        return render(request,"team/playerDetail.html",{"player":player,"player_data":data,"teammates":teammates,"games":games})
     else:
+        id_code = request.POST['id_code']
+        player = Player.objects.get(id_code=id_code);
         response_data ={}
         response_data['players'] = toPlayersView([player])
         return HttpResponse(json.dumps(response_data,cls=CJsonEncoder),content_type='application/json')
@@ -101,14 +127,14 @@ def changeLogo(request):
         response_data['message'] = '无权修改'
     else:
         upfile = request.FILES['file']
-        fileInfo = saveFile(upfile,os.path.join(settings.UPLOADED_DIR))
+        fileInfo = saveFile(upfile,os.path.join(settings.TEAM_IMG))
         result = Logics.changeLogo(team,fileInfo['fileUName'])
         if result:
             response_data['success'] = 1
             response_data['message'] = '修改成功'
             response_data['fileInfo']={
                                                     "filename":fileInfo['fileName'],
-                                                    "url":"/static/upload/" + fileInfo['fileUName'],
+                                                    "url":"/static/files/teamLogo/" + fileInfo['fileUName'],
                                                     "uname":fileInfo['fileUName']
                                                         };
     return HttpResponse(json.dumps(response_data),content_type="application/json")
@@ -145,19 +171,17 @@ def disbandTeam(request):
 
 
 # player do something
+@post_required
 @login_required
 def savePlayer(request):
-    if request.method == 'GET':
-        return render(request,"team/createPlayer.html")
-    else:
-        response_data = {}
-        response_data["success"] = 0
-        response_data["message"] = '保存失败'
-        result = Logics.savePlayer(request.user,request.POST)
-        if result:
-            response_data["success"] = 1
-            response_data["message"] = '保存成功'
-        return HttpResponse(json.dumps(response_data),content_type="application/json")
+    response_data = {}
+    response_data["success"] = 0
+    response_data["message"] = '保存失败'
+    result = Logics.savePlayer(request.user,request.POST)
+    if result:
+        response_data["success"] = 1
+        response_data["message"] = '保存成功'
+    return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 # player do something
 @login_required
@@ -216,7 +240,7 @@ def agreeApplyJoinTeam(request):
     return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 
-# 同意邀请
+# 同意邀请入队
 @login_required
 @post_required
 def agreeInviteJoinTeam(request):
@@ -233,6 +257,31 @@ def agreeInviteJoinTeam(request):
     if result:
         response_data['success'] = 1
         response_data['message'] = '保存成功'
+        MsgLogics.readMsg(msg)
+    return HttpResponse(json.dumps(response_data),content_type="application/json")
+
+# 同意邀请比赛
+@login_required
+@post_required
+def agreeInviteGame(request):
+    response_data = {}
+    postData = request.POST
+    team_one = Team.objects.get(manager=User.objects.get(id_code=request.POST['id_code']),status=1)
+    msg = Message.objects.get(id_code=request.POST['msg_id_code'])
+    team_two = Team.objects.get(manager=request.user,status=1)
+    game_date = postData['game-date']
+    if len(Game.objects.filter(Q(team_one = team_one)|Q(team_two = team_one),game_date=game_date)) != 0:
+        response_data['success'] = 0
+        response_data['message'] = team_one.name+"当天有比赛.该邀请无效"
+        return HttpResponse(json.dumps(response_data),content_type="application/json")
+    if len(Game.objects.filter(Q(team_one = team_two)|Q(team_two = team_two),game_date=game_date)) != 0:
+        response_data['success'] = 0
+        response_data['message'] = "你的球队当天有比赛.该邀请无效"
+        return HttpResponse(json.dumps(response_data),content_type="application/json")
+    result = saveGame(team_one,team_two,game_date,postData['game-time'],postData['location'])
+    if result:
+        response_data['success'] = 1
+        response_data['message'] = '生成比赛成功'
         MsgLogics.readMsg(msg)
     return HttpResponse(json.dumps(response_data),content_type="application/json")
 
@@ -288,14 +337,28 @@ def toPlayersView(players):
     return result
 
 def toTeamView(team):
-    obj = {}
-    obj['id_code'] = team.id_code
-    obj['logo'] = team.logo
-    obj['name'] = team.name
-    obj['manager'] = team.manager.first_name
-    obj['school'] = team.school
-    obj['create_time'] = team.create_time
-    obj['desc'] = team.desc
+    team = list(team)
+    if len(team) >1:
+        obj = []
+        for each in team:
+            tmp = {}
+            tmp['id_code'] = each.id_code
+            tmp['logo'] = each.logo
+            tmp['name'] = each.name
+            tmp['manager'] = each.manager.first_name
+            tmp['school'] = each.school
+            tmp['create_time'] = each.create_time
+            tmp['desc'] = each.desc
+            obj.append(tmp)
+    elif len(team) != 0:
+        obj = {}
+        obj['id_code'] = team[0].id_code
+        obj['logo'] = team[0].logo
+        obj['name'] = team[0].name
+        obj['manager'] = team[0].manager.first_name
+        obj['school'] = team[0].school
+        obj['create_time'] = team[0].create_time
+        obj['desc'] = team[0].desc
     return obj
 
 # 对象转字典

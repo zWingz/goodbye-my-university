@@ -13,6 +13,7 @@ from django.conf.urls import patterns, url
 urlpatterns = patterns(
     'apps.team.views',
     url('^listTeam$', 'listTeam'),
+    url('^listAllTeam$', 'listAllTeam'),
     url('^teamDetail$', 'teamDetail'),
 
     url('^listPlayer$', 'listPlayer'),
@@ -34,4 +35,7 @@ urlpatterns = patterns(
     url('^leaveTeam$', 'leaveTeam'),
 
     url('^checkNum$', 'checkNum'),
+
+    # 同意比赛
+    url('^agreeInviteGame$', 'agreeInviteGame'),
 )
