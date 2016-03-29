@@ -44,13 +44,13 @@ def usercenter(request):
         team = request.user.team.all()[0]
         player = request.user.player
         player_data = Logics.getPlayerProfile(player.id_code)
-        team_data = Logics.getTeamProfile(team.id_code)
         isManager = True
     elif status == 'player':
         player = request.user.player
         player_data = Logics.getPlayerProfile(player.id_code)
         team = player.team
     if team :
+        team_data = Logics.getTeamProfile(team.id_code)
         now = datetime.datetime.now()
         weeknum = str(now.isocalendar()[0])+str(now.isocalendar()[1])
         games = Game.objects.filter(Q(team_one=team)|Q(team_two=team),weeknum=weeknum)
@@ -113,7 +113,7 @@ def updateImage(request):
         username = request.user.username
         extention =  upfile.name[upfile.name.rfind('.'):]
         fileName = str(int(time.time() * 10)) + extention
-        with open(settings.UPLOADED_DIR + '/' + fileName, 'wb+') as dest:
+        with open(settings.USER_IMG + '/' + fileName, 'wb+') as dest:
             for chunk in upfile.chunks():
                 dest.write(chunk)
         result = Logics.updateImage(username,fileName)
@@ -125,7 +125,7 @@ def updateImage(request):
             response_data['message'] = '保存成功'
             response_data['fileInfo']={
                                                     "filename":upfile.name,
-                                                    "url":"/static/upload/" + fileName,
+                                                    "url":"/static/files/userImg/" + fileName,
                                                     "uname":fileName
                                                         };
     return HttpResponse(json.dumps(response_data), content_type='application/json')

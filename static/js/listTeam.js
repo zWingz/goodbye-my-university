@@ -26,15 +26,17 @@ $(function(){
         var code_type = $(this).data("code-type");
         var map = codeTypeMap[code_type];
         $.post(map.url,{id_code:id_code},function(data){
-            console.log(data);
-            $(".flex-right").css("width","400px");
-            $(".flex-right").removeClass("opacity")
+            $(".flex-right").show();
             setTimeout(function(){
-                $(".flex-right").hide();
-                map.bindTmpl(data)
-                $(".flex-right").show();
-                $(".flex-right").addClass("opacity")
-            },500);
+                $(".flex-right").css("width","400px");
+                $(".flex-right").removeClass("opacity")
+                setTimeout(function(){
+                    $(".flex-right").hide();
+                    map.bindTmpl(data)
+                    $(".flex-right").show();
+                    $(".flex-right").addClass("opacity")
+                },500);
+            },100);
         });
     });
 
@@ -122,14 +124,14 @@ function bindTeamTmpl(data){
     var data_profile = data.team_data;
     var players_container = container.find('.detail-players');
     container.prev().find(".into-detail").attr("href","/team/teamDetail?id_code="+data.team.id_code);
-    container.find(".team-logo").attr("src","/static/upload/"+team.logo);
+    container.find(".team-logo").attr("src","/static/files/teamLogo/"+team.logo);
     container.find(".detail-name").html(team.name);
     container.find(".detail-desc").html(team.desc);
     players_container.html("");
     for (var i = 0; i < players.length; i++) {
         var player = players[i];
         var $div = $("<a>").addClass("player").data('playerIndex', i).attr('href', "/team/playerDetail?id_code="+player.id_code).attr('target', '_blank');;
-        var $img = $("<img>").attr("src","/static/upload/"+player.img_path);
+        var $img = $("<img>").attr("src","/static/files/userImg/"+player.img_path);
         var $name = $("<div>").html(player.name);
         var $position = $("<div>").html(player.position);
         $div.append($img).append($name).append($position);
@@ -158,7 +160,7 @@ function bindPlayerTmpl(data){
     var container = $(".playerDetail");
     container.prev().find(".into-detail").attr("href","/team/playerDetail?id_code="+player.id_code);
     container.data('id_code', player.id_code);
-    container.find(".player-logo").attr("src","/static/upload/"+player.img_path);
+    container.find(".player-logo").attr("src","/static/files/userImg/"+player.img_path);
     container.find(".detail-name").html(player.name);
     container.find(".detail-number").html(player.number);
     container.find(".detail-position").html(player.position);
@@ -194,3 +196,16 @@ function getScrollTop()
     }
     return scrollTop;
 }
+
+
+// 时间选择器禁止今天以及之前的选择
+(function(){
+    var nowTemp = new Date();
+    $(".game-date-picker").datepicker({
+          onRender: function(date, viewMode) {
+            // 默认 days 视图，与当前日期比较
+            var viewDate = nowTemp;
+            return date.valueOf() < viewDate.valueOf() ? 'am-disabled' : '';
+          }
+        })
+})();

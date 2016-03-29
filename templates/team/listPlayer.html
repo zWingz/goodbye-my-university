@@ -12,7 +12,7 @@
             <section class="teamList-content" >
                 {% for player in playerList %}
                     <div class="team-item" data-code-type='player' data-code="{{player.id_code}}">
-                        <img class ="team-logo"src="/static/upload/{{player.user.img_path}}" alt="">
+                        <img class ="team-logo"src="/static/files/userImg/{{player.user.img_path}}" alt="">
                         <div class="team-info">
                             <span><label>姓名:</label>{{player.user.first_name}}</span>
                              <span><label>球队:</label>{{player.team.name}}</span>
@@ -33,7 +33,7 @@
             </header><!-- /header -->
             <section class="playerDetail">
                 <header class="detail-info">
-                    <img class="player-logo"src="/static/upload/{{team.logo}}" alt="">
+                    <img class="player-logo"src="/static/files/teamLogo/{{team.logo}}" alt="">
                     <div>
                         <div>姓名:<span class="detail-name"></span></div>
                         <div>球衣:<span class="detail-number"></span></div>

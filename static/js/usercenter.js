@@ -157,7 +157,7 @@ $(function(){
 function bindPlayerTmpl(player){
     var container = $(".playerDetail");
     container.data('id_code', player.id_code);
-    container.find(".player-logo").attr("src","/static/upload/"+player.img_path);
+    container.find(".player-logo").attr("src","/static/files/userImg/"+player.img_path);
     container.find(".detail-name").html(player.name);
     container.find(".detail-number").html(player.number);
     container.find(".detail-position").html(player.position);

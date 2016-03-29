@@ -13,6 +13,7 @@ from django.conf.urls import patterns, url
 urlpatterns = patterns(
     'apps.team.views',
     url('^listTeam$', 'listTeam'),
+    url('^listAllTeam$', 'listAllTeam'),
     url('^teamDetail$', 'teamDetail'),
 
     url('^listPlayer$', 'listPlayer'),

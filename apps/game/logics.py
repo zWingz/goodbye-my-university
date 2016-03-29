@@ -57,6 +57,17 @@ def saveGame(team_one,team_two,date,time,location):
     return True
 
 @transaction.atomic
+def editGame(game,date,time,location):
+    game.game_date = date
+    game.game_time = time
+    game.location = location
+    num = datetime.datetime.strptime(date, "%Y-%m-%d")
+    game.weeknum = str(num.isocalendar()[0])+str(num.isocalendar()[1])
+    game.week_index = num.weekday()
+    game.save()
+    return True
+
+@transaction.atomic
 def saveDetailData(postData):
     result = {}
     id_code = postData['game']
@@ -94,7 +105,7 @@ def saveData(game,data):
                 team_one_profile = TeamProfile.objects.get(id_code=str(int(each['id_code'])))
                 saveProfile(team_one_profile,each)
                 # team_one_profile.game += 1
-            else:
+            elif str(int(each['id_code'])) == game.team_two.id_code:
                 team_two = each
                 team_two_gprofile = TeamGameProfile()
                 team_two_gprofile.id_code = game.team_two.id_code
@@ -104,6 +115,8 @@ def saveData(game,data):
                 team_two_profile = TeamProfile.objects.get(id_code=str(int(each['id_code'])))
                 saveProfile(team_two_profile,each)
                 # team_two_profile.game += 1
+            else:
+                return False;
             game.point = point
             game.status = 1
     if int(team_one['point']) > int(team_two['point']):

@@ -8,7 +8,7 @@
        <div class="flex-left">
         <header class="team-info">
             <a href="/team/teamDetail?id_code={{game.team_one.id_code}}">
-                <img src="/static/upload/{{game.team_one.logo}}" alt="">
+                <img src="/static/files/teamLogo/{{game.team_one.logo}}" alt="">
                 <span class="team-name">{{game.team_one.name}}</span>
             </a>
                 <div class="point">
@@ -20,7 +20,7 @@
                 </div>
             <a href="/team/teamDetail?id_code={{game.team_one.id_code}}">
                 <span class="team-name">{{game.team_two.name}}</span>
-                <img src="/static/upload/{{game.team_two.logo}}" alt="">
+                <img src="/static/files/teamLogo/{{game.team_two.logo}}" alt="">
             </a>
         </header><!-- /header -->
         {% if game.status == 0 %}
@@ -30,9 +30,9 @@
             <section class="game-data-container">
                 <header class="game-data-head">
                     {% if forloop.counter == 1 %}
-                        <img src="/static/upload/{{game.team_one.logo}}" alt="">
+                        <img src="/static/files/teamLogo/{{game.team_one.logo}}" alt="">
                     {% else %}
-                        <img src="/static/upload/{{game.team_two.logo}}" alt="">
+                        <img src="/static/files/teamLogo/{{game.team_two.logo}}" alt="">
                     {% endif %}
                         {{gameProfile.name}}
                 </header>

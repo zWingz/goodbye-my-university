@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 import apps.game.logics as Logics
 from apps.game.models import Game,PlayerGameProfile,TeamGameProfile
 from apps.team.models import Team,TeamProfile,Player,PlayerProfile
-from utils.Decorator.decorator import post_required
+from utils.Decorator.decorator import post_required,admin_required
 from django.contrib.auth.decorators import login_required
 from django.db.models import F,Q
 # Create your views here.
@@ -29,7 +29,9 @@ location = ["loc_a","loc_b","loc_c","loc_d","loc_e"]
 
 
 # 新建赛程
-# @post_required
+@login_required
+@post_required
+@admin_required
 def createFixtures(request):
     teams = Team.objects.filter(status=1)
     fixtures = json.loads(request.POST['fixtures'])
@@ -56,7 +58,9 @@ def createFixtures(request):
             index = index + 1;
     return HttpResponse(json.dumps(fixtures),content_type="application/json")
 
-
+@login_required
+@post_required
+@admin_required
 def saveFixtures(request):
     fixtures = json.loads(request.POST['fixtures'])
     for time in fixtures:
@@ -101,7 +105,9 @@ def getFixtures(request):
                                                                                                     "blockPlayer":blockPlayer,
                                                                                                     "stealPlayer":stealPlayer})
 
+@login_required
 @post_required
+@admin_required
 def uploadData(request):
     response_data = {}
     game = Game.objects.get(id_code=request.POST['id_code'])
@@ -117,12 +123,52 @@ def uploadData(request):
                 dest.write(chunk)
         result = Logics.parseDatFromExcel(fileName)
         result = Logics.saveData(game,result)
-        response_data['success'] = 1
-        response_data['message'] = '修改成功'
-        response_data['result'] = result
+        if result:
+            response_data['success'] = 1
+            response_data['message'] = '上传成功'
+            response_data['result'] = result
+        else:
+            response_data['success'] = 0
+            response_data['message'] = '上传失败,请检查数据是否正确'
     return HttpResponse(json.dumps(response_data),content_type="application/json")
 
+@login_required
+@post_required
+@admin_required
+def editGame(request):
+    id_code = request.POST.get("id_code","")
+    response_data = {}
+    if id_code == "":
+        game = Game()
+        team_one = Team.objects.get(id_code=request.POST['team_one'])
+        team_two = Team.objects.get(id_code=request.POST['team_two'])
+        result = Logics.saveGame(team_one,team_two,request.POST['game-date'],request.POST['game-time'],request.POST['location'])
+    else:
+        game = Game.objects.get(id_code=id_code)
+        result = Logics.editGame(game,request.POST['game-date'],request.POST['game-time'],request.POST['location'])
+    if result:
+        response_data['success'] = 1
+        response_data['message'] = '操作成功'
+    else:
+        response_data['success'] = 0
+        response_data['message'] = '操作失败'
+    return HttpResponse(json.dumps(response_data),content_type="application/json")
 
+@login_required
+@post_required
+@admin_required
+def deleteGame(request):
+    id_code = request.POST.get("id_code","")
+    response_data = {}
+    if id_code != "":
+        game = Game.objects.get(id_code=id_code)
+        game.delete()
+        response_data['success'] = 1
+        response_data['message'] = '操作成功'
+    else:
+        response_data['success'] = 0
+        response_data['message'] = '操作失败'
+    return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 def toFixturesView(games):
     result = [[],[],[],[],[],[],[]]

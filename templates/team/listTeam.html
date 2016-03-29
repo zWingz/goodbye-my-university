@@ -12,7 +12,7 @@
             <section class="teamList-content" >
                 {% for team in teamList %}
                     <div class="team-item" data-code-type='team' data-code="{{team.id_code}}">
-                        <img class="team-logo"src="/static/upload/{{team.logo}}" alt="">
+                        <img class="team-logo"src="/static/files/teamLogo/{{team.logo}}" alt="">
                         <div class="team-info">
                             <span><label>球队名:</label>{{team.name}}</span>
                             <span><label>学校:</label>{{team.school}}</span>
@@ -21,7 +21,7 @@
                         </div>
                         {% if user.player and not user.player.team %}
                         <button type="button" class="apply-join-team am-btn am-btn-default">申请加入</button>
-                        {%elif user.team.all %}
+                        {%elif user.team.all and user.team.first != team %}
                             <button type="button" class="invite-game am-btn am-btn-default">邀请比赛</button>
                         {%endif%}
                     </div>
@@ -35,7 +35,7 @@
             </header><!-- /header -->
             <section class="teamDetail">
                 <header class="detail-info">
-                    <img class="team-logo"src="/static/upload/{{team.logo}}" alt="">
+                    <img class="team-logo"src="/static/files/teamLogo/{{team.logo}}" alt="">
                     <div><span class="detail-name">{{team.name}}</span></div>
                     <div><label>简介:</label><span class="detail-desc">{{team.desc}}</span></div>
                 </header><!-- /header -->

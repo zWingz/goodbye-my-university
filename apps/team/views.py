@@ -25,6 +25,12 @@ def listTeam(request):
         teamList = Team.objects.all()[(page-1)*count:page*count]
         return HttpResponse(json.dumps(toTeamView(teamList),cls=CJsonEncoder),content_type="application/json")
 
+@post_required
+def listAllTeam(request):
+    teamList = Team.objects.filter(status=1)
+    return HttpResponse(json.dumps(toTeamView(teamList),cls=CJsonEncoder),content_type="application/json")
+
+
 def listPlayer(request):
     if request.method == "GET":
         playerList = Player.objects.all()[0:5];
@@ -121,14 +127,14 @@ def changeLogo(request):
         response_data['message'] = '无权修改'
     else:
         upfile = request.FILES['file']
-        fileInfo = saveFile(upfile,os.path.join(settings.UPLOADED_DIR))
+        fileInfo = saveFile(upfile,os.path.join(settings.TEAM_IMG))
         result = Logics.changeLogo(team,fileInfo['fileUName'])
         if result:
             response_data['success'] = 1
             response_data['message'] = '修改成功'
             response_data['fileInfo']={
                                                     "filename":fileInfo['fileName'],
-                                                    "url":"/static/upload/" + fileInfo['fileUName'],
+                                                    "url":"/static/files/teamLogo/" + fileInfo['fileUName'],
                                                     "uname":fileInfo['fileUName']
                                                         };
     return HttpResponse(json.dumps(response_data),content_type="application/json")
@@ -331,14 +337,28 @@ def toPlayersView(players):
     return result
 
 def toTeamView(team):
-    obj = {}
-    obj['id_code'] = team.id_code
-    obj['logo'] = team.logo
-    obj['name'] = team.name
-    obj['manager'] = team.manager.first_name
-    obj['school'] = team.school
-    obj['create_time'] = team.create_time
-    obj['desc'] = team.desc
+    team = list(team)
+    if len(team) >1:
+        obj = []
+        for each in team:
+            tmp = {}
+            tmp['id_code'] = each.id_code
+            tmp['logo'] = each.logo
+            tmp['name'] = each.name
+            tmp['manager'] = each.manager.first_name
+            tmp['school'] = each.school
+            tmp['create_time'] = each.create_time
+            tmp['desc'] = each.desc
+            obj.append(tmp)
+    elif len(team) != 0:
+        obj = {}
+        obj['id_code'] = team[0].id_code
+        obj['logo'] = team[0].logo
+        obj['name'] = team[0].name
+        obj['manager'] = team[0].manager.first_name
+        obj['school'] = team[0].school
+        obj['create_time'] = team[0].create_time
+        obj['desc'] = team[0].desc
     return obj
 
 # 对象转字典
