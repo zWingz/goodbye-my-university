@@ -19,6 +19,8 @@ urlpatterns = patterns(
     url('^inviteGame$', 'inviteGame'),
     url('^listUnReadMsg$', 'listUnReadMsg'),
     url('^listAllMsg$', 'listAllMsg'),
+
     url('^createNew$', 'createNew'),
     url('^getNew$', 'getNew'),
+    
 )

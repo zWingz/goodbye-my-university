@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-import json, os, datetime
+import json, os, datetime,random
 import copy
 from django.conf import settings
 from django.http import HttpResponse
@@ -25,7 +25,7 @@ def getGame(request):
     return render(request,"game/detail.html",{"game":game,"game_profile":game_profile})
 
 
-location = ["loc_a","loc_b","loc_c","loc_d","loc_e"]
+# location = ["loc_a","loc_b","loc_c","loc_d","loc_e"]
 
 
 # 新建赛程
@@ -35,6 +35,8 @@ location = ["loc_a","loc_b","loc_c","loc_d","loc_e"]
 def createFixtures(request):
     teams = Team.objects.filter(status=1)
     fixtures = json.loads(request.POST['fixtures'])
+    location = fixtures['location']
+    fixtures = fixtures['table']
     response_data = []
     for team in teams:
         team_profile = TeamProfile.objects.get(id_code=team.id_code)
@@ -45,17 +47,22 @@ def createFixtures(request):
     sorted(teams,key=lambda s: s.game)
     sum_location = len(location)
     index = 0;
+    choicesTeam=[]
     for time in fixtures:
         for game in time:
-            if len(Game.objects.filter(Q(team_one = teams[index])|Q(team_two = teams[index]),game_date=game['time']['date'])) != 0:
+            if(index < teams_count):
+                if len(Game.objects.filter(Q(team_one = teams[index])|Q(team_two = teams[index]),game_date=game['time']['date'])) != 0 or teams[index] in choicesTeam:
+                    index = index + 1;
+                    continue;
+                game['location'] = location[time.index(game)%sum_location] # 顺序选取一个地点
+                game['team_one'] = {"id_code":teams[index].id_code,"name":teams[index].name,"logo":teams[index].logo}
+                choicesTeam.append(teams[index]) # 加入到已选队伍当中
                 index = index + 1;
-            if (teams_count < index + 2):
-                break;
-            game['location'] = location[time.index(game)%sum_location]
-            game['team_one'] = {"id_code":teams[index].id_code,"name":teams[index].name,"logo":teams[index].logo}
-            index = index + 1;
-            game['team_two'] = {"id_code":teams[index].id_code,"name":teams[index].name,"logo":teams[index].logo}
-            index = index + 1;
+                next_index = random.randint(index,teams_count-1);# 在剩下队伍中找出一队
+                while len(Game.objects.filter(Q(team_one = teams[next_index])|Q(team_two = teams[next_index]),game_date=game['time']['date'])) != 0:
+                    next_index = random.randint(index,teams_count-1);# 找出当天没有比赛的队伍
+                game['team_two'] = {"id_code":teams[next_index].id_code,"name":teams[next_index].name,"logo":teams[next_index].logo}
+                choicesTeam.append(teams[next_index]) # 加入到已选队伍当中
     return HttpResponse(json.dumps(fixtures),content_type="application/json")
 
 @login_required

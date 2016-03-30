@@ -20,43 +20,40 @@ $(function(){
                 bindTmpl:bindPlayerTmpl
             }
         };
-    //  获取球队信息
-    $("[data-code]").on("click",function(){
-        var id_code = $(this).data("code");
-        var code_type = $(this).data("code-type");
-        var map = codeTypeMap[code_type];
-        $.post(map.url,{id_code:id_code},function(data){
-            $(".flex-right").show();
-            setTimeout(function(){
-                $(".flex-right").css("width","400px");
-                $(".flex-right").removeClass("opacity")
-                setTimeout(function(){
-                    $(".flex-right").hide();
-                    map.bindTmpl(data)
-                    $(".flex-right").show();
-                    $(".flex-right").addClass("opacity")
-                },500);
-            },100);
-        });
-    });
 
-    //  申请加入
-    $(".apply-join-team").on("click",function(){
-        var id_code = $(this).parent().data("code");
-        $("#applyModal").find(".am-modal-bd").attr("team-id-code",id_code).attr("join-type","apply");
-        $("#applyModal").modal("open");
-    });
-    // 邀请加入
-    $(".invite-join-team").on("click",function(){
-        var id_code = $(this).parent().data("code");
-        $("#applyModal").find(".am-modal-bd").attr("team-id-code",id_code).attr("join-type","invite");
-        $("#applyModal").modal("open");
-    });
-    // 邀请比赛
-    $(".invite-game").on("click",function(){
-        var id_code = $(this).parent().data("code");
-        $("#inviteGameModal").find(".am-modal-bd").attr("team-id-code",id_code);
-        $("#inviteGameModal").modal("open");
+    //  事件委托至content
+    $(".teamList-content").on("click",function(e){
+        var target = $(e.target);
+        if( target.hasClass('apply-join-team')){  //  请求加入队伍
+            var id_code = $(this).parent().data("code");
+            $("#applyModal").find(".am-modal-bd").attr("team-id-code",id_code).attr("join-type","apply");
+            $("#applyModal").modal("open");
+        }else if(target.hasClass("invite-join-team")){ // 邀请加入队伍
+            var id_code = $(this).parent().data("code");
+            $("#applyModal").find(".am-modal-bd").attr("team-id-code",id_code).attr("join-type","invite");
+            $("#applyModal").modal("open");
+        }else if(target.hasClass("invite-game")){ // 邀请比赛
+            var id_code = $(this).parent().data("code");
+            $("#inviteGameModal").find(".am-modal-bd").attr("team-id-code",id_code);
+            $("#inviteGameModal").modal("open");
+        }else if(typeof target.parents(".team-item").attr("data-code") !== 'undefined'){
+            var id_code = target.parents(".team-item").data("code");
+            var code_type = target.parents(".team-item").data("code-type");
+            var map = codeTypeMap[code_type];
+            $.post(map.url,{id_code:id_code},function(data){
+                $(".flex-right").show();
+                setTimeout(function(){
+                    $(".flex-right").css("width","400px");
+                    $(".flex-right").removeClass("opacity")
+                    setTimeout(function(){
+                        $(".flex-right").hide();
+                        map.bindTmpl(data)
+                        $(".flex-right").show();
+                        $(".flex-right").addClass("opacity")
+                    },500);
+                },100);
+            });
+        }
     });
 
     // 邀请,申请加入的提交btn
@@ -111,6 +108,9 @@ $(function(){
             }
         });
     });
+
+    // 加载更多
+    new loadMore("#load-more-btn");
 
 });
 
@@ -195,6 +195,42 @@ function getScrollTop()
         scrollTop=document.body.scrollTop;
     }
     return scrollTop;
+}
+
+function loadMore(ele){
+    this.ele = $(ele);
+    this.page = 1;
+    var self = this;
+    if(this.ele.attr('load-type') === "team"){
+        this.url = "listTeam";
+        this.render = function(data){
+            console.log(data);
+        };
+    }else {
+        this.url = "listPlayer";
+        this.render = function(data){
+            var $df = $(document.createDocumentFragment());
+            data.forEach(function(ele,index){
+                var $item = $("<div>").addClass("team-item").attr("data-code-type","player").attr("data-code",ele.id_code)
+                var $img = $("<img>").addClass('team-logo').attr("src","/static/files/userImg/"+ele.img_path);
+                var $info = $("<div>").addClass("team-info");
+                $info.append($("<span>").append($("<label>姓名:</label>")).append(ele.name))
+                            .append($("<span>").append($("<label>球队:</label>")).append(ele.team))
+                            .append($("<span>").append($("<label>学校:</label>")).append(ele.school))
+                            .append($("<span>").append($("<label>位置:</label>")).append(ele.position));
+                $item.append($img).append($info);
+                $df.append($item);
+            });
+            self.ele.before($df);
+            console.log(data);
+        };
+    }
+    this.ele.on("click",function(){
+        self.page ++;
+        $.post(self.url, {page: self.page}, function(data, textStatus, xhr) {
+            self.render(data);
+        });
+    });
 }
 
 

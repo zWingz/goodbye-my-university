@@ -38,19 +38,44 @@ def loginAdmin(request):
 
 
 
-# 比赛管理
+# 赛程
 def getFixtures(request):
     now = datetime.datetime.now()
     weeknum = request.GET.get('weeknum',str(now.isocalendar()[0])+str(now.isocalendar()[1])) 
     games = Game.objects.filter(weeknum=weeknum)
     next_weeknum = int(weeknum)+1
     next_games = Game.objects.filter(weeknum=next_weeknum)
-    return render(request,"admin/game-list.html",{"title":"近期赛程","games":games,"nextgames":next_games})
+    return render(request,"admin/fixtures-list.html",{"title":"近期赛程","games":games,"nextgames":next_games})
+
+def  getGameList(request):
+    page = request.GET.get("page",1)
+    count = settings.PAGE_COUNT
+    gameList = Game.objects.all().order_by("-create_time")[(page-1)*count:page*count]
+    return render(request,"admin/game-list.html",{"gameList":gameList})
+
 
 
 def createNews(request):
     return render(request,"admin/createnews.html")
 
+def getNewsList(request):
+    page = request.GET.get("page",1)
+    count = settings.PAGE_COUNT
+    newList = News.objects.all().order_by("-create_time")[(page-1)*count:page*count]
+    return render(request,"admin/list-news.html",{"newList":newList})
+
+def deleteNew(request):
+    id_code = request.POST.get("id_code","")
+    response_data = {}
+    if id_code != "":
+        new = News.objects.get(id_code=id_code)
+        new.delete()
+        response_data['success'] = 1
+        response_data['message'] = '操作成功'
+    else:
+        response_data['success'] = 0
+        response_data['message'] = '操作失败'
+    return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 
 @login_required
