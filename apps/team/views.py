@@ -443,3 +443,68 @@ class CJsonEncoder(json.JSONEncoder):
             return obj.strftime('%Y-%m-%d')
         else:
             return json.JSONEncoder.default(self, obj)
+
+
+
+def  adeditPlayer(request):
+    id_code = request.POST.get("id_code","")
+    response_data = {}
+    player = Player.objects.get(id_code=id_code)
+    result = Logics.adeditPlayer(player,request.POST['number'],request.POST['height'],request.POST['weight'],request.POST['position'],request.POST['school'],request.POST['desc'])
+    if result:
+        response_data['success'] = 1
+        response_data['message'] = '操作成功'
+    else:
+        response_data['success'] = 0
+        response_data['message'] = '操作失败'
+    return HttpResponse(json.dumps(response_data),content_type="application/json")
+
+@login_required
+@post_required
+# @admin_required
+def deletePlayer(request):
+    id_code = request.POST.get("id_code","")
+    response_data = {}
+    if id_code != "":
+        player = Player.objects.get(id_code=id_code)
+        player.delete()
+        response_data['success'] = 1
+        response_data['message'] = '操作成功'
+    else:
+        response_data['success'] = 0
+        response_data['message'] = '操作失败'
+    return HttpResponse(json.dumps(response_data),content_type="application/json")
+
+
+
+
+
+
+def  adeditTeam(request):
+    id_code = request.POST.get("id_code","")
+    response_data = {}
+    team = Team.objects.get(id_code=id_code)
+    result = Logics.adeditTeam(team,request.POST['name'],request.POST['school'],request.POST['desc'])
+    if result:
+        response_data['success'] = 1
+        response_data['message'] = '操作成功'
+    else:
+        response_data['success'] = 0
+        response_data['message'] = '操作失败'
+    return HttpResponse(json.dumps(response_data),content_type="application/json")
+
+@login_required
+@post_required
+# @admin_required
+def deleteTeam(request):
+    id_code = request.POST.get("id_code","")
+    response_data = {}
+    if id_code != "":
+        team = Team.objects.get(id_code=id_code)
+        team.delete()
+        response_data['success'] = 1
+        response_data['message'] = '操作成功'
+    else:
+        response_data['success'] = 0
+        response_data['message'] = '操作失败'
+    return HttpResponse(json.dumps(response_data),content_type="application/json")

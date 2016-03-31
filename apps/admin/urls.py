@@ -24,6 +24,9 @@ urlpatterns = patterns(
     
     url('^uploadImg$', 'uploadImg'),
     url('^userlist$', 'getUserList'),
+    url('^playerlist$', 'getPlayerList'),
+    url('^teamlist$', 'getTeamList'),
+
     # url('^saveFixtures$', 'saveFixtures'),
     # url('^fixtures$', 'getFixtures'),
 )

@@ -19,5 +19,8 @@ urlpatterns = patterns(
     url('^updateImage$', 'updateImage'),
     url('^editUserInfo$', 'editUserInfo'),
     url('^changePwd$', 'changePwd'),
+    url('^editUser$', 'editUser'),
+     url('^deleteUser$', 'deleteUser'),
+
     
 )

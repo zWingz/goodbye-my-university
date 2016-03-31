@@ -56,3 +56,14 @@ def getTeamProfile(id_code):
 def getPlayerProfile(id_code):
     profile = PlayerProfile.objects.get(id_code=id_code)
     return profile
+
+@transaction.atomic
+def editUser(user,username,first_name,last_name,phone,email,qq):
+    user.username = username
+    user.first_name = first_name
+    user.last_name = last_name
+    user.phone = phone
+    user.email = email
+    user.qq = qq
+    user.save()
+    return True

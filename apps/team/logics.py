@@ -245,3 +245,27 @@ def getTeamProfile(id_code):
 def getPlayerProfile(id_code):
     profile = PlayerProfile.objects.get(id_code=id_code)
     return profile
+
+
+@transaction.atomic
+def adeditPlayer(player,number,height,weight,position,school,desc):
+    player.number = number
+    player.height = height
+    player.weight = weight
+    player.position = position
+    player.school = school
+    player.desc = desc
+    player.save()
+    return True
+
+
+
+@transaction.atomic
+def adeditTeam(team,name,school,desc):
+    team.name = name
+    team.school = school
+    team.desc = desc
+    team.save()
+    return True
+
+

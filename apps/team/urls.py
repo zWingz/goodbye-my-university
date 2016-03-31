@@ -38,4 +38,11 @@ urlpatterns = patterns(
 
     # 同意比赛
     url('^agreeInviteGame$', 'agreeInviteGame'),
+
+    url('^adeditPlayer$', 'adeditPlayer'),
+    url('^deletePlayer$', 'deletePlayer'),
+
+    url('^adeditTeam$', 'adeditTeam'),
+    url('^deleteTeam$', 'deleteTeam'),
+
 )

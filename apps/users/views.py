@@ -8,9 +8,11 @@ from django.contrib.auth.decorators import login_required
 import apps.users.logics as Logics
 from apps.message.models import Message
 from apps.game.models import Game
+from django.contrib.auth.models import User  
 from django.db.models import Q
 import datetime
 from django.contrib.auth.views import logout as auth_logout
+from utils.Decorator.decorator import post_required
 from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login,authenticate
 # Create your views here.
 def register(request):
@@ -129,3 +131,34 @@ def updateImage(request):
                                                     "uname":fileName
                                                         };
     return HttpResponse(json.dumps(response_data), content_type='application/json')
+
+
+def editUser(request):
+    id_code = request.POST.get("id_code","")
+    response_data = {}
+    user = User.objects.get(id_code=id_code)
+    result = Logics.editUser(user,request.POST['username'],request.POST['first_name'],request.POST['last_name']
+        ,request.POST['phone'],request.POST['email'],request.POST['qq'])
+    if result:
+        response_data['success'] = 1
+        response_data['message'] = '操作成功'
+    else:
+        response_data['success'] = 0
+        response_data['message'] = '操作失败'
+    return HttpResponse(json.dumps(response_data),content_type="application/json")
+
+@login_required
+@post_required
+# @admin_required
+def deleteUser(request):
+    id_code = request.POST.get("id_code","")
+    response_data = {}
+    if id_code != "":
+        user = User.objects.get(id_code=id_code)
+        user.delete()
+        response_data['success'] = 1
+        response_data['message'] = '操作成功'
+    else:
+        response_data['success'] = 0
+        response_data['message'] = '操作失败'
+    return HttpResponse(json.dumps(response_data),content_type="application/json")

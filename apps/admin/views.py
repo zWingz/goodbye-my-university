@@ -5,7 +5,7 @@ from django.conf import settings
 from django.http import HttpResponse
 # import apps.game.logics as Logics
 from apps.game.models import Game
-from apps.team.models import Team,TeamProfile
+from apps.team.models import Team,TeamProfile,Player
 from apps.message.models import News
 from utils.Decorator.decorator import post_required
 from django.contrib.auth.decorators import login_required
@@ -103,5 +103,19 @@ def superuser_required(fnc):
     return wraper
 
 
+
+
 def getUserList(request):
-    return render(request,"admin/userList.html")
+    users = User.objects.all();
+    return render(request,"admin/userlist.html", {"users":users})
+
+def getPlayerList(request):
+    players = Player.objects.all();
+    users = User.objects.all();
+    teams = Team.objects.all();
+    return render(request,"admin/playerlist.html", {"users":users,"teams":teams,"players":players})
+
+def getTeamList(request): 
+    users = User.objects.all();
+    teams = Team.objects.all();
+    return render(request,"admin/teamlist.html", {"users":users,"teams":teams})
