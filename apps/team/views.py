@@ -16,15 +16,26 @@ from django.db.models import Q
 # Create your views here.
 
 def listTeam(request):
+    user = request.user
     if request.method == "GET":
         teamList = Team.objects.all()[0:5];
         return render(request,"team/listTeam.html",{"teamList":teamList})
     else:
+        response_data = {}
         page = int(request.POST.get("page",1))
-        count = int(settings.PAGE_COUNT)
-        # teamList = Team.objects.all()[(page-1)*count:page*count]
-        teamList = Team.objects.all();
-        return HttpResponse(json.dumps(toTeamView(teamList),cls=CJsonEncoder),content_type="application/json")
+        # count = int(settings.PAGE_COUNT)
+        count = 1
+        teamList = Team.objects.all()[(page-1)*count:page*count]
+        if  user.is_authenticated() and user.player and user.player.team:
+            response_data['is_free_player'] = False
+        else:  
+            response_data['is_free_player'] = True
+        response_data['teams'] = toTeamView(teamList)
+        for each in response_data['teams']:
+            print(each['id_code'])
+            if user.team.first() and each['id_code'] == user.team.first().id_code:
+                each['self_team'] = True;
+        return HttpResponse(json.dumps(response_data,cls=CJsonEncoder),content_type="application/json")
 
 @post_required
 def listAllTeam(request):
@@ -37,12 +48,18 @@ def listPlayer(request):
         playerList = Player.objects.all()[0:5];
         return render(request,"team/listPlayer.html",{"playerList":playerList})
     else:
+        response_data = {}
         page = int(request.POST.get("page",1))
         # count = int(settings.PAGE_COUNT)
         count = 1
         playerList = Player.objects.all()[(page-1)*count:page*count]
+        if  request.user.is_authenticated() and request.user.team is not None:
+            response_data['is_manager'] = True
+        else:  
+            response_data['is_manager'] = False
+        response_data['players'] = toPlayersView(playerList)
         # playerList = Player.objects.all()
-        return HttpResponse(json.dumps(toPlayersView(playerList),cls=CJsonEncoder),content_type="application/json")
+        return HttpResponse(json.dumps(response_data,cls=CJsonEncoder),content_type="application/json")
 
 def teamDetail(request):
     id_code = request.REQUEST['id_code']
@@ -344,29 +361,17 @@ def toPlayersView(players):
     return result
 
 def toTeamView(team):
-    team = list(team)
-    obj = None
-    if len(team) >1:
-        obj = []
-        for each in team:
-            tmp = {}
-            tmp['id_code'] = each.id_code
-            tmp['logo'] = each.logo
-            tmp['name'] = each.name
-            tmp['manager'] = each.manager.first_name
-            tmp['school'] = each.school
-            tmp['create_time'] = each.create_time
-            tmp['desc'] = each.desc
-            obj.append(tmp)
-    elif len(team) != 0:
-        obj = {}
-        obj['id_code'] = team[0].id_code
-        obj['logo'] = team[0].logo
-        obj['name'] = team[0].name
-        obj['manager'] = team[0].manager.first_name
-        obj['school'] = team[0].school
-        obj['create_time'] = team[0].create_time
-        obj['desc'] = team[0].desc
+    obj = []
+    for each in team:
+        tmp = {}
+        tmp['id_code'] = each.id_code
+        tmp['logo'] = each.logo
+        tmp['name'] = each.name
+        tmp['manager'] = each.manager.first_name
+        tmp['school'] = each.school
+        tmp['create_time'] = each.create_time
+        tmp['desc'] = each.desc
+        obj.append(tmp)
     return obj
 
 # 对象转字典
