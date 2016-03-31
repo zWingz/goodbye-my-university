@@ -1,0 +1,55 @@
+{% extends "layout/superuser-base.html" %}
+{% block title %}新闻列表{% endblock %}
+{%block content%}
+<div class="content-container">
+    <a  href="createNews" class="am-btn am-btn-primary am-btn-sm">发布新闻</a>
+    {% if newList %}
+        <table class="am-table am-table-hover data-table mt10">
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>标题</th>
+                        <th>发布人</th>
+                        <th>发布时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for new in newList %}
+                    <tr id-code="{{new.id_code}}">
+                        <td>{{forloop.counter}}</td>
+                        <td><a href="/msg/getNew?id_code={{new.id_code}}" title="">{{new.title}}</a></td>
+                        <td>{{new.publisher}}</td>
+                        <td>{{new.create_time|date:'Y-m-d'}}</td>
+                        <td class="game-action">
+                            <button type="button" class="am-btn am-btn-link am-btn-sm" action-type='delete'>删除</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>    
+    {% endif %}
+</div>
+
+{%endblock%}
+
+{%block js%}
+<script type="text/javascript">
+    $(function(){
+        // 操作
+        $("[action-type='delete']").on("click",function(e){
+            console.log(e.target)
+            var $target = $(e.target);
+            var type = $target.attr('action-type');
+            var container = $(this).parents("tr");
+            var id_code = container.attr("id-code")
+            $.post('/admin/deleteNew', {id_code: id_code}, function(data, textStatus, xhr) {
+                msgPopup(data.message);
+                if(data.success === 1) {
+                    reload();
+                }
+            });
+        });
+    });
+</script>
+{%endblock%}

@@ -14,8 +14,14 @@ urlpatterns = patterns(
     'apps.admin.views',
     url(r'^$', 'admin_index'),
     url(r'^login$', 'loginAdmin'),
+
+    url('^getGameList$', 'getGameList'),
     url('^fixtures$', 'getFixtures'),
+
     url('^createNews$', 'createNews'),
+    url('^getNewsList$', 'getNewsList'),
+    url('^deleteNew$', 'deleteNew'),
+    
     url('^uploadImg$', 'uploadImg'),
     url('^userlist$', 'getUserList'),
     # url('^saveFixtures$', 'saveFixtures'),
