@@ -1,0 +1,165 @@
+{% extends "layout/superuser-base.html" %}
+{% block title %}用户数据{% endblock %}
+{%block content%}
+<div class="content-container">
+    <div class="user">
+         <header class="user-title">
+           用户管理
+        </header><!-- /header -->   
+
+         <table class="am-table am-table-hover " >
+            <thead>
+                <tr >
+                    <th>id_code</th>
+                    <th>用户名</th>
+                    <th>姓名</th>
+                    <th>昵称</th>
+                    <th>电话</th>
+                    <th>邮箱</th>
+                    <th>QQ</th>
+                    <th>身份</th>
+                </tr>
+            </thead>
+           <tbody>
+                 {% for user in users %}
+                    <tr  id-code="{{user.id_code}}" >
+                        <td class="id_code ">      {{user.id_code}}</td>
+                         <td class="username">{{user.username}}</td>
+                         <td class="first_name">{{user.first_name}} </td>
+                         <td class="last_name">  {{user.last_name}} </td>  
+                          <td class="phone"> {{user.phone}}  </td>                
+                          <td class="email"> {{user.email}}   </td>                  
+                          <td class="qq"> {{user.qq}}  </td>
+                          <td class="status"> {%if user.status == "double"%}球队管理员{%elif user.status == "player"%}球员{%else%}游客{%endif%} </td>  
+                           <td  class="user-action">       
+                           
+                            <button type="button" class="am-btn am-btn-link am-btn-sm" action-type='edit'>编辑</button>
+
+                            <button type="button" class="am-btn am-btn-link am-btn-sm" action-type='delete'>删除</button>
+                            
+                          </td>
+                           
+                     </tr>
+                 {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+     <!-- 编辑usermodal -->
+    <div class="am-modal am-modal-no-btn" tabindex="-1" id="editUserModal">
+      <div class="am-modal-dialog">
+        <div class="am-modal-hd">
+          <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+        </div>
+        <div class="am-modal-bd my-form am-date-validator">
+            <div class="my-form-group">
+                <label class="my-form-label">用户名:</label>
+                <input type="text" name="username" class="my-form-input" value="" placeholder="">
+            </div>
+
+          
+            <div class="my-form-group">
+                <label class="my-form-label">姓名:</label>
+                <input type="text" name="first_name" class="my-form-input" value="" placeholder="">
+            </div>
+
+       
+            <div class="my-form-group">
+                <label class="my-form-label">昵称:</label>
+                <input type="text" name="last_name" class="my-form-input" value="" placeholder="">
+            </div>
+
+     
+            <div class="my-form-group">
+                <label class="my-form-label">电话:</label>
+                <input type="text" name="phone" class="my-form-input" value="" placeholder="">
+            </div>
+        
+            <div class="my-form-group">
+                <label class="my-form-label">邮箱:</label>
+                <input type="text" name="email" class="my-form-input" value="" placeholder="">
+            </div>
+         
+            <div class="my-form-group">
+                <label class="my-form-label">QQ:</label>
+                <input type="text" name="qq" class="my-form-input" value="" placeholder="">
+            </div>
+     
+
+            <div>  </div>
+            <div class="my-form-group">
+                <button id="edit-user-btn" type="button" class='am-btn am-btn-success am-btn-sm'>提交</button>
+            </div>
+        </div>
+      </div>
+    </div>
+{%endblock%}
+{%block js%}
+<script type="text/javascript" src="/static/vendors/moment/min/moment.min.js"></script>
+<script type="text/javascript" >
+
+
+ $// 操作
+        $(".user-action").on("click",function(e){
+            console.log(e.target)
+            var $target = $(e.target);
+            var type = $target.attr('action-type');
+            var container = $(this).parents("tr");
+            var id_code = container.attr("id-code")
+            switch(type){
+                case 'edit':
+                    var modal = $("#editUserModal");
+                    modal.find('.am-modal-bd').removeAttr('id_code').attr('id_code', id_code);         
+                    modal.find('[name="username"]').val(container.find('.username').text())
+                    modal.find('[name="first_name"]').val(container.find('.first_name').text())
+                        modal.find('[name="last_name"]').val(container.find('.last_name').text())
+                    modal.find('[name="phone"]').val(container.find('.phone').text())
+                        modal.find('[name="email"]').val(container.find('.email').text())
+                    modal.find('[name="qq"]').val(container.find('.qq').text())
+
+                    modal.modal("open");
+                    break;
+                case 'delete':
+                    $.post('/users/deleteUser', {id_code: id_code}, function(data, textStatus, xhr) {
+                        msgPopup(data.message);
+                        if(data.success === 1) {
+                            reload();
+                        }
+                    });
+                    break;
+            }
+        });
+
+
+// 编辑userbtn
+        $("#edit-user-btn").on('click',function(){
+            var postData = {};
+            var container = $(this).parent().parent();
+            var username= container.find("[name='username']").val();
+            var first_name = container.find("[name='first_name']").val();
+            var last_name = container.find("[name='last_name']").val();
+            var phone = container.find("[name='phone']").val();
+            var email = container.find("[name='email']").val();
+            var qq = container.find("[name='qq']").val();
+            postData.id_code = container.attr("id_code");
+            postData['username'] = username
+            postData['first_name'] = first_name;
+            postData['last_name'] =  last_name;
+            postData['phone'] =  phone;
+            postData['email'] =  email;
+            postData['qq'] =  qq;
+            $.post('/users/editUser', postData, function(data, textStatus, xhr) {
+                msgPopup(data.message);
+                if(data.success === 1) {
+                    reload();
+                }
+            });
+        });
+
+
+
+</script>
+
+{%endblock%}
