@@ -14,9 +14,9 @@
                     <div class="team-item" data-code-type='team' data-code="{{team.id_code}}">
                         <img class="team-logo"src="/static/files/teamLogo/{{team.logo}}" alt="">
                         <div class="team-info">
-                            <span><label>球队名:</label>{{team.name}}</span>
-                            <span><label>学校:</label>{{team.school}}</span>
-                            <span><label>管理员:</label>{{team.manager.first_name}}</span>
+                            <span><label>球队名: </label>{{team.name}}</span>
+                            <span><label>学校: </label>{{team.school}}</span>
+                            <span><label>队长: </label>{{team.manager.first_name}}</span>
                             <span><label>创建时间:</label>{{team.create_time|date:'Y-m-d'}}</span>
                         </div>
                         {% if user.player and not user.player.team %}

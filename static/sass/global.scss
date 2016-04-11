@@ -51,9 +51,13 @@ html,body{
                 height:$hader-nav-height;
                 line-height: $hader-nav-height;
             }
-            &.tabactive{
+            &.tabactive,&:hover{
                 a{
                     color:#E87BA0;
+                }
+            }
+            &.tabactive{
+                a{
                     border-bottom: 1px dashed #E87BA0;
                 }
             }
@@ -93,6 +97,11 @@ html,body{
             display:block;
             width:100px;
             font-size: 13px;
+            border-bottom: 1px solid #ddd;
+            &:not(span):hover {
+                background-color: $header-bgc;
+                color:#fff;
+            }
         }
         //  三角形
         &:before{

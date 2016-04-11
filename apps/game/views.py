@@ -79,21 +79,23 @@ def saveFixtures(request):
                 date = game['time']['date']
                 Logics.saveGame(team_one,team_two,date,time,game['location'])
     response_data={}
+    response_data['message'] = '赛程保存成功'
     response_data['success'] = 1
     return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 def getFixtures(request):
     if request.method == 'POST':
         weeknum = request.POST['weeknum']
-        games = Game.objects.filter(weeknum=weeknum)
+        print(weeknum)
+        games = Game.objects.filter(weeknum=weeknum).order_by("game_date","game_time")
         response_data = {}
         response_data['success'] = 1
         response_data['fixtures'] = toFixturesView(games)
-        return HttpResponse(json.dumps(game_time),content_type="application/json")
+        return HttpResponse(json.dumps(response_data),content_type="application/json")
     elif request.method == 'GET':
         now = datetime.datetime.now()
         weeknum = request.GET.get('weeknum',str(now.isocalendar()[0])+str(now.isocalendar()[1])) 
-        games = Game.objects.filter(weeknum=weeknum)
+        games = Game.objects.filter(weeknum=weeknum).order_by("game_date","game_time")
         next_weeknum = int(weeknum)+1
         next_games = Game.objects.filter(weeknum=next_weeknum)
         teamsProfile = TeamProfile.objects.all().order_by("-win_rate")[0:5]
@@ -178,16 +180,18 @@ def deleteGame(request):
     return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 def toFixturesView(games):
-    result = [[],[],[],[],[],[],[]]
+    result = []
     for game in games:
         obj = {}
+        obj['id_code'] = game.id_code
         obj['game-time'] = game.game_time
+        obj['game-date'] = game.game_date
         obj['location'] = game.location
         obj['status'] = game.status
         obj['point'] = game.point
         obj['team_one'] = toTeamView(game.team_one)
         obj['team_two'] = toTeamView(game.team_two)
-        result[game.week_index].append(obj)
+        result.append(obj)
     return result
     
 def toTeamView(team):

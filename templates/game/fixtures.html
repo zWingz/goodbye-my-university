@@ -6,98 +6,50 @@
 {%block content%}
    <div class="flex-container">
        <div class="flex-left">
-            {# <div class="fixtures-container"> #}
-                <header class="flex-header">
-                    本周赛程
-                </header><!-- /header -->
-                <section class="fixtures">
-                    {% if games %}
-                    <table class="am-table am-table-hover data-table">
-                        <thead>
-                            <tr>
-                                <th>时间</th>
-                                <th>地点</th>
-                                <th>状态</th>
-                                <th>主场</th>
-                                <th>比分</th>
-                                <th>客场</th>
-                                <th>数据</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {% for game in games %}
-                            <tr>
-                                <td class="game-time">
-                                    <div>
-                                        {{game.game_date}}
-                                    </div>
-                                    <div>
-                                          {{game.game_time}}
-                                     </div>
-                                 </td>
-                                <td class="location">{{game.location}}</td>
-                                <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
-                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_one.id_code}}" title="" target="_blank"><img src="/static/files/teamLogo/{{game.team_one.logo}}">{{game.team_one}}</a></td>
-                                <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
-                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_two.id_code}}" title="" target="_blank"><img src="/static/files/teamLogo/{{game.team_two.logo}}">{{game.team_two}}</a></td>
-                                <td class="game-data">{%if game.status = 1%}<a href="/game/getGame?id_code={{game.id_code}}" target="_blank" title="">查看</a>{%endif%}</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                    {%else%}
-                    <div class="none-data">
-                        <i class="iconfont">&#xe608;</i>
-                        暂无赛程
-                    </div>
-                    {% endif %}
-                </section>
-                <header class="flex-header">
-                    下周赛程
-                </header><!-- /header -->
-                <section class="fixtures">
-                    {% if nextgames %}
-                    <table class="am-table am-table-hover data-table">
-                        <thead>
-                            <tr>
-                                <th>时间</th>
-                                <th>地点</th>
-                                <th>状态</th>
-                                <th>主场</th>
-                                <th>比分</th>
-                                <th>客场</th>
-                                <th>数据</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {% for game in nextgames %}
-                            <tr>
-                                <td class="game-time">
-                                    <div>
-                                        {{game.game_date}}
-                                    </div>
-                                    <div>
-                                          {{game.game_time}}
-                                     </div>
-                                 </td>
-                                <td class="location">{{game.location}}</td>
-                                <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
-                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_one.id_code}}" title="" target="_blank"><img src="/static/files/teamLogo/{{game.team_one.logo}}">{{game.team_one}}</a></td>
-                                <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
-                                <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_two.id_code}}" title="" target="_blank"><img src="/static/files/teamLogo/{{game.team_two.logo}}">{{game.team_two}}</a></td>
-                                <td class="game-data"></td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                    {%else%}
-                    <div class="none-data">
-                        <i class="iconfont">&#xe608;</i>
-                        暂无赛程
-                    </div>
-                    {% endif %}
-                </section>
-            {# </div> #}
+        <header class="week-container">
+            <button id="prev-week" type="button" class="am-btn">&lt;上一周</button>
+            <span id="weeknum" ></span>
+            <button id="next-week" type="button" class="am-btn">下一周&gt;</button>
+        </header><!-- /header -->
+            <section class="fixtures">
+                <table class="am-table am-table-hover data-table {%if not games%}dis-none{% endif %}">
+                    <thead>
+                        <tr>
+                            <th>时间</th>
+                            <th>地点</th>
+                            <th>状态</th>
+                            <th>主场</th>
+                            <th>比分</th>
+                            <th>客场</th>
+                            <th>数据</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for game in games %}
+                        <tr>
+                            <td class="game-time">
+                                <div>
+                                    {{game.game_date}}
+                                </div>
+                                <div>
+                                      {{game.game_time}}
+                                 </div>
+                             </td>
+                            <td class="location">{{game.location}}</td>
+                            <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
+                            <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_one.id_code}}" title="" target="_blank"><img src="/static/files/teamLogo/{{game.team_one.logo}}">{{game.team_one}}</a></td>
+                            <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
+                            <td class="team-td"><a href="/team/teamDetail?id_code={{game.team_two.id_code}}" title="" target="_blank"><img src="/static/files/teamLogo/{{game.team_two.logo}}">{{game.team_two}}</a></td>
+                            <td class="game-data">{%if game.status = 1%}<a href="/game/getGame?id_code={{game.id_code}}" target="_blank" title="">查看</a>{%endif%}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="none-data {%if games %}dis-none{%endif%}">
+                    <i class="iconfont">&#xe608;</i>
+                    暂无赛程
+                </div>
+            </section>
        </div>
        <div class="flex-right">
            <header class="flex-header">

@@ -1,0 +1,156 @@
+<section class="usercenter-content-item" my-role="content-item" >
+    <header class="content-head">
+        <span>我的生涯</span>
+    </header>
+    <article class="content-bd">
+        {%if not player %}
+            <form action="/team/savePlayer" method="post" accept-charset="utf-8" class="my-form tac-form">
+                <div class="">
+                    <i class="iconfont">&#xe608;</i>
+                    你还不是一名球员,请先申请成为球员
+                </div>
+                <div class="my-form-group">
+                    <label class="my-form-label">真实姓名:</label>
+                    <input type="text" name="first_name" value="" placeholder="填写后不能修改" required>
+                </div>
+                 <div class="my-form-group">
+                    <label class="my-form-label">身高:</label>
+                    <input type="text" name="height" value="" placeholder="单位:cm" required>
+                </div>
+                 <div class="my-form-group">
+                    <label class="my-form-label">体重:</label>
+                    <input type="text" name="weight" value="" placeholder="单位:kg" required>
+                </div>
+                <div class="my-form-group">
+                  <label class="my-form-label" or="">擅长位置:</label>
+                  <select name="position" required>
+                      <option value="PG">控卫</option>
+                      <option value="SG">分卫</option>
+                      <option value="C">中锋</option>
+                      <option value="PF">前锋</option>
+                      <option value="SF">小前锋</option>
+                  </select>
+                </div>
+                <div class="my-form-group">
+                  <label class="my-form-label">个人简述:</label>
+                  <textarea name="desc"></textarea>
+                </div>
+                <input type="submit" name="" class="am-btn am-btn-primary am-btn-sm am-round" value="提交">
+            </form>
+        {%else%}
+        <div class="player-info my-form">
+                <div class="info-avatar">
+                    {# <img class="team-avatar" src="/static/files/clothes.png" alt=""> #}
+                    <i>{%if user.player.number%}{{user.player.number}}{%else%}null{%endif%}</i>
+                </div>
+                <div class="info-group">
+                    <div >
+                            姓名:<span>{{user.first_name}}</span>
+                        </div>
+                    <div >
+                        所在球队:<span>{%if user.player.team%}{{user.player.team}}{%else%}你不属于任何球队{%endif%}</span>
+                    </div>
+                    <div >
+                        球衣号码:<span>{%if user.player.number%}{{user.player.number}}{%else%}你还未有号码{%endif%}</span>
+                    </div>
+                    <div >
+                        位置:<span>{{user.player.position}}</span>
+                    </div>
+                </div>
+                <div class="info-group">
+                    <div >
+                        身高:<span editable='height'>{{user.player.height}}</span>
+                    </div>
+                    <div >
+                        体重:<span editable='weight'>{{user.player.weight}}</span>
+                    </div>
+                    <div >
+                        学校:<span editable='school'>{{user.player.school}}</span>
+                    </div>
+                    <div >
+                        desc :<span editable='desc'>{{user.player.desc}}</span>
+                    </div>
+                </div>
+            <div id="editPlayerInfoBtn">
+                <span class="edit"><i class="iconfont">&#xe600;</i>编辑</span>
+                <span class="save dis-none"><i class="iconfont">&#xe602;</i>保存</span>
+                <span class="cancel dis-none"><i class="iconfont">&#xe601;</i>取消</span>
+            </div>
+        </div>
+        <div>
+        {%if player_data%}
+            <table class="am-table data-table">
+                <caption>平均数据</caption>
+                <thead>
+                    <tr>
+                        <th >得分</th>
+                        <th >投篮</th>
+                        <th >三分</th>
+                        <th>罚球</th>
+                        <th >助攻</th>
+                        <th >抢断</th>
+                        <th >篮板</th>
+                        <th >盖帽</th>
+                        <th >失误</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{% widthratio player_data.point player_data.game 1%}</td>
+                        <td>{% widthratio player_data.shot_all player_data.game 1%}</td>
+                        <td>{% widthratio player_data.three_all player_data.game 1%}</td>
+                        <td>{% widthratio player_data.free_all player_data.game 1%}</td>
+                        <td>{% widthratio player_data.assist player_data.game 1%}</td>
+                        <td>{% widthratio player_data.steal player_data.game 1%}</td>
+                        <td>{% widthratio player_data.rebound player_data.game 1%}</td>
+                        <td>{% widthratio player_data.block player_data.game 1%}</td>
+                        <td>{% widthratio player_data.turnover player_data.game 1%}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="am-table data-table">
+                <caption>总数据</caption>
+                <thead>
+                    <tr>
+                        <th >得分</th>
+                        <th >投篮</th>
+                        <th >命中%</th>
+                        <th >三分</th>
+                        <th >三分%</th>
+                        <th>罚球</th>
+                        <th>罚球%</th>
+                        <th >助攻</th>
+                        <th >抢断</th>
+                        <th >篮板</th>
+                        <th >盖帽</th>
+                        <th >失误</th>
+                        <th >场次</th>
+                        <th >两双</th>
+                        <th >三双</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{player_data.point}}</td>
+                        <td>{{player_data.shot_all}}</td>
+                        <td>{{player_data.shot_rate}}</td>
+                        <td>{{player_data.three_all}}</td>
+                        <td>{{player_data.three_rate}}</td>
+                        <td>{{player_data.free_all}}</td>
+                        <td>{{player_data.free_rate}}</td>
+                        <td>{{player_data.assist}}</td>
+                        <td>{{player_data.steal}}</td>
+                        <td>{{player_data.rebound}}</td>
+                        <td>{{player_data.block}}</td>
+                        <td>{{player_data.turnover}}</td>
+                        <td>{{player_data.game}}</td>
+                        <td>{{player_data.doubledouble}}</td>
+                        <td>{{player_data.threedouble}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        {%endif%}
+        </div>
+        {%endif%}
+    </article>
+</section>

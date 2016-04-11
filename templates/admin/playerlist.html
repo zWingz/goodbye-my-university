@@ -2,12 +2,11 @@
 {% block title %}球员数据{% endblock %}
 {%block content%}
 <div class="content-container">
-    <div class="player">
-         <header class="player-title">
-           用户管理
+         <header class="content-header">
+           球员列表
         </header><!-- /header -->   
 
-         <table class="am-table am-table-hover " >
+         <table class="am-table am-table-hover data" >
             <thead>
                 <tr >
                     <th>id_code</th>
@@ -19,6 +18,7 @@
                     <th>位置</th>
                     <th>学校</th>
                     <th>球员简介</th>
+                    <th>操作</th>
                 </tr>
             </thead>
            <tbody>
@@ -47,7 +47,6 @@
 
             </tbody>
         </table>
-    </div>
     </div>
 
      <!-- 编辑playermodal -->

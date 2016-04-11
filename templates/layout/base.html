@@ -27,7 +27,13 @@
                     <img class="user-avatar"src="/static/files/userImg/{{user.img_path}}" alt="">
                     <div class='user-center-menu'>
                         <!-- <i class='triangle'></i> -->
-                        <span class="menu-item">您好! {{user.first_name}}</span>
+                        <span class="menu-item">您好! 
+                          {% if user.first_name %}
+                            {{user.first_name}}
+                          {% elif user.last_name%}
+                            {{user.last_name}}
+                          {% endif %}
+                        </span>
                         <a class="menu-item" href="/users/usercenter#user-info" title="">个人信息</a>
                         <a class="menu-item" href="/users/usercenter#user-player" title="">我的生涯</a>
                         <a class="menu-item" href="/users/usercenter#user-team" title="">我的球队</a>
@@ -60,33 +66,33 @@
             </ul>
             <div class="my-tabs-bd">
               <div class="my-tabs-panel my-tabs-active">
-                  <form id="login-form" action="/users/login" method="POST" class="my-form">
+                  <form id="login-form" action="/users/login" method="POST" class="my-form tac-form">
                     <h4 class="my-form-title">账号登录:</h4>
                     <div class="my-form-group">
-                        <label class="my-form-label" or="">用户名:</label>
-                        <input type="text" class='my-form-input' name="username" value="" placeholder="用户名">
+                        <label class="my-form-label">用户名:</label>
+                        <input type="text" class='my-form-input' name="username" value="" placeholder="用户名" required="required">
                     </div>
                     <div class="my-form-group">
                         <label class="my-form-label" for="">密码:</label>
-                        <input type="password" class='my-form-input' name="password" value="" placeholder="password">
+                        <input type="password" class='my-form-input' name="password" value="" placeholder="password" required="required">
                     </div>
                      <input class="am-btn am-btn-success am-btn-sm" type="submit" name="" value="登录">
                   </form>
               </div>
               <div class="my-tabs-panel">
-                  <form action="/users/register" method="post" accept-charset="utf-8" class='my-form'>
+                  <form action="/users/register" method="post" accept-charset="utf-8" class='my-form tac-form'>
                       <h4 class="my-form-title">快速注册:</h4>
                       <div class="my-form-group">
                           <label class="my-form-label" or="">用户名:</label>
-                          <input id="username" class='my-form-input' type="text" name="r-username" value="" placeholder="username">
+                          <input id="username" class='my-form-input' type="text" name="r-username" value="" placeholder="username" required="required">
                       </div>
                       <div class="my-form-group">
                           <label class="my-form-label" or="">密码:</label>
-                          <input id="password" class='my-form-input' type="password" name="r-password" value="" placeholder="password">
+                          <input id="password" class='my-form-input' type="password" name="r-password" value="" placeholder="password" required="required">
                       </div>
                       <div class="my-form-group">
                           <label class="my-form-label" or="">邮箱:</label>
-                          <input id="email" class='my-form-input' type="mail" name="r-email" value="" placeholder="email">
+                          <input id="email" class='my-form-input' type="mail" name="r-email" value="" placeholder="email" required="required">
                       </div>
                       <input class="am-btn am-btn-success am-btn-sm" type="submit" name="" value="提交">
                   </form>

@@ -247,7 +247,7 @@
         margin-left: 5px;
         font-weight: normal;
     }
-    .my-form-input {
+    input:not([type="submit"]){
         border:1px solid #ddd;
         background:transparent;
         outline: none;
@@ -260,18 +260,42 @@
         }
         border-radius: 4px;
     }
-    .my-form-submit {
-
-    }
-    select {
+    select,textarea {
         border:1px solid #ddd;
         border-radius: 4px;
         font-size: 14px;
         vertical-align: 0px;
     }
+    textarea {
+        border:1px solid #ddd;
+    }
 }
 
-
+// form
+.tac-form {
+    width:300px;
+    margin:0 auto;
+    text-align:center;
+    .my-form-title {
+        margin-left: 35px;
+    }
+    .my-form-group {
+        display:flex;
+        justify-content:flex-end;
+        *:first-child {
+            flex-grow:1;
+            text-align: right;
+            margin-right: 10px;
+            margin-top: 3px;
+        }
+        input,select,textarea {
+            width:200px;
+            flex-grow:0;
+            font-size: 14px;
+            // height: 30px;
+        }
+    }
+}
 .data-table {
     width:100%;
     th{
@@ -280,6 +304,7 @@
         color:#a0a0a0;
         background:#f7f7f7;
         font-weight: normal;
+        padding:5px !important;
     }
     td {
         padding:16px 0;

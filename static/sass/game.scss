@@ -1,25 +1,31 @@
 // $base-blue:#0732A2;
 $base-blue:#408ed6;
 
-// 创建赛程table
-#createFixtures-table {
-    th {
-        text-align: center;
+// 周期
+.week-container {
+    display:flex;
+    justify-content:space-between;
+    margin-bottom: 10px;
+}
+#prev-week,#next-week {
+    font-size: 14px;
+    color: $base-blue;
+    border:none;
+    background-color: transparent;
+    border-radius: 10px;
+    &:focus,&:active {
+        outline: none;
+        box-shadow: none;
     }
-    td{
-        width:100px;
-        height:100px;
-        border:1px solid #ddd;
-        text-align: center;
-    }
-    .fixtures-item {
-        &.active {
-            background-color: red;
-        }
-        
+    &:hover {
+        background-color: $base-blue;
+        color:#fff;
     }
 }
-
+#weeknum {
+    font-size: 18px;
+    font-weight: bold;
+}
 // 比赛赛程item
 .game-item {
     .game-item-team {
@@ -72,6 +78,7 @@ $base-blue:#408ed6;
     }
 }
 
+// 数据对比
 .compare-container {
     font-size: 14px;
     .compare-header{
@@ -112,7 +119,7 @@ $base-blue:#408ed6;
         background:#ec6a86;
     }
 }
-
+// 排行榜
 #rank-tab {
     .my-tabs-nav {
         display:flex;

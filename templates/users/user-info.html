@@ -1,0 +1,41 @@
+<section id="user-info" class="usercenter-content-item active opacity" my-role="content-item" >
+    <header class="content-head">
+        <span>个人信息</span>
+    </header>
+    <article class="content-bd">
+        <div class="base-info my-form">
+            <div class="info-avatar">
+                <img class="user-avatar" src="/static/files/userImg/{{user.img_path}}" alt="">
+                <div class="am-form-group am-form-file">
+                  <button  type="button" class="am-btn am-btn-default am-btn-sm">
+                    <i class="am-icon-cloud-upload"></i> 上传头像</button>
+                  <input id="uploadImg" type="file" >
+                </div>
+            </div>
+            <div class="info-group">
+                <div class="m10">
+                    用户名:<span>{{user.username}}</span>
+                </div>
+                <div class="m10">
+                    昵称: <span editable='last_name'>{{user.last_name}}</span>
+                </div>
+            </div>
+            <div class="info-group">
+                <div class="m10">
+                    邮箱:<span editable='email'>{{user.email}}</span>
+                </div>
+                <div class="m10">
+                    电话:<span editable='phone'>{{user.phone}}</span>
+                </div>
+                <div class="m10">
+                    q q :<span editable='qq'>{{user.qq}}</span>
+                </div>
+            </div>
+        </div>
+        <div id="editUserInfoBtn">
+            <span class="edit"><i class="iconfont">&#xe600;</i>编辑</span>
+            <span class="save dis-none"><i class="iconfont">&#xe602;</i>保存</span>
+            <span class="cancel dis-none"><i class="iconfont">&#xe601;</i>取消</span>
+        </div>
+    </article>
+</section>

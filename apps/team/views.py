@@ -26,15 +26,16 @@ def listTeam(request):
         # count = int(settings.PAGE_COUNT)
         count = 1
         teamList = Team.objects.all()[(page-1)*count:page*count]
-        if  user.is_authenticated() and user.player and user.player.team:
+        if not user.is_authenticated() or not user.player or user.player.team:
             response_data['is_free_player'] = False
-        else:  
+        elif user.player and not user.player.team:
             response_data['is_free_player'] = True
         response_data['teams'] = toTeamView(teamList)
         for each in response_data['teams']:
-            print(each['id_code'])
-            if user.team.first() and each['id_code'] == user.team.first().id_code:
-                each['self_team'] = True;
+            if not user.is_authenticated() or not user.team.first() or each['id_code'] != user.team.first().id_code:
+                each['can_inivite'] = False;
+            else:
+                each['can_inivite'] = True;
         return HttpResponse(json.dumps(response_data,cls=CJsonEncoder),content_type="application/json")
 
 @post_required

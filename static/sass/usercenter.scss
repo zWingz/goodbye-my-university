@@ -176,6 +176,13 @@ $base-blue:#408ed6;
                     flex-grow:1;
             >div {
                 margin:10px;
+                color:#a0a0a0;
+                >span {
+                    color:black;
+                    font-size: 14px;
+                    vertical-align: 0px;
+                    margin-left: 5px;
+                }
             }
         }
         .info-avatar {
@@ -327,22 +334,6 @@ $base-blue:#408ed6;
         margin-bottom: 5px;
         text-align: center;
     }
-    // @at-root .data-table {
-    //     width:100%;
-    //     th{
-    //         font-size: 13px;
-    //         text-align: center;
-    //         color:#a0a0a0;
-    //         background:#f7f7f7;
-    //         font-weight: normal;
-    //     }
-    //     td {
-    //         padding:16px 0;
-    //         vertical-align: middle;
-    //         font-size: 14px;
-    //         text-align: center;
-    //     }
-    // }
     .player-img {
         height:43px;
         width:46px;
@@ -350,6 +341,30 @@ $base-blue:#408ed6;
         vertical-align: middle;
     }
 }
+
+// form
+.tac-form {
+    width:300px;
+    margin:0 auto;
+    text-align:center;
+    .my-form-group {
+        display:flex;
+        justify-content:flex-end;
+        *:first-child {
+            flex-grow:1;
+            text-align: right;
+            margin-right: 10px;
+            margin-top: 3px;
+        }
+        input,select,textarea {
+            width:200px;
+            flex-grow:0;
+            font-size: 14px;
+            // height: 30px;
+        }
+    }
+}
+
 // msg 信息栏
 .message-container {
     @at-root .message-item {

@@ -123,7 +123,7 @@ function bindTeamTmpl(data){
     var players = data.players;
     var data_profile = data.team_data;
     var players_container = container.find('.detail-players');
-    container.prev().find(".into-detail").attr("href","/team/teamDetail?id_code="+data.team.id_code);
+    container.prev().find(".into-detail").attr("href","/team/teamDetail?id_code="+team.id_code);
     container.find(".team-logo").attr("src","/static/files/teamLogo/"+team.logo);
     container.find(".detail-name").html(team.name);
     container.find(".detail-desc").html(team.desc);
@@ -211,7 +211,7 @@ function loadMore(ele){
                 var $item = $("<div>").addClass("team-item").attr("data-code-type","team").attr("data-code",ele.id_code)
                 var $img = $("<img>").addClass('team-logo').attr("src","/static/files/teamLogo/"+ele.logo);
                 var $info = $("<div>").addClass("team-info");
-                var is_self_team = ele.self_team;
+                var can_inivite = ele.can_inivite;
                 $info.append($("<span>").append($("<label>球队名:</label>")).append(ele.name))
                             .append($("<span>").append($("<label>学校:</label>")).append(ele.school))
                             .append($("<span>").append($("<label>管理员:</label>")).append(ele.manager))
@@ -220,7 +220,7 @@ function loadMore(ele){
                 if(is_free_player){
                     $item.append($("<button type='button' class='apply-join-team am-btn am-btn-default'>申请加入</button>"))
                 }
-                if(! is_self_team){
+                if(can_inivite){
                     $item.append($("<button type='button' class='invite-team am-btn am-btn-default'>邀请比赛</button>"))
                 }
                 $df.append($item);

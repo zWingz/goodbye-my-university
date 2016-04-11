@@ -216,7 +216,7 @@
                                 <tbody>
                                     {% for player in players %}
                                         <tr>
-                                            <td><a href="#" title="" onclick="showPlayer('{{player.id_code}}',event);"><img class="player-img" src="/static/files/userImg/{{player.img_path}}" alt="{{player.name}}"><span>{{player.name}}</span></a></td>
+                                            <td><a href="/team/playerDetail?id_code={{player.id_code}}" target="_blank" title="" ><img class="player-img" src="/static/files/userImg/{{player.img_path}}" alt="{{player.name}}"><span>{{player.name}}</span></a></td>
                                             <td>{{player.number}}</td>
                                             <td>{{player.position}}</td>
                                             <td>{{player.height}}</td>

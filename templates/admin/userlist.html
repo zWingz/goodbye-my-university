@@ -2,9 +2,8 @@
 {% block title %}用户数据{% endblock %}
 {%block content%}
 <div class="content-container">
-    <div class="user">
-         <header class="user-title">
-           用户管理
+         <header class="content-header">
+           用户列表
         </header><!-- /header -->   
 
          <table class="am-table am-table-hover " >
@@ -30,7 +29,7 @@
                           <td class="phone"> {{user.phone}}  </td>                
                           <td class="email"> {{user.email}}   </td>                  
                           <td class="qq"> {{user.qq}}  </td>
-                          <td class="status"> {%if user.status == "double"%}球队管理员{%elif user.status == "player"%}球员{%else%}游客{%endif%} </td>  
+                          <td class="status"> {%if user.status == "manager"%}球队管理员{%elif user.status == "player"%}球员{%else%}游客{%endif%} </td>  
                            <td  class="user-action">       
                            
                             <button type="button" class="am-btn am-btn-link am-btn-sm" action-type='edit'>编辑</button>
@@ -44,7 +43,6 @@
 
             </tbody>
         </table>
-    </div>
     </div>
 
      <!-- 编辑usermodal -->

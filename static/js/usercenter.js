@@ -1,7 +1,14 @@
+(function(){
+        var hash = location.hash;
+        $("a[href*='"+hash+"']").click();
+})();
 $(function(){
-    var hash = location.hash;
     new bingUserTabs(".usercenter-nav",".usercenter-content");
-    $("a[href*='"+hash+"']").click();
+    $("a.menu-item").on("click",function(){
+        var href = $(this).attr("href");
+        var hash = href.split("#")[1];
+        $("a[href='#"+hash+"']").click();
+    });
     new changeAvatar("#uploadImg","/users/updateImage",".user-avatar");
     new changeAvatar("#uploadLogo","/team/changeLogo",".team-avatar");
 
@@ -169,7 +176,6 @@ function bindPlayerTmpl(player){
     var data_profile = player.player_data;
     var keys = Object.keys(data_profile);
     var game = data_profile.game;
-    console.log(player);
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i];
         if(game !== 0){
@@ -276,8 +282,10 @@ function bindEditFnc(ele,cbObj){
             return;
         }else if($target.hasClass('save')){
             self.saveCb($target);
-        }else {
+        }else if($target.hasClass('cancel')){
             self.cancelCb($target);
+        }else {
+            return;
         }
         $target.parent().children().hide();
         $target.parent().children().eq(0).show();

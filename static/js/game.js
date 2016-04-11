@@ -1,79 +1,80 @@
 
 
-
-
 $(function(){
-    var fixtures = [];
-    var weekday = getWeekDate();
-    var timeArr = ["09:30","11:00","02:00","03:30","05:00","08:00"];
-    $("#fixtures-week").html(weekday[0]+" 至 "+weekday[6]);
-    $(".fixtures-item").each(function(){
-        var $this = $(this);
-        var $tr = $this.parent();
-        var colIndex = $tr.index();
-        var rowIndex = $this.index();
-        $this.attr('colIndex', colIndex).attr("rowIndex",rowIndex-1);
-    });
-
-    // 新建赛程
-    $("#createFixtures-btn").on("click",function(){
-        var postData = [];
-        $("#createFixtures-table tbody tr").each(function(){
-            var trArr = [];
-            $(this).find("td").each(function(){
-                if($(this).hasClass("active")){
-                    var colIndex = $(this).attr("colIndex");
-                    var rowIndex = $(this).attr("rowIndex");
-                    var obj = {};
-                    obj.time = {};
-                    obj.time.date = weekday[colIndex];
-                    obj.time.time = timeArr[rowIndex];
-                    obj.index = {col:colIndex,row:rowIndex}
-                    trArr.push(obj)
-                }
-            });
-            postData.push(trArr);
-        });
-        $.post('/game/createFixtures',{"fixtures":JSON.stringify(postData)}, function(data, textStatus, xhr) {
-            /*optional stuff to do after success */
-            // console.log(data);
-            fixtures = data;
-            var timeLen = data.length;
-            for (var i = 0; i < timeLen; i++) {
-                var gameLen = data[i].length;
-                for (var j= 0; j < gameLen; j++) {
-                    var game = data[i][j];
-                    if(typeof game.location !== "undefined"){
-                        var $td = $("#createFixtures-table tbody tr").eq(game.index.col).find("td").eq(+game.index.row+1);
-                        $td.addClass('game-item');
-                        var locationDiv = $("<div>").addClass("game-item-location").append(game.location);
-                        var $team = $("<div>").append($("<div>").append(game.team_one.name).attr("id_code",game.team_one.id_code))
-                                                                    .append($("<i>").addClass('iconfont').append("&#xe607;"))
-                                                                    .append($("<div>").append(game.team_two.name).attr("id_code",game.team_two.id_code))
-                        $td.append(locationDiv).append($team).removeClass('active');
-                    }
-                }
-            }
+    $("#weeknum").data('date', moment().format("YYYY-MM-DD")).text(getWeekDate()[0]+" 至 "+getWeekDate()[6]);
+    $("#next-week").on("click",function(){
+        var date = moment($("#weeknum").data("date")).add(7,"d");
+        $("#weeknum").data('date', date.format("YYYY-MM-DD")).text(getWeekDate(date.toDate())[0]+" 至 "+getWeekDate(date.toDate())[6]);
+        $.ajax({
+            url: '/game/fixtures',
+            type: 'post',
+            dataType: 'json',
+            data: {weeknum: ""+date.year()+(""+date.week()-1)},
+        })
+        .done(function(data) {
+            bindGmaeTmpl(data.fixtures);
         });
     });
-
-    //  选择比赛时间
-    $(".fixtures-item").on("click",function(e){
-        var $target = $(this);
-        $target.addClass("active");
-    });
-
-    // 保存赛程
-    $("#saveFixtures-btn").on("click",function(){
-        console.log(fixtures);
-        $.post('/game/saveFixtures', {fixtures: JSON.stringify(fixtures)}, function(data, textStatus, xhr) {
-            /*optional stuff to do after success */
-            console.log(data)
+    //  上一周
+    $("#prev-week").on("click",function(){
+        var date = moment($("#weeknum").data("date")).subtract(7,"d");
+        $("#weeknum").data('date', date.format("YYYY-MM-DD")).text(getWeekDate(date.toDate())[0]+" 至 "+getWeekDate(date.toDate())[6]);
+        $.ajax({
+            url: '/game/fixtures',
+            type: 'post',
+            dataType: 'json',
+            data: {weeknum: ""+date.year()+(""+date.week()-1)},
+        })
+        .done(function(data) {
+            bindGmaeTmpl(data.fixtures);
         });
     });
 });
 
-
+//  渲染赛程
+function bindGmaeTmpl(data){
+    console.log(data)
+    var table = $(".fixtures .data-table");
+    if (data.length === 0) {
+        table.hide();
+        $(".none-data").show();
+    }else {
+        var tbody = table.find("tbody");
+        tbody.html("");
+        data.forEach(function(item,index){
+            var tr = $("<tr>");
+            var game_time = $("<td class='game-time'>").append($("<div>").append(item['game-date']))
+                                                                                                    .append($("<div>").append(item['game-time']));
+            var location = $("<td class='location'>").append(item.location);
+            var status = $("<td class='status'>");
+            var point = $("<td class='point'>");
+            var game_data = $("<td class='game-data'>");
+            if(item.status === 0 ){
+                status.append('未赛');
+                point.append(' --- ')
+            }else {
+                status.append('已完结');
+                point.append(item.point)
+                game_data.append($("<a>").attr("href","/game/getGame?id_code="+item.id_code).attr("target","_blank").append("查看"));
+            }
+            var team_one = $("<td class='team-td'>").append(
+                $("<a>").attr("href","/team/teamDetail?id_code="+item.team_one.id_code).attr("target","_blank")
+                    .append($("<img>").attr("src","/static/files/teamLogo/"+item.team_one.logo))
+                    .append(item.team_one.name)
+            );
+            var team_two = $("<td class='team-td'>").append(
+                $("<a>").attr("href","/team/teamDetail?id_code="+item.team_two.id_code).attr("target","_blank")
+                    .append($("<img>").attr("src","/static/files/teamLogo/"+item.team_two.logo))
+                    .append(item.team_two.name)
+            );
+            tr.append(game_time).append(location).append(status).append(team_one)
+                .append(point).append(team_two).append(game_data);
+            tbody.append(tr);
+        });
+        table.show();
+        $(".none-data").hide();
+    }
+}
 
 //返回本周的日期
 function getWeekDate(currentdate){

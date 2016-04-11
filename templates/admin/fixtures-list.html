@@ -308,7 +308,8 @@
             postData['location'] = location;
             var team_one = container.find("[name='team_one']").val();
             var team_two = container.find("[name='team_two']").val();
-            if(team_one !== '' && team_two !== ''){
+            console.log(team_one)
+            if(team_one !== null && team_one !== '' && team_two !== null && team_two !== '' ){
                 if(team_one === team_two){
                     msgPopup("不能选择相同队伍");
                     return;
@@ -398,7 +399,6 @@
                 });
                 postData["table"].push(trArr);
             });
-            console.log(postData);
             // return;
             $.post('/game/createFixtures',{"fixtures":JSON.stringify(postData)}, function(data, textStatus, xhr) {
                 fixtures = data;
@@ -431,10 +431,9 @@
         $("#saveFixtures-btn").on("click",function(){
             console.log(fixtures);
             $.post('/game/saveFixtures', {fixtures: JSON.stringify(fixtures)}, function(data, textStatus, xhr) {
-                /*optional stuff to do after success */
                 msgPopup(data.message);
                 if(data.success === 1) {
-                    reload()
+                    reload();
                 }
             });
         });
