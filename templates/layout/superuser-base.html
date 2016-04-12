@@ -12,19 +12,21 @@
 <body>
     <header class="header">
         UBA管理后台
-        <div class="fr">
-            管理员
+        <div class="admin-name">
+            管理员:
             {{user.first_name}}
+            <i class="iconfont">&#xe610;</i>
         </div>
     </header><!-- /header -->
     <section class="admin-container">
         <nav class="side-bar">
             <ul class="unstyle">
-                <li class="side-bar-item"><a href="userlist" title="">用户管理</a></li>
-                <li class="side-bar-item"><a href="teamlist" title="">球队管理</a></li>
-                <li class="side-bar-item"><a href="playerlist" title="">球员管理</a></li>
-                <li class="side-bar-item" data-nav-type="getGameList"><a href="getGameList" title="">比赛管理</a></li>
-                <li class="side-bar-item" data-nav-type="getNewsList"><a href="getNewsList" title="">新闻</a></li>
+                <li class="side-bar-item" data-nav-type="userlist"><a href="userlist" title=""><i class="iconfont">&#xe60b;</i>用户管理</a></li>
+                <li class="side-bar-item" data-nav-type="teamlist"><a href="teamlist" title=""><i class="iconfont">&#xe609;</i>球队管理</a></li>
+                <li class="side-bar-item" data-nav-type="playerlist"><a href="playerlist" title=""><i class="iconfont">&#xe60c;</i>球员管理</a></li>
+                <li class="side-bar-item" data-nav-type="getGameList"><a href="getGameList" title=""><i class="iconfont">&#xe60d;</i>比赛管理</a></li>
+                <li class="side-bar-item" data-nav-type="getNewsList"><a href="getNewsList" title=""><i class="iconfont">&#xe60a;</i>新闻管理</a></li>
+                <li class="side-bar-item" ><a href="/" title="" target="_blank"><i class="iconfont">&#xe60e;</i>返回前台</a></li>
             </ul>
         </nav>
         {% block content %}{% endblock %}

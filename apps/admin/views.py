@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from apps.game.models import Game
 from apps.team.models import Team,TeamProfile,Player
 from apps.message.models import News
-from utils.Decorator.decorator import post_required
+from utils.Decorator.decorator import post_required,admin_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login,authenticate
 from django.contrib.auth.models import User  
@@ -39,6 +39,7 @@ def loginAdmin(request):
 
 
 # 赛程
+@admin_required
 def getFixtures(request):
     now = datetime.datetime.now()
     weeknum = request.GET.get('weeknum',str(now.isocalendar()[0])+str(now.isocalendar()[1])) 
@@ -47,6 +48,7 @@ def getFixtures(request):
     next_games = Game.objects.filter(weeknum=next_weeknum)
     return render(request,"admin/fixtures-list.html",{"title":"近期赛程","games":games,"nextgames":next_games})
 
+@admin_required
 def  getGameList(request):
     page = request.GET.get("page",1)
     count = settings.PAGE_COUNT
@@ -55,15 +57,18 @@ def  getGameList(request):
 
 
 
+@admin_required
 def createNews(request):
     return render(request,"admin/createnews.html")
 
+@admin_required
 def getNewsList(request):
     page = request.GET.get("page",1)
     count = settings.PAGE_COUNT
     newList = News.objects.all().order_by("-create_time")[(page-1)*count:page*count]
     return render(request,"admin/list-news.html",{"newList":newList})
 
+@admin_required
 def deleteNew(request):
     id_code = request.POST.get("id_code","")
     response_data = {}
@@ -79,6 +84,7 @@ def deleteNew(request):
 
 
 @login_required
+@admin_required
 @post_required
 def uploadImg(request):
     upfile = request.FILES['file']
@@ -96,25 +102,21 @@ def uploadImg(request):
 
 
 
-def superuser_required(fnc):
-    def wraper(request):
-        if request.user.is_superuser:
-            return fnc(request)
-    return wraper
 
 
-
-
+@admin_required
 def getUserList(request):
     users = User.objects.all();
     return render(request,"admin/userlist.html", {"users":users})
 
+@admin_required
 def getPlayerList(request):
     players = Player.objects.all();
     users = User.objects.all();
     teams = Team.objects.all();
     return render(request,"admin/playerlist.html", {"users":users,"teams":teams,"players":players})
 
+@admin_required
 def getTeamList(request): 
     users = User.objects.all();
     teams = Team.objects.all();

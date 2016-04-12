@@ -4,23 +4,24 @@ $base-blue:#408ed6;
     transform:translate3d(0,0,0);
     .flex-left,.flex-right {
         padding:0px;
+        animation:none;
     }
     .flex-left {
-        // flex-grow:1;
-        // margin-right: 20px;
         transition:width 0.5s;
+        transform:translateY(100px);
+        animation: 1s container-load forwards;
     }
     .flex-right {
         width:0;
         transition:width 0.5s,opacity 0.5s ;
-        opacity:0;
         overflow: hidden;
         padding:0px;
         position: relative;
         display:none;
+        transform:translateX(0px);
     }
-    .opacity{
-        opacity:1;
+    @keyframes container-load {
+          100% { transform:translateY(0px); opacity: 1; }
     }
 }
 .flex-header {

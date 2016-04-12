@@ -1,6 +1,7 @@
 @import "base";
 // @import "common";
 // $header-bgc:#0732A2;
+$backgroundColor:darken(#f4f4f4,2%);
 $header-bgc:#408ed6;
 $header-title-height:110px;
 $hader-nav-height:40px;
@@ -8,7 +9,7 @@ html,body{
     margin:0px;
     padding:0px;
     min-height: 100%;
-    background:#F4F4F4 !important;
+    background:$backgroundColor !important;
 }
 #header {
     // position:fixed;
@@ -34,7 +35,7 @@ html,body{
     .header-nav {
         position:relative;
         padding:10px 20px;
-        background:#f4f4f4;
+        background:$backgroundColor;
     }
     .nav {
         display:inline-block;
@@ -149,7 +150,7 @@ html,body{
     width:80%;
     margin:0 auto;
     // min-height: 1500px;
-    background:#F4F4F4;
+    background:$backgroundColor;
     // box-shadow: 0 0px 4px rgb(232,123,160)
     // overflow: hidden;
 }
@@ -158,30 +159,40 @@ $base-blue:#0732A2;
 .flex-container {
     min-height:500px;
     display: flex;
+    padding: 0 5px;
     flex-wrap:nowrap;
     align-items: flex-start;
     width:100%;
     margin-bottom: 20px;
+    transform:translate3d(0,0,0);
+    overflow: hidden;
     .flex-left,.flex-right {
-        box-shadow: 0 0 4px rgba(0,0,0,0.1);
+        box-shadow:0 2px 6px rgba(100, 100, 100, 0.3);
         height:100%;
         background: #fff;
         padding:10px 20px;
+        opacity:0;
+        animation: 1s container-load forwards;
     }
     .flex-left {
         flex-grow:1;
         margin-right: 20px;
         padding-top: 20px;
         padding-left: 24px;
+        transform:translateX(-100px);
     }
     .flex-right {
         width:360px;
         flex-shrink:0;
         transition:opacity 0.5s ;
         margin-bottom: 10px;
+        transform:translateX(100px);
+        &.opacity{
+            opacity:1;
+        }
     }
-    .opacity{
-        opacity:1;
+    @keyframes container-load {
+          100% { transform:translateX(0px); opacity: 1; }
     }
     .flex-header{
         border-left: 4px solid $base-blue;

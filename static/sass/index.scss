@@ -92,6 +92,7 @@ $base-blue:#408ed6;
             text-align: center;
             cursor: pointer;
             border-right: 1px solid #fff;
+            transition:background-color 0.2s,color 0.2s;
             &:hover,&.my-tabs-active{
                 background-color:$base-blue;
                 color:#fff;
@@ -108,11 +109,13 @@ $base-blue:#408ed6;
         img {
             height:30px;
             width:30px;
-            // border-radius: 50%;
             margin-right: 10px;
         }
         a {
             color:black;
+            &:hover {
+                color:$base-blue;
+            }
         }
         .forloop {
             font-size: 19px;

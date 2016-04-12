@@ -2,7 +2,7 @@
 {% block title %}{{title}}{% endblock %}
 {%block content%}
 <div class="content-container">
-    <button id="create-game-btn" type="button" class="am-btn am-btn-primary am-btn-sm">创建比赛</button>
+    <button id="create-game-btn" type="button" class="am-btn am-btn-primary am-btn-xs">创建比赛</button>
     <div class="fixtures mt10">
         <header class="fixtures-title">
             本周赛程
@@ -221,24 +221,26 @@
         <div class="am-modal-hd">
           <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
         </div>
-        <div class="am-modal-bd my-form am-date-validator">
+        <form id="editGameForm" action="" class="am-modal-bd my-form tac-form am-date-validator">
             <div class="my-form-group">
-                <input type="text" name="game-date" class="am-form-field game-date-picker" value="" placeholder="选择日期" data-am-datepicker readonly>
-                <input type="time" name="game-time" class="my-form-input" value="" placeholder="">
+                <label class="my-form-label">日期:</label>
+                <input type="text" name="game-date" class="am-form-field game-date-picker" value="" placeholder="选择日期" data-am-datepicker readonly required>
+            </div>
+            <div class="my-form-group">
+                <label class="my-form-label">时间:</label>
+                <input type="time" name="game-time"  value="" required>
             </div>
             <div class="my-form-group">
                 <label class="my-form-label">地点:</label>
-                <input type="text" name="location" class="my-form-input" value="" placeholder="">
+                <input type="text" name="location"  value="" placeholder="输入地点" required>
             </div>
             <div class="my-form-group dis-none team-select">
                 <select name="team_one" ></select>
                 <i class="iconfont">&#xe607;</i>
                 <select name="team_two" ></select>
             </div>
-            <div class="my-form-group">
-                <button id="edit-game-btn" type="button" class='am-btn am-btn-success am-btn-sm'>提交</button>
-            </div>
-        </div>
+            <input type="submit" class='am-btn am-btn-success am-btn-sm' value="提交">
+        </form>
       </div>
     </div>
 {%endblock%}
@@ -257,6 +259,7 @@
             switch(type){
                 case 'edit':
                     var modal = $("#editGameModal");
+                    modal.find(".team-select").hide();
                     modal.find('.am-modal-bd').removeAttr('id_code').attr('id_code', id_code);
                     modal.find('[name="game-date"]').datepicker('setValue',container.find('.game-date').text().trim())
                     modal.find('[name="game-time"]').val(container.find('.game-time').text().trim())
@@ -296,9 +299,9 @@
         });
 
         // 编辑比赛btn
-        $("#edit-game-btn").on('click',function(){
+        $("#editGameForm").on('submit',function(){
             var postData = {};
-            var container = $(this).parent().parent();
+            var container = $(this);
             var game_date = container.find("[name='game-date']").val();
             var game_time = container.find("[name='game-time']").val();
             var location = container.find("[name='location']").val();
@@ -308,7 +311,6 @@
             postData['location'] = location;
             var team_one = container.find("[name='team_one']").val();
             var team_two = container.find("[name='team_two']").val();
-            console.log(team_one)
             if(team_one !== null && team_one !== '' && team_two !== null && team_two !== '' ){
                 if(team_one === team_two){
                     msgPopup("不能选择相同队伍");
@@ -323,6 +325,7 @@
                     reload();
                 }
             });
+            return false;
         });
 
 

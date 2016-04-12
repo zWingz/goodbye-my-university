@@ -2,7 +2,10 @@
 {% block title %}新闻列表{% endblock %}
 {%block content%}
 <div class="content-container">
-    <a  href="createNews" class="am-btn am-btn-primary am-btn-sm">发布新闻</a>
+    <header class="content-header">
+           新闻列表
+        <a  href="createNews" class="fr am-btn am-btn-primary am-btn-xs">发布新闻</a>
+        </header><!-- /header -->   
     {% if newList %}
         <table class="am-table am-table-hover data-table mt10">
                 <thead>

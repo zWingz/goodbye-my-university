@@ -77,8 +77,9 @@ def teamDetail(request):
         games = Game.objects.filter(Q(team_one=team)|Q(team_two=team),weeknum=weeknum)
         nextgames =  Game.objects.filter(Q(team_one=team)|Q(team_two=team),weeknum=int(weeknum)+1)
         otherTeam = list(Team.objects.all().order_by('?')[:5])
-        index = otherTeam.index(team)
-        del otherTeam[index]
+        if team in otherTeam:
+            index = otherTeam.index(team)
+            del otherTeam[index]
         return render(request,"team/teamDetail.html",{"team":team,"players":players,"team_data":data,"games":games,"nextgames":nextgames,"otherTeam":otherTeam})
     else:
         response_data ={}

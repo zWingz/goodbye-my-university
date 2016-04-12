@@ -2,7 +2,10 @@
 {% block title %}比赛列表{% endblock %}
 {%block content%}
 <div class="content-container fixtures">
-    <a  href="fixtures" class="am-btn am-btn-primary am-btn-sm">赛程管理</a>
+    <header class="content-header">
+           比赛列表
+        <a  href="fixtures" class="fr am-btn am-btn-primary am-btn-xs">赛程管理</a>
+        </header><!-- /header -->   
     {% if gameList %}
     <table class="am-table am-table-hover data-table mt10">
         <thead>

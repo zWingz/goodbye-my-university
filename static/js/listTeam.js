@@ -57,9 +57,9 @@ $(function(){
     });
 
     // 邀请,申请加入的提交btn
-    $("#saveApplyJoin").on('click',function(){
+    $("#saveApplyJoinForm").on('submit',function(){
         var postData = {},url = '';
-        var container = $(this).parent();
+        var container = $(this);
         var type = container.attr('join-type');
         postData.id_code = container.attr("team-id-code");
         var position = container.find("[name='r-position']").val();
@@ -82,6 +82,7 @@ $(function(){
                 reload();
             }
         });
+        return false;
     });
 
     // 邀请比赛btn

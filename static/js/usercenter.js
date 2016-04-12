@@ -137,17 +137,18 @@ $(function(){
         }
     });
     //  提交同意申请
-    $("#agreeApplyJoin").on("click",function(){
+    $("#agreeApplyJoinForm").on("submit",function(){
         var postData = {};
         var container = $("#applyModal");
         postData.id_code = container.data("id-code");
         postData.msg_id_code = container.data("msg-id-code");
         postData['r-position']= container.find("[name='r-position']").val();
         postData['r-number'] = container.find("[name='r-number']").val();
-        console.log(postData)
         $.post("/team/agreeApplyJoinTeam",postData,function(data){
-            console.log(data);
+            msgPopup(data.message);
+            reload();
         });
+        return false;
     });
 
 
