@@ -99,6 +99,8 @@ def changePwd(request):
             if result:
                 response_data['success'] = 1
                 response_data['message'] = '修改成功'
+        else:
+            response_data['message'] = '原密码错误'
     return HttpResponse(json.dumps(response_data),content_type='application/json')
 
 @login_required

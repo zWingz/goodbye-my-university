@@ -15,7 +15,7 @@
                         <img class ="team-logo"src="/static/files/userImg/{{player.user.img_path}}" alt="">
                         <div class="team-info">
                             <span><label>姓名:</label>{{player.user.first_name}}</span>
-                             <span><label>球队:</label>{{player.team.name}}</span>
+                             <span><label>球队:</label>{%if player.team%}{{player.team.name}}{%else%}无{%endif%}</span>
                             <span><label>学校:</label>{{player.school}}</span>
                              <span><label>位置:</label>{{player.position}}</span>
                         </div>

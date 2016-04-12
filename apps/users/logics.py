@@ -16,8 +16,10 @@ def register(postData):
     username = postData["r-username"]
     pwd = postData["r-password"]
     email = postData["r-email"]
+    last_name = postData['nickname']
     user = User.objects.create_user(username,email,pwd)
     user.id_code = id_code
+    user.last_name = last_name
     user.status="normal"
     user.save()
     fileLogics.setIdCode("USER",int(id_code)+1)

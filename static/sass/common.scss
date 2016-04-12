@@ -251,10 +251,13 @@
         border:1px solid #ddd;
         background:transparent;
         outline: none;
-        height: 30px;
-        line-height: 30px;
+        height: 25px;
+        line-height: 25px;
         padding-left: 10px;
+        color:#000;
         background: #fff;
+        font-weight: normal;
+        vertical-align: 0px !important ;
         &:active,&:focus {
             border:1px solid #3bb4f2;
         }
@@ -263,11 +266,13 @@
     select,textarea {
         border:1px solid #ddd;
         border-radius: 4px;
-        font-size: 14px;
+        font-size: 12px;
+        font-weight: normal;
         vertical-align: 0px;
     }
     textarea {
         border:1px solid #ddd;
+        vertical-align: top;
     }
 }
 
@@ -288,11 +293,19 @@
             margin-right: 10px;
             margin-top: 3px;
         }
+        input:not([type="submit"]){
+            height: 30px;
+            line-height: 30px;
+        }
         input,select,textarea {
             width:200px;
             flex-grow:0;
             font-size: 14px;
+
             // height: 30px;
+            &:focus:invalid {
+                border-color:red;
+            }
         }
     }
 }

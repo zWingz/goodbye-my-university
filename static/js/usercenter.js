@@ -1,9 +1,9 @@
-(function(){
-        var hash = location.hash;
-        $("a[href*='"+hash+"']").click();
-})();
 $(function(){
     new bingUserTabs(".usercenter-nav",".usercenter-content");
+    (function(){
+        var hash = location.hash;
+        $("a[href='"+hash+"']").click();
+    })();
     $("a.menu-item").on("click",function(){
         var href = $(this).attr("href");
         var hash = href.split("#")[1];
@@ -65,7 +65,7 @@ $(function(){
             .append("<option value='PF'>大前</option>")
             .append("<option value='SF'>小前</option>");
             select.val(position.text());
-            var input = $("<input name='number' type='text'>").val(number.text());
+            var input = $("<input name='number' type='number' min='0' max='99' required>").val(number.text());
             position.after(select);
             number.after(input);
             position.hide()
@@ -76,7 +76,6 @@ $(function(){
             postData.id_code = $target.parents(".playerDetailContainer").find(".playerDetail").data('id_code');
             postData.number = $target.parents(".playerDetailContainer").find("[name='number']").val();
             postData.position = $target.parents(".playerDetailContainer").find("[name='position']").val();
-            console.log(postData);
             $.ajax({
                     url: '/team/changeNumAndPos',
                     type: 'post',
@@ -84,8 +83,8 @@ $(function(){
                     data: postData
                 })
                 .done(function(data) {
-                    console.log(data);
-                    location.reload();
+                    msgPopup(data.message)
+                    reload();
                 });
             },
             cancelCb:function($target){
@@ -109,7 +108,6 @@ $(function(){
         var postData = {};
         postData.id_code = id_code;
         postData.msg_id_code = msg_id_code;
-        console.log(type)
         switch(type){
             case 0:
                 $("#applyModal").data("id-code",id_code).data("msg-id-code",msg_id_code);
@@ -150,6 +148,22 @@ $(function(){
         $.post("/team/agreeApplyJoinTeam",postData,function(data){
             console.log(data);
         });
+    });
+
+
+    $("#pwd-form").on("submit",function(){
+        var oldPwd = $(this).find("input[name='oldPwd']").val();
+        var newPwd = $(this).find("input[name='newPwd']").val();
+        var newPwd2 = $(this).find("input[name='newPwd2']").val();
+        if(newPwd !== newPwd2){
+            msgPopup("两次密码不想同");
+        }else{
+            $.post('/users/changePwd', {oldPwd: oldPwd,'newPwd':newPwd}, function(data, textStatus, xhr) {
+                msgPopup(data.message);
+                reload();
+            });
+        }
+        return false;
     });
 
     $(document.body).on("click",function(e){

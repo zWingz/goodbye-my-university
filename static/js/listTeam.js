@@ -85,9 +85,9 @@ $(function(){
     });
 
     // 邀请比赛btn
-    $("#invite-game-btn").on('click',function(){
+    $("#invite-game-form").on('submit',function(){
         var postData = {},url = '/msg/inviteGame';
-        var container = $(this).parent().parent();
+        var container = $(this);
         postData.id_code = container.attr("team-id-code");
         var game_date = container.find("[name='game-date']").val();
         postData.game_date = game_date
@@ -107,6 +107,7 @@ $(function(){
                 reload();
             }
         });
+        return false;
     });
 
     // 加载更多
@@ -221,7 +222,7 @@ function loadMore(ele){
                     $item.append($("<button type='button' class='apply-join-team am-btn am-btn-default'>申请加入</button>"))
                 }
                 if(can_inivite){
-                    $item.append($("<button type='button' class='invite-team am-btn am-btn-default'>邀请比赛</button>"))
+                    $item.append($("<button type='button' class='invite-game am-btn am-btn-default'>邀请比赛</button>"))
                 }
                 $df.append($item);
             });

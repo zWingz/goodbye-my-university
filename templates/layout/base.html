@@ -70,11 +70,11 @@
                     <h4 class="my-form-title">账号登录:</h4>
                     <div class="my-form-group">
                         <label class="my-form-label">用户名:</label>
-                        <input type="text" class='my-form-input' name="username" value="" placeholder="用户名" required="required">
+                        <input type="text" name="username" value="" placeholder="用户名" required="required">
                     </div>
                     <div class="my-form-group">
                         <label class="my-form-label" for="">密码:</label>
-                        <input type="password" class='my-form-input' name="password" value="" placeholder="password" required="required">
+                        <input type="password" name="password" value="" placeholder="密码"  required="required">
                     </div>
                      <input class="am-btn am-btn-success am-btn-sm" type="submit" name="" value="登录">
                   </form>
@@ -84,15 +84,19 @@
                       <h4 class="my-form-title">快速注册:</h4>
                       <div class="my-form-group">
                           <label class="my-form-label" or="">用户名:</label>
-                          <input id="username" class='my-form-input' type="text" name="r-username" value="" placeholder="username" required="required">
+                          <input id="username" type="text" name="r-username" value="" placeholder="用于登录" required="required">
                       </div>
                       <div class="my-form-group">
                           <label class="my-form-label" or="">密码:</label>
-                          <input id="password" class='my-form-input' type="password" name="r-password" value="" placeholder="password" required="required">
+                          <input id="password" type="password" name="r-password" value="" minlength="6" maxlength="10" placeholder="输入6-10位密码" required="required">
+                      </div>
+                      <div class="my-form-group">
+                          <label class="my-form-label" or="">昵称:</label>
+                          <input id="nickname" type="text" name="nickname" value="" placeholder="输入昵称" required="required">
                       </div>
                       <div class="my-form-group">
                           <label class="my-form-label" or="">邮箱:</label>
-                          <input id="email" class='my-form-input' type="mail" name="r-email" value="" placeholder="email" required="required">
+                          <input id="email" type="email" name="r-email" value="" placeholder="example@example.com" required="required">
                       </div>
                       <input class="am-btn am-btn-success am-btn-sm" type="submit" name="" value="提交">
                   </form>

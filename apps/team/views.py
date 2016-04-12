@@ -17,14 +17,14 @@ from django.db.models import Q
 
 def listTeam(request):
     user = request.user
+    count = int(settings.PAGE_COUNT)
     if request.method == "GET":
-        teamList = Team.objects.all().order_by("-create_time")[0:5];
+        teamList = Team.objects.all().order_by("-create_time")[0:count];
         return render(request,"team/listTeam.html",{"teamList":teamList})
     else:
         response_data = {}
         page = int(request.POST.get("page",1))
-        count = int(settings.PAGE_COUNT)
-        teamList = Team.objects.all()[(page-1)*count:page*count]
+        teamList = Team.objects.all().order_by("-create_time")[(page-1)*count:page*count]
         if not user.is_authenticated():
             response_data['is_free_player'] = False
         else:
@@ -37,7 +37,7 @@ def listTeam(request):
                 response_data['is_free_player'] = False
         response_data['teams'] = toTeamView(teamList)
         for each in response_data['teams']:
-            if not user.is_authenticated() or not user.team.first() or each['id_code'] != user.team.first().id_code:
+            if not user.is_authenticated() or not user.team.first() or each['id_code'] == user.team.first().id_code:
                 each['can_inivite'] = False;
             else:
                 each['can_inivite'] = True;
@@ -50,15 +50,15 @@ def listAllTeam(request):
 
 
 def listPlayer(request):
-    if request.method == "GET":
-        playerList = Player.objects.all()[0:5];
+    count = int(settings.PAGE_COUNT)
+    if request.method == "GET": 
+        playerList = Player.objects.all().order_by("-create_time")[0:count];
         return render(request,"team/listPlayer.html",{"playerList":playerList})
     else:
         response_data = {}
         page = int(request.POST.get("page",1))
-        count = int(settings.PAGE_COUNT)
         playerList = Player.objects.all().order_by("-create_time")[(page-1)*count:page*count]
-        if  request.user.is_authenticated() and request.user.team is not None:
+        if  request.user.is_authenticated() and request.user.team.first():
             response_data['is_manager'] = True
         else:  
             response_data['is_manager'] = False
