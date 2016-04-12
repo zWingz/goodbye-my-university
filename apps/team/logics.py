@@ -111,8 +111,8 @@ def editTeam(user,postData):
 @transaction.atomic
 def changeLogo(team,logo):
     oldLogo = team.logo
-    if not oldLogo is None:
-        os.remove(os.path.join(settings.UPLOADED_DIR,oldLogo))
+    if not oldLogo is None and oldLogo != 'teamImg.jpg':
+        os.remove(os.path.join(settings.TEAM_IMG,oldLogo))
     team.logo = logo
     team.save()
     return True

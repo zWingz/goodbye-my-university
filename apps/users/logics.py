@@ -26,6 +26,9 @@ def register(postData):
 @transaction.atomic
 def updateImage(username,imgpath):
     user = User.objects.get(username=username)
+    oldImg = user.img_path
+    if not oldImg is None and oldImg != 'userImg.png':
+        os.remove(os.path.join(settings.USER_IMG,oldImg))
     user.img_path = imgpath
     user.save()
     return True

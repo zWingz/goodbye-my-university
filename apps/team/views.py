@@ -18,18 +18,23 @@ from django.db.models import Q
 def listTeam(request):
     user = request.user
     if request.method == "GET":
-        teamList = Team.objects.all()[0:5];
+        teamList = Team.objects.all().order_by("-create_time")[0:5];
         return render(request,"team/listTeam.html",{"teamList":teamList})
     else:
         response_data = {}
         page = int(request.POST.get("page",1))
-        # count = int(settings.PAGE_COUNT)
-        count = 1
+        count = int(settings.PAGE_COUNT)
         teamList = Team.objects.all()[(page-1)*count:page*count]
-        if not user.is_authenticated() or not user.player or user.player.team:
+        if not user.is_authenticated():
             response_data['is_free_player'] = False
-        elif user.player and not user.player.team:
-            response_data['is_free_player'] = True
+        else:
+            try:
+                if user.player and not user.player.team:
+                    response_data['is_free_player'] = True
+                else:
+                    response_data['is_free_player'] = False
+            except:
+                response_data['is_free_player'] = False
         response_data['teams'] = toTeamView(teamList)
         for each in response_data['teams']:
             if not user.is_authenticated() or not user.team.first() or each['id_code'] != user.team.first().id_code:
@@ -51,9 +56,8 @@ def listPlayer(request):
     else:
         response_data = {}
         page = int(request.POST.get("page",1))
-        # count = int(settings.PAGE_COUNT)
-        count = 1
-        playerList = Player.objects.all()[(page-1)*count:page*count]
+        count = int(settings.PAGE_COUNT)
+        playerList = Player.objects.all().order_by("-create_time")[(page-1)*count:page*count]
         if  request.user.is_authenticated() and request.user.team is not None:
             response_data['is_manager'] = True
         else:  

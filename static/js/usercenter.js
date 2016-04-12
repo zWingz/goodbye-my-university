@@ -40,7 +40,6 @@ $(function(){
             $target.parents(".content-bd").find(".my-form-input").each(function(index,input){
                 postData[$(this).attr("name")] = $(this).val();
             });
-            console.log(postData);
             $.ajax({
                     url: '/team/editTeam',
                     type: 'post',
@@ -88,6 +87,15 @@ $(function(){
                     console.log(data);
                     location.reload();
                 });
+            },
+            cancelCb:function($target){
+                var container = $target.parents(".playerDetailContainer");
+                var number = container.find(".detail-number").show();
+                var position = container.find(".detail-position").show();
+                var form_item = container.find("[name]").remove();
+                // $editabel.show();
+                // $editabel.parent().find('input').remove();
+                // $editabel.parent().find('select').remove();
             }
         });
 

@@ -180,7 +180,7 @@ DATABASE_ROUTERS = [
 EMAIL_HOST_USER = 'afs@youmi.net'
 
 DEBUG = True
-PAGE_COUNT = 5
+PAGE_COUNT = 4
 # localsettings 放到最后，以覆盖默认配置
 from config.localsettings import *
 
