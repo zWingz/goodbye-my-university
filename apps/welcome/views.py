@@ -16,7 +16,7 @@ def welcome(request):
     next_day_game = Game.objects.filter(game_date=next_day.strftime("%Y-%m-%d")).order_by("game_time")
     prev_day_game = Game.objects.filter(game_date=prev_day.strftime("%Y-%m-%d")).order_by("game_time")
 
-    teamsProfile = TeamProfile.objects.all().order_by("-win_rate")[0:5]
+    teamsProfile = TeamProfile.objects.all().order_by("-win_rate","-game")[0:5]
     teams = getModelByIdCode(teamsProfile,"TeamProfile")
     querySet = PlayerProfile.objects.all()
     pointPlayer = getModelByIdCode(sorted(querySet,key=lambda s:s.avg_point,reverse=True)[0:5],"PlayerProfile","point")
