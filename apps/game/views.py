@@ -54,7 +54,7 @@ def createFixtures(request):
                 if len(Game.objects.filter(Q(team_one = teams[index])|Q(team_two = teams[index]),game_date=game['time']['date'])) != 0 or teams[index] in choicesTeam:
                     index = index + 1;
                     continue;
-                game['location'] = location[time.index(game)%sum_location] # 顺序选取一个地点
+                game['location'] = location[index%sum_location] # 顺序选取一个地点
                 game['team_one'] = {"id_code":teams[index].id_code,"name":teams[index].name,"logo":teams[index].logo}
                 choicesTeam.append(teams[index]) # 加入到已选队伍当中
                 index = index + 1;
@@ -100,12 +100,12 @@ def getFixtures(request):
         next_games = Game.objects.filter(weeknum=next_weeknum)
         teamsProfile = TeamProfile.objects.all().order_by("-win_rate")[0:5]
         teams = getModelByIdCode(teamsProfile,"TeamProfile")
-        pointPlayer = getModelByIdCode(PlayerProfile.objects.all().order_by("-point")[0:5],"PlayerProfile")
-        assistPlayer = getModelByIdCode(PlayerProfile.objects.all().order_by("-assist")[0:5],"PlayerProfile")
-        reboundPlayer = getModelByIdCode(PlayerProfile.objects.all().order_by("-rebound")[0:5],"PlayerProfile")
-        blockPlayer = getModelByIdCode(PlayerProfile.objects.all().order_by("-block")[0:5],"PlayerProfile")
-        stealPlayer = getModelByIdCode(PlayerProfile.objects.all().order_by("-steal")[0:5],"PlayerProfile")
-
+        querySet = PlayerProfile.objects.all()
+        pointPlayer = getModelByIdCode(sorted(querySet,key=lambda s:s.avg_point,reverse=True)[0:5],"PlayerProfile","point")
+        assistPlayer = getModelByIdCode(sorted(querySet,key=lambda s:s.avg_assist,reverse=True)[0:5],"PlayerProfile","assist")
+        reboundPlayer = getModelByIdCode(sorted(querySet,key=lambda s:s.avg_rebound,reverse=True)[0:5],"PlayerProfile","rebound")
+        blockPlayer = getModelByIdCode(sorted(querySet,key=lambda s:s.avg_block,reverse=True)[0:5],"PlayerProfile","block")
+        stealPlayer = getModelByIdCode(sorted(querySet,key=lambda s:s.avg_steal,reverse=True)[0:5],"PlayerProfile","steal")
         return render(request,"game/fixtures.html",{"games":games,"nextgames":next_games,
                                                                                                     "teams":teams,
                                                                                                     "pointPlayer":pointPlayer,
@@ -171,6 +171,12 @@ def deleteGame(request):
     response_data = {}
     if id_code != "":
         game = Game.objects.get(id_code=id_code)
+        teamGameProfile = TeamGameProfile.objects.filter(game_id_code=id_code)
+        for each in teamGameProfile:
+            playerGameProfile = PlayerGameProfile.objects.filter(team_game=each)
+            for eachPlayerGame in playerGameProfile:
+                eachPlayerGame.delete()
+            each.delete()
         game.delete()
         response_data['success'] = 1
         response_data['message'] = '操作成功'
@@ -203,7 +209,7 @@ def toTeamView(team):
     return obj
 
 
-def getModelByIdCode(objlist,modelType):
+def getModelByIdCode(objlist,modelType,sortType=None):
     result = []
     if len(objlist)==0:
         return result
@@ -214,14 +220,9 @@ def getModelByIdCode(objlist,modelType):
             team.game = each.game
             result.append(team)
     elif modelType == 'PlayerProfile':
-        for each in objlist:
-            player = Player.objects.get(id_code=each.id_code)
-            if each.game != 0 :
-                player.point = each.point/each.game
-                player.rebound = each.rebound/each.game
-                player.assist = each.assist/each.game
-                player.steal = each.steal/each.game
-                player.block = each.block/each.game
-                result.append(player)
-            player.game = each.game
+            for each in objlist:
+                player = Player.objects.get(id_code=each.id_code)
+                if each.game != 0 :
+                    setattr(player,sortType,getattr(each,sortType)/each.game)
+                    result.append(player)
     return result

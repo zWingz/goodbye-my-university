@@ -149,14 +149,19 @@ $base-blue:#408ed6;
         }
     }
     .rank {
+        th:nth-child(2){
+            text-align: left;
+        }
         img {
-            height:30px;
-            width:30px;
-            // border-radius: 50%;
+            height:39px;
+            width:39px;
             margin-right: 10px;
         }
         a {
             color:black;
+            &:hover {
+                color:$base-blue;
+            }
         }
         .forloop {
             font-size: 19px;
@@ -164,9 +169,8 @@ $base-blue:#408ed6;
         .player-info {
             display:flex;
             font-size: 13px;
-            justify-content: center;
+            // justify-content: center;
             img {
-                height: 100%;
                 vertical-align: top;
             }
             >div {

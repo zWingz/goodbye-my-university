@@ -151,10 +151,7 @@ def saveData(game,data):
             player_game_profile.save()
     team_one_gprofile.save()
     team_two_gprofile.save()
-    # game_profile = GameProfile()
-    # game_profile.id_code = game.id_code
     game.save()
-    # game_profile.save()
     team_one_gprofile.game_id_code = game.id_code
     team_two_gprofile.game_id_code = game.id_code
     team_one_gprofile.save()

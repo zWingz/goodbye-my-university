@@ -202,8 +202,8 @@
                       <tbody>
                           {% for team in teams %}
                           <tr>
-                              <td>{{forloop.counter}}</td>
-                              <td>
+                              <td class="forloop">{{forloop.counter}}</td>
+                              <td style="text-align:left;">
                                  <a href="/team/teamDetail?id_code={{team.id_code}}" title="" target="_blank">
                                      <img src="/static/files/teamLogo/{{team.logo}}" alt="">{{team.name}}
                                  </a>

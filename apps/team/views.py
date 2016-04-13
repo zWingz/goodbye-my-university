@@ -15,18 +15,19 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 # Create your views here.
 
+# 球队列表
 def listTeam(request):
     user = request.user
     count = int(settings.PAGE_COUNT)
-    if request.method == "GET":
+    if request.method == "GET":  # 首次加载时候通过Get方法
         teamList = Team.objects.all().order_by("-create_time")[0:count];
         return render(request,"team/listTeam.html",{"teamList":teamList})
-    else:
+    else: # POST请求用于加载更多(分页)
         response_data = {}
         page = int(request.POST.get("page",1))
         teamList = Team.objects.all().order_by("-create_time")[(page-1)*count:page*count]
         if not user.is_authenticated():
-            response_data['is_free_player'] = False
+            response_data['is_free_player'] = False #判断用户是否可以进行加入申请
         else:
             try:
                 if user.player and not user.player.team:
@@ -38,7 +39,7 @@ def listTeam(request):
         response_data['teams'] = toTeamView(teamList)
         for each in response_data['teams']:
             if not user.is_authenticated() or not user.team.first() or each['id_code'] == user.team.first().id_code:
-                each['can_inivite'] = False;
+                each['can_inivite'] = False;  # 判断用户是否可以进行比赛邀请
             else:
                 each['can_inivite'] = True;
         return HttpResponse(json.dumps(response_data,cls=CJsonEncoder),content_type="application/json")
@@ -66,6 +67,7 @@ def listPlayer(request):
         # playerList = Player.objects.all()
         return HttpResponse(json.dumps(response_data,cls=CJsonEncoder),content_type="application/json")
 
+# 球队详情
 def teamDetail(request):
     id_code = request.REQUEST['id_code']
     team = Team.objects.get(id_code=id_code,status=1);

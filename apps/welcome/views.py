@@ -5,6 +5,7 @@ from apps.message.models import News
 from apps.game.models import Game,PlayerGameProfile,TeamGameProfile
 from apps.team.models import Team,TeamProfile,Player,PlayerProfile
 from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login
+from operator import attrgetter
 # Create your views here.
 def welcome(request):
     news = News.objects.all().order_by("-create_time")[0:5]
@@ -17,11 +18,12 @@ def welcome(request):
 
     teamsProfile = TeamProfile.objects.all().order_by("-win_rate")[0:5]
     teams = getModelByIdCode(teamsProfile,"TeamProfile")
-    pointPlayer = getModelByIdCode(PlayerProfile.objects.all().order_by("-point")[0:5],"PlayerProfile")
-    assistPlayer = getModelByIdCode(PlayerProfile.objects.all().order_by("-assist")[0:5],"PlayerProfile")
-    reboundPlayer = getModelByIdCode(PlayerProfile.objects.all().order_by("-rebound")[0:5],"PlayerProfile")
-    blockPlayer = getModelByIdCode(PlayerProfile.objects.all().order_by("-block")[0:5],"PlayerProfile")
-    stealPlayer = getModelByIdCode(PlayerProfile.objects.all().order_by("-steal")[0:5],"PlayerProfile")
+    querySet = PlayerProfile.objects.all()
+    pointPlayer = getModelByIdCode(sorted(querySet,key=lambda s:s.avg_point,reverse=True)[0:5],"PlayerProfile","point")
+    assistPlayer = getModelByIdCode(sorted(querySet,key=lambda s:s.avg_assist,reverse=True)[0:5],"PlayerProfile","assist")
+    reboundPlayer = getModelByIdCode(sorted(querySet,key=lambda s:s.avg_rebound,reverse=True)[0:5],"PlayerProfile","rebound")
+    blockPlayer = getModelByIdCode(sorted(querySet,key=lambda s:s.avg_block,reverse=True)[0:5],"PlayerProfile","block")
+    stealPlayer = getModelByIdCode(sorted(querySet,key=lambda s:s.avg_steal,reverse=True)[0:5],"PlayerProfile","steal")
     return render(request,"index.html",{
             "todayGame":today_game,
             "nextDayGame":next_day_game,
@@ -37,7 +39,7 @@ def welcome(request):
 
 
 
-def getModelByIdCode(objlist,modelType):
+def getModelByIdCode(objlist,modelType,sortType=None):
     result = []
     if len(objlist)==0:
         return result
@@ -48,14 +50,9 @@ def getModelByIdCode(objlist,modelType):
             team.game = each.game
             result.append(team)
     elif modelType == 'PlayerProfile':
-        for each in objlist:
-            player = Player.objects.get(id_code=each.id_code)
-            if each.game != 0 :
-                player.point = each.point/each.game
-                player.rebound = each.rebound/each.game
-                player.assist = each.assist/each.game
-                player.steal = each.steal/each.game
-                player.block = each.block/each.game
-                result.append(player)
-            player.game = each.game
+            for each in objlist:
+                player = Player.objects.get(id_code=each.id_code)
+                if each.game != 0 :
+                    setattr(player,sortType,getattr(each,sortType)/each.game)
+                    result.append(player)
     return result

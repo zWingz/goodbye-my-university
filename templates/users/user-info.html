@@ -16,6 +16,11 @@
                 <div class="m10">
                     用户名:<span>{{user.username}}</span>
                 </div>
+                {% if user.first_name %}
+                    <div class="m10">
+                        姓名:<span>{{user.first_name}}</span>
+                    </div>
+                {% endif %}
                 <div class="m10">
                     昵称: <span editable='last_name'>{{user.last_name}}</span>
                 </div>
