@@ -122,7 +122,7 @@ def saveData(game,data):
     if int(team_one['point']) > int(team_two['point']):
         team_one_profile.win += 1
     else:
-        team_one_profile.win += 1
+        team_two_profile.win += 1
     team_one_profile.save()
     team_one_gprofile.save()
     team_two_profile.save()
@@ -183,7 +183,7 @@ def saveProfile(profile,data):
     profile.free_all = (profile.free_all or 0) + int(data['free_all'])
     profile.rebound = (profile.rebound or 0) + int(data['rebound'])
     profile.steal = (profile.steal or 0) + int(data['steal'])
-    profile.assist = (profile.assist or 0) + int(data['point'])
+    profile.assist = (profile.assist or 0) + int(data['assist'])
     profile.turnover = (profile.turnover or 0) + int(data['turnover'])
     profile.block = (profile.block or 0) + int(data['block'])
     if hasattr(profile,"game"):
