@@ -101,9 +101,10 @@ def saveData(game,data):
                 team_one_gprofile.id_code = game.team_one.id_code
                 team_one_gprofile.name = game.team_one.name
                 saveProfile(team_one_gprofile,each)
-                point = str(int(each['point']))+" - "
+                point = str(int(each['point']))+" - "+point
                 team_one_profile = TeamProfile.objects.get(id_code=str(int(each['id_code'])))
                 saveProfile(team_one_profile,each)
+                print("team_one"+point)
                 # team_one_profile.game += 1
             elif str(int(each['id_code'])) == game.team_two.id_code:
                 team_two = each
@@ -114,6 +115,7 @@ def saveData(game,data):
                 point = point + str(int(each['point']))
                 team_two_profile = TeamProfile.objects.get(id_code=str(int(each['id_code'])))
                 saveProfile(team_two_profile,each)
+                print("team_two"+point)
                 # team_two_profile.game += 1
             else:
                 return False;
