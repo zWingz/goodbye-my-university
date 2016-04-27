@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 import json, os, datetime
 from django.conf import settings
 from django.http import HttpResponse
@@ -116,18 +116,16 @@ def playerDetail(request):
 
 # Team do something view
 @login_required
+@post_required
 def saveTeam(request):
-    if request.method == 'GET':
-        return render(request,"team/createTeam.html")
-    else:
-        response_data = {}
-        response_data['success'] = 0
-        response_data['message'] = '保存失败'
-        result = Logics.saveTeam(request.user,request.POST)
-        if result :
-            response_data['success'] = 1
-            response_data['message'] = '保存成功'
-        return HttpResponse(json.dumps(response_data),content_type="application/json")
+    response_data = {}
+    response_data['success'] = 0
+    response_data['message'] = '保存失败'
+    result = Logics.saveTeam(request.user,request.POST)
+    if result :
+        response_data['success'] = 1
+        response_data['message'] = '保存成功'
+    return redirect('/users/usercenter#user-team')
 
 @login_required
 def editTeam(request):
@@ -182,26 +180,14 @@ def changeTeamName(request):
             response_data['message'] = '修改成功'
     return HttpResponse(json.dumps(response_data),content_type="application/json")
 
-@login_required
-@post_required
-def disbandTeam(request):
-    response_data = {}
-    team = Team.objects.get(manager = request.user,status=1)
-    if team is None:
-        response_data['success'] = 0
-        response_data['message'] = '无权修改'
-    else:
-        result = Logics.disbandTeam(team)
-        if result:
-            response_data['success'] = 1
-            response_data['message'] = '修改成功'
-    return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 
 # player do something
 @post_required
 @login_required
 def savePlayer(request):
+    url = request.get_full_path()
+    print(url)
     response_data = {}
     response_data["success"] = 0
     response_data["message"] = '保存失败'
@@ -209,7 +195,7 @@ def savePlayer(request):
     if result:
         response_data["success"] = 1
         response_data["message"] = '保存成功'
-    return HttpResponse(json.dumps(response_data),content_type="application/json")
+    return redirect('/users/usercenter#user-player')
 
 # player do something
 @login_required
@@ -318,15 +304,20 @@ def agreeInviteGame(request):
 @post_required
 def leaveTeam(request):
     response_data = {}
-    player = Player.objects.get(user=request.user,status=1)
-    if player is None:
+    id_code = request.POST['id_code']
+    player = Player.objects.get(id_code=id_code)
+    team = player.team
+    if player is None :
         response_data['success'] = 0
-        response_data['message'] = '退出失败'
+        response_data['message'] = '离队失败'
+    elif  team.manager == player.user:
+        response_data['success'] = 0
+        response_data['message'] = '该球员是管理者不能离队'
     else:
         result = Logics.leaveTeam(player)
         if result:
-            response_data.success = 1
-            response_data.message = '保存成功'
+            response_data['success'] = 1
+            response_data['message'] = '离队成功'
     return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 
@@ -473,14 +464,18 @@ def  adeditPlayer(request):
 def deletePlayer(request):
     id_code = request.POST.get("id_code","")
     response_data = {}
-    if id_code != "":
+    response_data['success'] = 0
+    response_data['message'] = '操作失败'
+    if id_code != "" :
         player = Player.objects.get(id_code=id_code)
-        player.delete()
-        response_data['success'] = 1
-        response_data['message'] = '操作成功'
-    else:
-        response_data['success'] = 0
-        response_data['message'] = '操作失败'
+        if player.user.status == 'manager':
+            response_data['success'] = 0
+            response_data['message'] = '该球员是管理者,请先解散其球队'
+        else:
+            result = Logics.deletePlayer(player)
+            if result:
+                response_data['success'] = 1
+                response_data['message'] = '操作成功'
     return HttpResponse(json.dumps(response_data),content_type="application/json")
 
 
@@ -508,11 +503,11 @@ def deleteTeam(request):
     id_code = request.POST.get("id_code","")
     response_data = {}
     if id_code != "":
-        team = Team.objects.get(id_code=id_code)
-        team.delete()
-        response_data['success'] = 1
-        response_data['message'] = '操作成功'
-    else:
-        response_data['success'] = 0
-        response_data['message'] = '操作失败'
+        result = Logics.deleteTeam(id_code)
+        if result:
+            response_data['success'] = 1
+            response_data['message'] = '操作成功'
+            return HttpResponse(json.dumps(response_data),content_type="application/json")
+    response_data['success'] = 0
+    response_data['message'] = '操作失败'
     return HttpResponse(json.dumps(response_data),content_type="application/json")

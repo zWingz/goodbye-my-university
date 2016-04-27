@@ -127,11 +127,29 @@ def changeTeamName(team,name):
     return True
 
 @transaction.atomic
-def disbandTeam(team):
-    # team = get_team(username)
-    team.status = 0
-    team.save()
+def deleteTeam(id_code):
+    team = Team.objects.get(id_code=id_code)
+    players = team.players.all()
+    for each in players:
+        each.team = None
+        each.save()
+    teamProfile = TeamProfile.objects.get(id_code=id_code)
+    teamProfile.delete()
+    team.manager.status = 'player'
+    team.manager.save()
+    team.delete()
     return True
+
+@transaction.atomic
+def deletePlayer(player):
+    player.user.status = 'normal'
+    playerProfile = PlayerProfile.objects.get(id_code=player.id_code)
+    playerProfile.delete()
+    player.user.save();
+    player.delete()
+    return True
+
+
 
 # Player do something
 @transaction.atomic
@@ -200,8 +218,8 @@ def joinTeam(player,team,number,position):
 
 @transaction.atomic
 def leaveTeam(player):
-    player.team = null
-    player.number = null
+    player.team = None
+    player.number = None
     player.save();
     return True
 

@@ -44,7 +44,7 @@ def createFixtures(request):
         team.game = game
     teams = list(teams)
     teams_count = len(teams)
-    sorted(teams,key=lambda s: s.game)
+    teams = sorted(teams,key=lambda s: s.game)
     sum_location = len(location)
     index = 0;
     choicesTeam=[]
@@ -59,7 +59,7 @@ def createFixtures(request):
                 choicesTeam.append(teams[index]) # 加入到已选队伍当中
                 index = index + 1;
                 next_index = random.randint(index,teams_count-1);# 在剩下队伍中找出一队
-                while len(Game.objects.filter(Q(team_one = teams[next_index])|Q(team_two = teams[next_index]),game_date=game['time']['date'])) != 0:
+                while len(Game.objects.filter(Q(team_one = teams[next_index])|Q(team_two = teams[next_index]),game_date=game['time']['date'])) != 0 or teams[next_index] in choicesTeam:
                     next_index = random.randint(index,teams_count-1);# 找出当天没有比赛的队伍
                 game['team_two'] = {"id_code":teams[next_index].id_code,"name":teams[next_index].name,"logo":teams[next_index].logo}
                 choicesTeam.append(teams[next_index]) # 加入到已选队伍当中

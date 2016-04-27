@@ -14,6 +14,7 @@
                     <th>所属学校</th>
                     <th>球队简介</th>
                     <th>管理员</th>
+                    <th>操作</th>
                 </tr>
             </thead>
            <tbody>
@@ -23,19 +24,13 @@
                          <td class="name">{{team.name}}</td>
                          <td class="school">{{team.school}} </td>
                          <td class="desc">  {{team.desc}} </td>  
-                          <td class="manager_id"> {{team.manager}}  </td>                
-                  
+                          <td class="manager_id"> {{team.manager.first_name}}</td>                
                            <td  class="team-action">       
-                           
                             <button type="button" class="am-btn am-btn-link am-btn-sm" action-type='edit'>编辑</button>
-
                             <button type="button" class="am-btn am-btn-link am-btn-sm" action-type='delete'>删除</button>
-                            
                           </td>
-                           
                      </tr>
                  {% endfor %}
-
             </tbody>
         </table>
     </div>

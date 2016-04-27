@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from django.shortcuts import redirect
+from django.shortcuts import render,redirect
 # from django.shortcuts import render_to_response
 import json, os, time
 from django.conf import settings
@@ -157,9 +156,13 @@ def deleteUser(request):
     response_data = {}
     if id_code != "":
         user = User.objects.get(id_code=id_code)
-        user.delete()
-        response_data['success'] = 1
-        response_data['message'] = '操作成功'
+        if user.team.first() is not None:
+            response_data['success'] = 0
+            response_data['message'] = '该用户是球队管理者,请先解散其球队'
+        else:
+            user.delete()
+            response_data['success'] = 1
+            response_data['message'] = '操作成功'
     else:
         response_data['success'] = 0
         response_data['message'] = '操作失败'
