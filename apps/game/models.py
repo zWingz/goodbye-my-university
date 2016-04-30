@@ -27,8 +27,8 @@ class Game(models.Model):
         if not self.id_code:
             self.id_code = fileLogics.getIdCode("GAME")
             self.create_time = datetime.datetime.now()
+            fileLogics.setIdCode("GAME",int(self.id_code)+1)
         super(Game, self).save(*args, **kwargs)
-        fileLogics.setIdCode("GAME",int(self.id_code)+1)
 
     def __str__(self):
         return self.id_code

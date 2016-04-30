@@ -12,7 +12,7 @@
             <section class="teamList-content" >
                 {% for player in playerList %}
                     <div class="team-item" data-code-type='player' data-code="{{player.id_code}}">
-                        <img class ="team-logo"src="/static/files/userImg/{{player.user.img_path}}" alt="">
+                    <div class ="team-logo" alt="" style="background-image: url('/static/files/userImg/{{player.user.img_path}}');background-size:120px 120px;"></div>
                         <div class="team-info">
                             <span><label>姓名:</label>{{player.user.first_name}}</span>
                              <span><label>球队:</label>{%if player.team%}{{player.team.name}}{%else%}无{%endif%}</span>

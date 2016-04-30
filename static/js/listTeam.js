@@ -43,7 +43,7 @@ $(function(){
             $.post(map.url,{id_code:id_code},function(data){
                 $(".flex-right").show();
                 setTimeout(function(){
-                    $(".flex-right").css("width","400px");
+                    $(".flex-right").css("width","340px");
                     $(".flex-right").removeClass("opacity")
                     setTimeout(function(){
                         $(".flex-right").hide();
@@ -177,7 +177,7 @@ function bindPlayerTmpl(data){
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i];
         if(game !== 0){
-            table.find('[data-type="'+key+'"]').text((data_profile[key]/game));
+            table.find('[data-type="'+key+'"]').text((data_profile[key]/game).toFixed(2));
         }else {
             table.find('[data-type="'+key+'"]').text((data_profile[key]));
         }
@@ -238,7 +238,7 @@ function loadMore(ele){
             var $df = $(document.createDocumentFragment());
             data.forEach(function(ele,index){
                 var $item = $("<div>").addClass("team-item").attr("data-code-type","player").attr("data-code",ele.id_code)
-                var $img = $("<img>").addClass('team-logo').attr("src","/static/files/userImg/"+ele.img_path);
+                var $img = $("<div>").addClass('team-logo').css("background-image","url('/static/files/userImg/"+ele.img_path+"')");
                 var $info = $("<div>").addClass("team-info");
                 $info.append($("<span>").append($("<label>姓名:</label>")).append(ele.name))
                             .append($("<span>").append($("<label>球队:</label>")).append(ele.team))

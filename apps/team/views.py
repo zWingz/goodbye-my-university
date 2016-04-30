@@ -99,6 +99,7 @@ def playerDetail(request):
         games = []
         for each in player_game_profile:
             game_id_code = each.team_game.game_id_code
+            print("game id code",game_id_code)
             games.append(Game.objects.get(id_code=game_id_code))
         if player.team is not None:
             teammates = list(player.team.players.all())

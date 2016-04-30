@@ -13,7 +13,7 @@
                 <td class="forloop">{{forloop.counter}}</td>
                 <td >
                     <a href="/team/playerDetail?id_code={{player.id_code}}" title="" target="_blank" class="player-info">
-                       <img src="/static/files/userImg/{{player.user.img_path}}" alt="">
+                    <div class="player-head lazy" style="background-image: url('/static/files/userImg/{{player.user.img_path}}');"></div>
                        <div class="inb">
                            {{player.user.first_name}}
                            <div>

@@ -1,6 +1,10 @@
 // $base-blue:#0732A2;
 $base-blue:#408ed6;
-
+.flex-container {
+    .flex-right{
+        width:315px;
+    }
+}
 // 周期
 .week-container {
     display:flex;
@@ -25,6 +29,14 @@ $base-blue:#408ed6;
 #weeknum {
     font-size: 18px;
     font-weight: bold;
+}
+.fixtures {
+    td {
+        font-size: 11px;
+    }
+    .team-td {
+        text-align: left;
+    }
 }
 // 比赛赛程item
 .game-item {
@@ -152,10 +164,11 @@ $base-blue:#408ed6;
         th:nth-child(2){
             text-align: left;
         }
-        img {
+        img,.player-head {
             height:39px;
             width:39px;
             margin-right: 10px;
+            background-size:39px 39px;
         }
         a {
             color:black;

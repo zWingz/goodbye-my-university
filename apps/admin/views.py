@@ -52,7 +52,8 @@ def getFixtures(request):
 def  getGameList(request):
     page = request.GET.get("page",1)
     count = settings.PAGE_COUNT
-    gameList = Game.objects.all().order_by("game_date","game_time")[(page-1)*count:page*count]
+    # gameList = Game.objects.all().order_by("game_date","game_time")[(page-1)*count:page*count]
+    gameList = Game.objects.all().order_by("game_date","game_time")
     return render(request,"admin/game-list.html",{"gameList":gameList})
 
 
@@ -65,7 +66,8 @@ def createNews(request):
 def getNewsList(request):
     page = request.GET.get("page",1)
     count = settings.PAGE_COUNT
-    newList = News.objects.all().order_by("-create_time")[(page-1)*count:page*count]
+    # newList = News.objects.all().order_by("-create_time")[(page-1)*count:page*count]
+    newList = News.objects.all().order_by("-create_time")
     return render(request,"admin/list-news.html",{"newList":newList})
 
 @admin_required

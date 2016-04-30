@@ -11,13 +11,13 @@
                 <tr >
                     <th>id_code</th>
                     <th>姓名</th>
-                    <th>队伍名称</th>
-                    <th>球衣号码</th>
+                    <th>球队</th>
+                    <th>号码</th>
                     <th>身高</th>
                     <th>体重</th>
                     <th>位置</th>
                     <th>学校</th>
-                    <th>球员简介</th>
+                    <th>简介</th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -33,15 +33,12 @@
                           <td class="position"> {{player.position}}  </td>
                           <td class="school"> {{player.school}}  </td>
                           <td class="desc"> {{player.desc}}  </td>
-                          
                            <td  class="player-action">       
-                           
-                            <button type="button" class="am-btn am-btn-link am-btn-sm" action-type='edit'>编辑</button>
-                            {%if player.team%}
-                            <button type="button" class="am-btn am-btn-link am-btn-sm" action-type='leave'>离队</button>
-                            {%endif%}
-                            <button type="button" class="am-btn am-btn-link am-btn-sm" action-type='delete'>删除</button>
-                            
+                              <button type="button" class="am-btn am-btn-link am-btn-xs" action-type='edit'>编辑</button>
+                              {%if player.team%}
+                              <button type="button" class="am-btn am-btn-link am-btn-xs" action-type='leave'>离队</button>
+                              {%endif%}
+                              <button type="button" class="am-btn am-btn-link am-btn-xs" action-type='delete'>删除</button>
                           </td>
                            
                      </tr>

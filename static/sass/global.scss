@@ -147,7 +147,7 @@ html,body{
 
 
 .container {
-    width:80%;
+    width:95%;
     margin:0 auto;
     // min-height: 1500px;
     background:$backgroundColor;
@@ -178,7 +178,8 @@ $base-blue:#0732A2;
         flex-grow:1;
         margin-right: 20px;
         padding-top: 20px;
-        padding-left: 24px;
+        padding-left: 14px;
+        padding-right: 14px;
         transform:translateX(-100px);
     }
     .flex-right {

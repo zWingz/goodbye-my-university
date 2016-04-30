@@ -24,8 +24,8 @@ class Message(models.Model):
         if not self.id_code:
             self.id_code = fileLogics.getIdCode("MESSAGE")
             self.create_time = datetime.datetime.now()
+            fileLogics.setIdCode("MESSAGE",int(self.id_code)+1)
         super(Message, self).save(*args, **kwargs)
-        fileLogics.setIdCode("MESSAGE",int(self.id_code)+1)
 
     def __str__(self):
         return self.id_code
@@ -45,8 +45,8 @@ class News(models.Model):
         if not self.id_code:
             self.id_code = fileLogics.getIdCode("NEWS")
             self.create_time = datetime.datetime.now()
+            fileLogics.setIdCode("NEWS",int(self.id_code)+1)
         super(News, self).save(*args, **kwargs)
-        fileLogics.setIdCode("NEWS",int(self.id_code)+1)
 
     def __str__(self):
         return self.id_code

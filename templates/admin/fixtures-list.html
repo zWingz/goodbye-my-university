@@ -33,18 +33,18 @@
                          </td>
                         <td class="location">{{game.location}}</td>
                         <td class="status">{%if game.status == 0%}未赛{%else%}已完结{%endif%}</td>
-                        <td class="team_one "><a class="color-000" href="/team/teamDetail?id_code={{game.team_one.id_code}}" title=""><img src="/static/files/teamLogo/{{game.team_one.logo}}">{{game.team_one}}</a></td>
+                        <td class="team_one team-td "><a class="color-000" href="/team/teamDetail?id_code={{game.team_one.id_code}}" title=""><img src="/static/files/teamLogo/{{game.team_one.logo}}">{{game.team_one}}</a></td>
                         <td class="point">{%if not game.point%} --- {%else%}{{game.point}}{%endif%}</td>
-                        <td class="team_two"><a class="color-000" href="/team/teamDetail?id_code={{game.team_two.id_code}}" title=""><img src="/static/files/teamLogo/{{game.team_two.logo}}">{{game.team_two}}</a></td>
+                        <td class="team_two  team-td"><a class="color-000" href="/team/teamDetail?id_code={{game.team_two.id_code}}" title=""><img src="/static/files/teamLogo/{{game.team_two.logo}}">{{game.team_two}}</a></td>
                         <td class="game-action">
                             {%if game.status != 1%}
                             <div class="am-form-file inb vertical-middle">
-                              <button type="button" class="am-btn am-btn-link am-btn-sm">
+                              <button type="button" class="am-btn am-btn-link am-btn-xs">
                                 <i class="am-icon-cloud-upload"></i> 上传比赛数据</button>
                               <input class="upload-input" type="file" name="upfile" action-type='upload'>
                             </div>
-                                <button type="button" class="am-btn am-btn-link am-btn-sm" action-type='edit'>编辑</button>
-                                <button type="button" class="am-btn am-btn-link am-btn-sm" action-type='delete'>删除</button>
+                                <button type="button" class="am-btn am-btn-link am-btn-xs" action-type='edit'>编辑</button>
+                                <button type="button" class="am-btn am-btn-link am-btn-xs" action-type='delete'>删除</button>
                             {% else %}
                             <a href="/game/getGame?id_code={{game.id_code}}" target="_blank" title="">查看</a>
                             {%endif%}
@@ -473,12 +473,12 @@
     // 时间选择器禁止今天以及之前的选择
 (function(){
     var nowTemp = new Date();
-    $(".game-date-picker").datepicker({
-          onRender: function(date, viewMode) {
-            var viewDate = nowTemp;
-            return date.valueOf() < viewDate.valueOf() ? 'am-disabled' : '';
-          }
-        })
+    // $(".game-date-picker").datepicker({
+    //       onRender: function(date, viewMode) {
+    //         var viewDate = nowTemp;
+    //         return date.valueOf() < viewDate.valueOf() ? 'am-disabled' : '';
+    //       }
+    //     })
 })();
 </script>
 

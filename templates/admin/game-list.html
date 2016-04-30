@@ -37,9 +37,9 @@
                     <td class="team_two"><a class="color-000" href="/team/teamDetail?id_code={{game.team_two.id_code}}" title=""><img src="/static/files/teamLogo/{{game.team_two.logo}}">{{game.team_two}}</a></td>
                     <td class="game-action">
                         {%if game.status == 1%}
-                        <a href="/game/getGame?id_code={{game.id_code}}" target="_blank" title="">查看</a>
+                        <a class="am-btn am-btn-link am-btn-xs" href="/game/getGame?id_code={{game.id_code}}" target="_blank" title="">查看</a>
                         {%endif%}
-                        <button type="button" class="am-btn am-btn-link am-btn-sm" action-type='delete'>删除</button>
+                        <button type="button" class="am-btn am-btn-link am-btn-xs" action-type='delete'>删除</button>
                     </td>
                 </tr>
             {% endfor %}
